@@ -1,4 +1,4 @@
-import { spoof_compare, spoof_batch_scan } from '../playground/src/moonspoof.js';
+import { spoof_compare, spoof_analyze, spoof_batch_scan } from '../playground/src/moonspoof.js';
 
 async function main() {
   console.log('----------------------------------------------------');
@@ -55,6 +55,22 @@ async function main() {
   console.log(`  Collision groups: ${res10k.group_count}`);
   console.log(`  Execution time:   ${dt10k.toFixed(2)} ms`);
   console.log(`  Rate:             ${((10000 / dt10k) * 1000).toFixed(0)} names/sec`);
+  console.log('');
+
+  // 4. Character diagnostic audit throughput
+  const N_ANALYZE = 20000;
+  const t3 = performance.now();
+  for (let i = 0; i < N_ANALYZE; i++) {
+    spoof_analyze('p\u0430ypal_service\u200B');
+  }
+  const dtAnalyze = performance.now() - t3;
+  const analyzeOps = (N_ANALYZE / (dtAnalyze / 1000)).toFixed(0);
+  const analyzeLat = ((dtAnalyze / N_ANALYZE) * 1000).toFixed(2);
+  console.log(`Character Diagnostic Audit:`);
+  console.log(`  Iterations: ${N_ANALYZE}`);
+  console.log(`  Total time: ${dtAnalyze.toFixed(2)} ms`);
+  console.log(`  Throughput: ${analyzeOps} ops/sec`);
+  console.log(`  Latency:    ${analyzeLat} µs/op`);
   console.log('----------------------------------------------------');
 }
 

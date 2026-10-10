@@ -6,6 +6,10 @@ pub fn benchmark_batch_1000() -> Int
 
 pub fn benchmark_batch_10000() -> Int
 
+pub fn benchmark_case_folded_comparison() -> Unit
+
+pub fn benchmark_diagnostic_audit() -> Unit
+
 pub fn benchmark_single_comparison() -> Unit
 
 pub fn generate_benchmark_dataset(Int) -> Array[String]

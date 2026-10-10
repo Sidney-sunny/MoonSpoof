@@ -38,6 +38,17 @@ Tests the multi-identifier collision detection engine (`find_confusable_groups`)
 | **1,000 Identifiers** | 6.69 ms | 149,392 names / second | 50 clusters |
 | **10,000 Identifiers** | 16.85 ms | 593,356 names / second | 200 clusters |
 
+### 2.3 Character-Level Security Diagnostic Audit
+
+Tests the latency and throughput of `analyze_identifier` over 20,000 iterations auditing suspicious identifiers containing mixed scripts, invisible controls, and confusable mappings.
+
+| Metric | Measured Value |
+| :--- | :--- |
+| **Sample Count** | 20,000 operations |
+| **Total Wall Time** | 243.73 ms |
+| **Mean Latency** | 12.19 microseconds / operation |
+| **Throughput** | 82,059 operations / second |
+
 ---
 
 ## 3. Algorithmic Complexity

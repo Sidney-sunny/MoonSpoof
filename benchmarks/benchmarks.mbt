@@ -37,3 +37,20 @@ pub fn benchmark_batch_10000() -> Int {
   let collisions = @moonspoof.find_confusable_groups(dataset)
   collisions.length()
 }
+
+///|
+pub fn benchmark_case_folded_comparison() -> Unit {
+  let a = "PAYPAL_ADMINISTRATOR"
+  let b = "p\u0430ypal_аdministrаtor"
+  for i = 0; i < 1000; i = i + 1 {
+    let _ = @moonspoof.are_confusable_ignore_case(a, b)
+  }
+}
+
+///|
+pub fn benchmark_diagnostic_audit() -> Unit {
+  let input = "p\u0430ypal_service_account\u200B"
+  for i = 0; i < 1000; i = i + 1 {
+    let _ = @moonspoof.analyze_identifier(input)
+  }
+}
