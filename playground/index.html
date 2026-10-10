@@ -72,14 +72,23 @@
             <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="invisible">
               admin vs admin[ZWSP]
             </button>
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="casefold">
+              PAYPAL vs PаyPal
+            </button>
             <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="clean">
               google vs goog1e
             </button>
           </div>
         </div>
-        <button id="btn-swap-inputs" class="text-xs px-3 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-300 border border-obsidian-700 transition font-mono">
-          Swap Inputs
-        </button>
+        <div class="flex items-center space-x-4">
+          <label class="flex items-center space-x-2 text-xs font-mono text-obsidian-300 cursor-pointer select-none">
+            <input type="checkbox" id="chk-ignore-case" class="rounded bg-obsidian-950 border-obsidian-700 text-obsidian-300 focus:ring-0" />
+            <span>Case-Insensitive (UTS #39 §4)</span>
+          </label>
+          <button id="btn-swap-inputs" class="text-xs px-3 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-300 border border-obsidian-700 transition font-mono">
+            Swap Inputs
+          </button>
+        </div>
       </div>
 
       <!-- Equivalence Status Banner -->
@@ -120,6 +129,10 @@
               <span id="skeleton-a" class="font-mono text-white select-all">paypal</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Case-Folded Skeleton:</span>
+              <span id="skeleton-cf-a" class="font-mono text-obsidian-200 select-all">paypal</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
               <span class="text-obsidian-400">Primary Script:</span>
               <span id="script-a" class="font-mono text-obsidian-200">Latin</span>
             </div>
@@ -151,6 +164,10 @@
             <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
               <span class="text-obsidian-400">UTS #39 Skeleton:</span>
               <span id="skeleton-b" class="font-mono text-white select-all">paypal</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Case-Folded Skeleton:</span>
+              <span id="skeleton-cf-b" class="font-mono text-obsidian-200 select-all">paypal</span>
             </div>
             <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
               <span class="text-obsidian-400">Primary Script:</span>

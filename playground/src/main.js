@@ -18,6 +18,10 @@ const PRESETS = {
     a: 'admin',
     b: 'admin\u200B', // Zero-Width Space (U+200B)
   },
+  casefold: {
+    a: 'PAYPAL',
+    b: 'P\u0430yPal', // Cyrillic Small Letter A (U+0430)
+  },
   clean: {
     a: 'google',
     b: 'goog1e', // Digit 1 -> UTS #39 maps to 'l'
@@ -161,6 +165,7 @@ function initCompareZone() {
   function renderReport(cardSuffix, data) {
     const riskPill = document.getElementById(`risk-pill-${cardSuffix}`);
     const skeleton = document.getElementById(`skeleton-${cardSuffix}`);
+    const skeletonCf = document.getElementById(`skeleton-cf-${cardSuffix}`);
     const script = document.getElementById(`script-${cardSuffix}`);
     const restriction = document.getElementById(`restriction-${cardSuffix}`);
     const rulesContainer = document.getElementById(`rules-${cardSuffix}`);
@@ -170,6 +175,9 @@ function initCompareZone() {
     riskPill.textContent = data.risk_level;
 
     skeleton.textContent = data.skeleton || '(empty)';
+    if (skeletonCf) {
+      skeletonCf.textContent = data.skeleton_case_folded || data.skeleton || '(empty)';
+    }
     script.textContent = data.primary_script || 'Unknown';
     restriction.textContent = data.restriction_level || 'SingleScript';
 
@@ -193,6 +201,8 @@ function initCompareZone() {
     const t0 = performance.now();
     const strA = inputA.value;
     const strB = inputB.value;
+    const chkIgnoreCase = document.getElementById('chk-ignore-case');
+    const isIgnoreCase = chkIgnoreCase && chkIgnoreCase.checked;
 
     try {
       const rawJson = spoof_compare(strA, strB);
@@ -209,14 +219,18 @@ function initCompareZone() {
       const desc = document.getElementById('compare-status-desc');
       const pill = document.getElementById('compare-status-pill');
 
-      if (res.are_confusable) {
+      const isMatch = isIgnoreCase ? res.are_confusable_ignore_case : res.are_confusable;
+
+      if (isMatch) {
         banner.className = 'border rounded-xl p-4 transition flex items-center justify-between bg-rose-950/20 border-rose-900/80';
         dot.className = 'w-3 h-3 rounded-full bg-rose-500 animate-pulse';
         title.className = 'text-sm font-semibold text-rose-300 tracking-wide';
-        title.textContent = 'CONFUSABLE EQUIVALENCE CONFIRMED (SPOOF RISK DETECTED)';
+        title.textContent = isIgnoreCase
+          ? 'CASE-INSENSITIVE CONFUSABLE MATCH (UTS #39 §4 RISK DETECTED)'
+          : 'CONFUSABLE EQUIVALENCE CONFIRMED (SPOOF RISK DETECTED)';
         desc.textContent = 'Identifiers resolve to identical UTS #39 Confusable Skeletons and present visual impersonation danger.';
         pill.className = 'text-xs font-mono font-medium px-3 py-1 rounded border bg-rose-950/80 text-rose-300 border-rose-800';
-        pill.textContent = 'CONFUSABLE MATCH';
+        pill.textContent = isIgnoreCase ? 'CASEFOLD MATCH' : 'CONFUSABLE MATCH';
       } else {
         banner.className = 'border rounded-xl p-4 transition flex items-center justify-between bg-obsidian-900 border-obsidian-800';
         dot.className = 'w-3 h-3 rounded-full bg-emerald-500';
@@ -233,6 +247,10 @@ function initCompareZone() {
 
   inputA.addEventListener('input', runCompare);
   inputB.addEventListener('input', runCompare);
+  const chkIgnoreCase = document.getElementById('chk-ignore-case');
+  if (chkIgnoreCase) {
+    chkIgnoreCase.addEventListener('change', runCompare);
+  }
 
   btnSwap.addEventListener('click', () => {
     const tmp = inputA.value;
@@ -243,10 +261,14 @@ function initCompareZone() {
 
   presetBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      const p = PRESETS[btn.dataset.preset];
+      const presetKey = btn.dataset.preset;
+      const p = PRESETS[presetKey];
       if (p) {
         inputA.value = p.a;
         inputB.value = p.b;
+        if (presetKey === 'casefold' && chkIgnoreCase) {
+          chkIgnoreCase.checked = true;
+        }
         runCompare();
       }
     });
