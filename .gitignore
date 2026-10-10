@@ -1,0 +1,11 @@
+.DS_Store
+_build/
+target/
+target
+.mooncakes/
+.moonagent/
+
+# Environment and sensitive tokens
+.env
+.env.*
+*.local
