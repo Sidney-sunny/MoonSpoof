@@ -1,0 +1,5 @@
+import {
+  "Sidney-sunny/moonspoof",
+}
+
+pkgtype(kind: "executable")
