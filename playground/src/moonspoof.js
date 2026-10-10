@@ -921,6 +921,135 @@ function _M0MPC15array5Array2atGcE(self, index) {
   const len = self.length;
   return index >= 0 && index < len ? self[index] : $panic();
 }
+function _M0FP414Sidney_2dsunny9moonspoof3src7unicode28is__bidi__control__codepoint(cp) {
+  switch (cp) {
+    case 8206: {
+      return true;
+    }
+    case 8207: {
+      return true;
+    }
+    case 1564: {
+      return true;
+    }
+    case 8234: {
+      return true;
+    }
+    case 8235: {
+      return true;
+    }
+    case 8236: {
+      return true;
+    }
+    case 8237: {
+      return true;
+    }
+    case 8238: {
+      return true;
+    }
+    case 8294: {
+      return true;
+    }
+    case 8295: {
+      return true;
+    }
+    case 8296: {
+      return true;
+    }
+    case 8297: {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+}
+function _M0FP414Sidney_2dsunny9moonspoof3src7unicode24is__invisible__codepoint(cp) {
+  switch (cp) {
+    case 8203: {
+      return true;
+    }
+    case 8204: {
+      return true;
+    }
+    case 8205: {
+      return true;
+    }
+    case 8288: {
+      return true;
+    }
+    case 65279: {
+      return true;
+    }
+    case 173: {
+      return true;
+    }
+    case 6158: {
+      return true;
+    }
+    case 8206: {
+      return true;
+    }
+    case 8207: {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
+}
+function _M0FP414Sidney_2dsunny9moonspoof3src7unicode9hex__char(digit) {
+  return digit < 10 ? 48 + digit | 0 : (65 + digit | 0) - 10 | 0;
+}
+function _M0FP414Sidney_2dsunny9moonspoof3src7unicode17format__codepoint(cp) {
+  const buf = _M0MPB13StringBuilder21StringBuilder_2einner(0);
+  _M0IPB13StringBuilderPB6Logger13write__string(buf, "U+");
+  const temp = new _M0TPB8MutLocalGiE(cp);
+  const digits = [];
+  if (temp.val === 0) {
+    _M0MPC15array5Array4pushGcE(digits, 48);
+    _M0MPC15array5Array4pushGcE(digits, 48);
+    _M0MPC15array5Array4pushGcE(digits, 48);
+    _M0MPC15array5Array4pushGcE(digits, 48);
+  } else {
+    while (true) {
+      if (temp.val > 0) {
+        if (16 === 0) {
+          $panic();
+        }
+        const rem = temp.val % 16 | 0;
+        _M0MPC15array5Array4pushGcE(digits, _M0FP414Sidney_2dsunny9moonspoof3src7unicode9hex__char(rem));
+        if (16 === 0) {
+          $panic();
+        }
+        temp.val = temp.val / 16 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    while (true) {
+      if (digits.length < 4) {
+        _M0MPC15array5Array4pushGcE(digits, 48);
+        continue;
+      } else {
+        break;
+      }
+    }
+  }
+  let _tmp = digits.length - 1 | 0;
+  while (true) {
+    const i = _tmp;
+    if (i >= 0) {
+      _M0IPB13StringBuilderPB6Logger11write__char(buf, _M0MPC15array5Array2atGcE(digits, i));
+      _tmp = i - 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return _M0MPB13StringBuilder10to__string(buf);
+}
 function _M0FP414Sidney_2dsunny9moonspoof3src10confusable26binary__search__confusable(cp) {
   const len = _M0FP414Sidney_2dsunny9moonspoof3src10confusable16confusable__keys.length;
   const low = new _M0TPB8MutLocalGiE(0);
@@ -949,7 +1078,10 @@ function _M0FP414Sidney_2dsunny9moonspoof3src10confusable26binary__search__confu
   return undefined;
 }
 function _M0FP414Sidney_2dsunny9moonspoof3src10confusable26map__confusable__codepoint(cp) {
-  const normalized_cp = cp >= 65281 && cp <= 65374 ? cp - 65248 | 0 : cp;
+  if (_M0FP414Sidney_2dsunny9moonspoof3src7unicode24is__invisible__codepoint(cp)) {
+    return "";
+  }
+  const normalized_cp = cp === 12288 ? 32 : cp >= 65281 && cp <= 65374 ? cp - 65248 | 0 : cp;
   const _bind = _M0FP414Sidney_2dsunny9moonspoof3src10confusable26binary__search__confusable(normalized_cp);
   if (_bind === undefined) {
     return _M0IPC14char4CharPB4Show10to__string(normalized_cp);
@@ -1326,135 +1458,6 @@ function _M0FP414Sidney_2dsunny9moonspoof3src6script16analyze__scripts(input) {
   const is_mixed = count > 1;
   const level = count <= 1 ? 0 : count === 2 && (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 7) || (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 8) || (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 9) || _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 10)))) ? 1 : count <= 3 && (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 7) && (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 8) || _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 9))) ? 1 : count <= 2 && (_M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 3) || _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 2) && _M0FP414Sidney_2dsunny9moonspoof3src6script16contains__script(found, 4)) ? 2 : 4;
   return new _M0TP414Sidney_2dsunny9moonspoof3src6script14ScriptAnalysis(primary.val, found, is_mixed, level);
-}
-function _M0FP414Sidney_2dsunny9moonspoof3src7unicode24is__invisible__codepoint(cp) {
-  switch (cp) {
-    case 8203: {
-      return true;
-    }
-    case 8204: {
-      return true;
-    }
-    case 8205: {
-      return true;
-    }
-    case 8288: {
-      return true;
-    }
-    case 65279: {
-      return true;
-    }
-    case 173: {
-      return true;
-    }
-    case 6158: {
-      return true;
-    }
-    case 8206: {
-      return true;
-    }
-    case 8207: {
-      return true;
-    }
-    default: {
-      return false;
-    }
-  }
-}
-function _M0FP414Sidney_2dsunny9moonspoof3src7unicode28is__bidi__control__codepoint(cp) {
-  switch (cp) {
-    case 8206: {
-      return true;
-    }
-    case 8207: {
-      return true;
-    }
-    case 1564: {
-      return true;
-    }
-    case 8234: {
-      return true;
-    }
-    case 8235: {
-      return true;
-    }
-    case 8236: {
-      return true;
-    }
-    case 8237: {
-      return true;
-    }
-    case 8238: {
-      return true;
-    }
-    case 8294: {
-      return true;
-    }
-    case 8295: {
-      return true;
-    }
-    case 8296: {
-      return true;
-    }
-    case 8297: {
-      return true;
-    }
-    default: {
-      return false;
-    }
-  }
-}
-function _M0FP414Sidney_2dsunny9moonspoof3src7unicode9hex__char(digit) {
-  return digit < 10 ? 48 + digit | 0 : (65 + digit | 0) - 10 | 0;
-}
-function _M0FP414Sidney_2dsunny9moonspoof3src7unicode17format__codepoint(cp) {
-  const buf = _M0MPB13StringBuilder21StringBuilder_2einner(0);
-  _M0IPB13StringBuilderPB6Logger13write__string(buf, "U+");
-  const temp = new _M0TPB8MutLocalGiE(cp);
-  const digits = [];
-  if (temp.val === 0) {
-    _M0MPC15array5Array4pushGcE(digits, 48);
-    _M0MPC15array5Array4pushGcE(digits, 48);
-    _M0MPC15array5Array4pushGcE(digits, 48);
-    _M0MPC15array5Array4pushGcE(digits, 48);
-  } else {
-    while (true) {
-      if (temp.val > 0) {
-        if (16 === 0) {
-          $panic();
-        }
-        const rem = temp.val % 16 | 0;
-        _M0MPC15array5Array4pushGcE(digits, _M0FP414Sidney_2dsunny9moonspoof3src7unicode9hex__char(rem));
-        if (16 === 0) {
-          $panic();
-        }
-        temp.val = temp.val / 16 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    while (true) {
-      if (digits.length < 4) {
-        _M0MPC15array5Array4pushGcE(digits, 48);
-        continue;
-      } else {
-        break;
-      }
-    }
-  }
-  let _tmp = digits.length - 1 | 0;
-  while (true) {
-    const i = _tmp;
-    if (i >= 0) {
-      _M0IPB13StringBuilderPB6Logger11write__char(buf, _M0MPC15array5Array2atGcE(digits, i));
-      _tmp = i - 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  return _M0MPB13StringBuilder10to__string(buf);
 }
 function _M0IP414Sidney_2dsunny9moonspoof3src8security17SecurityRiskLevelPB4Show6output(self, logger) {
   switch (self) {

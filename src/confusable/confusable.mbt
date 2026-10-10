@@ -2,7 +2,14 @@
 
 ///|
 pub fn map_confusable_codepoint(cp : Int) -> String {
-  let normalized_cp = if cp >= 0xFF01 && cp <= 0xFF5E {
+  // Strip default ignorable / invisible format characters (UTS #39 Section 4)
+  if @unicode.is_invisible_codepoint(cp) {
+    return ""
+  }
+  // Normalize Ideographic Space U+3000 to standard ASCII space 0x0020
+  let normalized_cp = if cp == 0x3000 {
+    0x0020
+  } else if cp >= 0xFF01 && cp <= 0xFF5E {
     cp - 0xFEE0
   } else {
     cp

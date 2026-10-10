@@ -8,6 +8,8 @@ import {
 // Values
 pub fn format_codepoint(Int) -> String
 
+pub fn get_general_category(Int) -> GeneralCategory
+
 pub fn hex_char(Int) -> Char
 
 pub fn is_ascii(Int) -> Bool
@@ -30,37 +32,14 @@ pub(all) struct CharInfo {
   is_bidi_control : Bool
 } derive(@debug.Debug)
 
-pub enum GeneralCategory {
-  Lu
-  Ll
-  Lt
-  Lm
-  Lo
-  Mn
-  Mc
-  Me
-  Nd
-  Nl
-  No
-  Pc
-  Pd
-  Ps
-  Pe
-  Pi
-  Pf
-  Po
-  Sm
-  Sc
-  Sk
-  So
-  Zs
-  Zl
-  Zp
-  Cc
-  Cf
-  Cs
-  Co
-  Cn
+pub(all) enum GeneralCategory {
+  Letter
+  Mark
+  Number
+  Punctuation
+  Symbol
+  Separator
+  Other
 } derive(Eq, @debug.Debug)
 
 pub(all) struct UnicodeVersion {

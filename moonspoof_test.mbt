@@ -64,3 +64,29 @@ test "batch collision scanner groups homoglyphs" {
   assert_eq(groups.length(), 1)
   assert_eq(groups[0].members.length(), 2)
 }
+
+///|
+test "issue-001: invisible format characters stripped in skeleton" {
+  let authentic = "admin"
+  let spoofed = "admin\u200B" // U+200B Zero Width Space
+  assert_true(are_confusable(authentic, spoofed))
+  assert_eq(skeleton(spoofed), skeleton(authentic))
+}
+
+///|
+test "issue-002: ideographic space U+3000 normalized to ASCII space" {
+  let authentic = "hello world"
+  let spoofed = "hello\u3000world" // U+3000 Ideographic Space
+  assert_true(are_confusable(authentic, spoofed))
+  assert_eq(skeleton(spoofed), skeleton(authentic))
+}
+
+///|
+test "issue-003: general category classifier coverage" {
+  assert_eq(@unicode.get_general_category(65), @unicode.GeneralCategory::Letter)
+  assert_eq(@unicode.get_general_category(48), @unicode.GeneralCategory::Number)
+  assert_eq(
+    @unicode.get_general_category(0x200B),
+    @unicode.GeneralCategory::Other,
+  )
+}

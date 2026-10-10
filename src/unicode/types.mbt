@@ -12,37 +12,42 @@ pub let unicode_version : UnicodeVersion = { major: 16, minor: 0, update: 0, }
 
 ///|
 pub(all) enum GeneralCategory {
-  Lu // Letter, uppercase
-  Ll // Letter, lowercase
-  Lt // Letter, titlecase
-  Lm // Letter, modifier
-  Lo // Letter, other
-  Mn // Mark, nonspacing
-  Mc // Mark, spacing combining
-  Me // Mark, enclosing
-  Nd // Number, decimal digit
-  Nl // Number, letter
-  No // Number, other
-  Pc // Punctuation, connector
-  Pd // Punctuation, dash
-  Ps // Punctuation, open
-  Pe // Punctuation, close
-  Pi // Punctuation, initial quote
-  Pf // Punctuation, final quote
-  Po // Punctuation, other
-  Sm // Symbol, math
-  Sc // Symbol, currency
-  Sk // Symbol, modifier
-  So // Symbol, other
-  Zs // Separator, space
-  Zl // Separator, line
-  Zp // Separator, paragraph
-  Cc // Other, control
-  Cf // Other, format
-  Cs // Other, surrogate
-  Co // Other, private use
-  Cn // Other, not assigned
+  Letter
+  Mark
+  Number
+  Punctuation
+  Symbol
+  Separator
+  Other
 } derive(Eq, Debug)
+
+///|
+pub fn get_general_category(cp : Int) -> GeneralCategory {
+  if (cp >= 0x0041 && cp <= 0x005A) ||
+    (cp >= 0x0061 && cp <= 0x007A) ||
+    (cp >= 0x4E00 && cp <= 0x9FFF) {
+    Letter
+  } else if cp >= 0x0030 && cp <= 0x0039 {
+    Number
+  } else if cp == 0x0020 || cp == 0x3000 {
+    Separator
+  } else if is_invisible_codepoint(cp) ||
+    is_bidi_control_codepoint(cp) ||
+    cp < 0x0020 {
+    Other
+  } else if cp == 0x002B || cp == 0x003D || cp == 0x0024 {
+    Symbol
+  } else if cp == 0x002C ||
+    cp == 0x002E ||
+    cp == 0x003A ||
+    cp == 0x003B ||
+    cp == 0x0021 ||
+    cp == 0x003F {
+    Punctuation
+  } else {
+    Mark
+  }
+}
 
 ///|
 pub(all) struct CharInfo {
