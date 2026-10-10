@@ -11,7 +11,8 @@ fn get_fuzz_samples() -> Array[String] {
      "\u3042\u3044\u3046\u3048\u304A", // Hiragana
      "\u30A2\u30A4\u30A6\u30A8\u30A4", // Katakana
      "\uAC00\uB098\uB2E4", // Hangul
-     "MIXED_\u0430\u03BF\uFF41_TOKEN", "safe_identifier_sample",
+     "MIXED_\u0430\u03BF\uFF41_TOKEN", "safe_identifier_sample", "invoice\u202Eexe.pdf",
+    "script\u202Dcom.bat",
   ]
 }
 
@@ -95,5 +96,25 @@ test "property: script classification consistency" {
     }
     let _ = validate_identifier(s)
     let _ = is_allowed_identifier(s)
+  }
+}
+
+///|
+test "property: bidi and invisible detection invariant" {
+  let samples = get_fuzz_samples()
+  for s in samples {
+    let rep = analyze_identifier(s)
+    let has_bidi = has_bidi_controls(s)
+    let has_inv = has_invisible_characters(s)
+    let has_ovr = has_bidi_override(s)
+
+    if has_ovr {
+      assert_true(has_bidi)
+      assert_eq(rep.risk_level, @security.SecurityRiskLevel::Critical)
+      assert_true(rep.rules_triggered.contains("RULE_BIDI_OVERRIDE_CHARACTER"))
+    }
+    if has_inv || has_bidi {
+      assert_eq(rep.risk_level, @security.SecurityRiskLevel::Critical)
+    }
   }
 }
