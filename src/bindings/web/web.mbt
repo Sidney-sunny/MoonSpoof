@@ -185,3 +185,24 @@ pub fn spoof_batch_scan(raw_input : String) -> String {
   sb.write_string("]}")
   sb.to_string()
 }
+
+///|
+/// Validate identifier against UTS #39 Security Profiles
+pub fn spoof_validate_profile(input : String, is_permissive : Bool) -> String {
+  let profile = if is_permissive {
+    @moonspoof.IdentifierProfile::permissive()
+  } else {
+    @moonspoof.IdentifierProfile::default()
+  }
+  let res = @moonspoof.validate_identifier(input, profile~)
+  let sb = StringBuilder()
+  match res {
+    Ok(_) => sb.write_string("{\"valid\":true,\"error\":\"\"}")
+    Err(msg) => {
+      sb.write_string("{\"valid\":false,\"error\":\"")
+      sb.write_string(escape_json(msg))
+      sb.write_string("\"}")
+    }
+  }
+  sb.to_string()
+}

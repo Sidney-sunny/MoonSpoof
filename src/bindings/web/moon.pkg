@@ -7,10 +7,20 @@ import {
 options(
   link: {
     "js": {
-      "exports": [ "spoof_compare", "spoof_analyze", "spoof_batch_scan" ],
+      "exports": [
+        "spoof_compare",
+        "spoof_analyze",
+        "spoof_batch_scan",
+        "spoof_validate_profile",
+      ],
     },
     "wasm": {
-      "exports": [ "spoof_compare", "spoof_analyze", "spoof_batch_scan" ],
+      "exports": [
+        "spoof_compare",
+        "spoof_analyze",
+        "spoof_batch_scan",
+        "spoof_validate_profile",
+      ],
     },
   },
 )

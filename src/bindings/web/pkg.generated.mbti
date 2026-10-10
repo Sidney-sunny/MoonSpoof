@@ -8,6 +8,8 @@ pub fn spoof_batch_scan(String) -> String
 
 pub fn spoof_compare(String, String) -> String
 
+pub fn spoof_validate_profile(String, Bool) -> String
+
 // Errors
 
 // Types and methods

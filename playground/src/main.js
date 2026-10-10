@@ -1,4 +1,4 @@
-import { spoof_compare, spoof_analyze, spoof_batch_scan } from './moonspoof.js';
+import { spoof_compare, spoof_analyze, spoof_batch_scan, spoof_validate_profile } from './moonspoof.js';
 
 // Pre-defined presets for Pair Comparison
 const PRESETS = {
@@ -424,12 +424,16 @@ function initInspectorZone() {
   const rulesEl = document.getElementById('inspector-rules');
   const charCountEl = document.getElementById('inspector-char-count');
   const tableBody = document.getElementById('inspector-table-body');
+  const profileDefaultEl = document.getElementById('inspector-profile-default');
+  const profilePermissiveEl = document.getElementById('inspector-profile-permissive');
 
   function runInspect() {
     const val = input.value;
     if (!val) {
       tableBody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-obsidian-500">Enter an identifier above to inspect glyphs.</td></tr>';
       charCountEl.textContent = '0 codepoints';
+      if (profileDefaultEl) profileDefaultEl.textContent = 'No input';
+      if (profilePermissiveEl) profilePermissiveEl.textContent = 'No input';
       return;
     }
 
@@ -458,6 +462,35 @@ function initInspectorZone() {
       scriptEl.textContent = res.primary_script || 'Unknown';
       restrictionEl.textContent = res.restriction_level || 'SingleScript';
       charCountEl.textContent = `${res.chars.length} codepoints`;
+
+      // Profile validation
+      try {
+        const rawDefault = spoof_validate_profile(val, false);
+        const resDef = JSON.parse(rawDefault);
+        if (profileDefaultEl) {
+          if (resDef.valid) {
+            profileDefaultEl.className = 'px-2 py-0.5 rounded border bg-emerald-950/80 text-emerald-400 border-emerald-800';
+            profileDefaultEl.textContent = 'PASSED (Compliant)';
+          } else {
+            profileDefaultEl.className = 'px-2 py-0.5 rounded border bg-rose-950/80 text-rose-400 border-rose-800';
+            profileDefaultEl.textContent = `FAILED (${resDef.error})`;
+          }
+        }
+
+        const rawPermissive = spoof_validate_profile(val, true);
+        const resPerm = JSON.parse(rawPermissive);
+        if (profilePermissiveEl) {
+          if (resPerm.valid) {
+            profilePermissiveEl.className = 'px-2 py-0.5 rounded border bg-emerald-950/80 text-emerald-400 border-emerald-800';
+            profilePermissiveEl.textContent = 'PASSED (Compliant)';
+          } else {
+            profilePermissiveEl.className = 'px-2 py-0.5 rounded border bg-rose-950/80 text-rose-400 border-rose-800';
+            profilePermissiveEl.textContent = `FAILED (${resPerm.error})`;
+          }
+        }
+      } catch (errProfile) {
+        console.error('Profile validation error:', errProfile);
+      }
 
       rulesEl.innerHTML = '';
       if (!res.rules_triggered || res.rules_triggered.length === 0) {
