@@ -10,6 +10,10 @@ pub fn benchmark_case_folded_comparison() -> Unit
 
 pub fn benchmark_diagnostic_audit() -> Unit
 
+pub fn benchmark_mixed_script_analysis() -> Unit
+
+pub fn benchmark_profile_validation() -> Unit
+
 pub fn benchmark_single_comparison() -> Unit
 
 pub fn generate_benchmark_dataset(Int) -> Array[String]
