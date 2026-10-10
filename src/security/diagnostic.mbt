@@ -83,6 +83,8 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
     })
   }
 
+  let has_mixed_triad = @script.has_mixed_triad_scripts(script_res.scripts)
+
   if has_invisible {
     rules.push("RULE_INVISIBLE_OR_FORMAT_CHARACTER")
   }
@@ -92,13 +94,17 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
   if script_res.is_mixed {
     rules.push("RULE_MIXED_SCRIPT_IDENTIFIER")
   }
+  if has_mixed_triad {
+    rules.push("RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD")
+  }
   if has_cross_script_confusable {
     rules.push("RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH")
   }
 
   let risk = if has_invisible || has_bidi {
     SecurityRiskLevel::Critical
-  } else if has_cross_script_confusable && script_res.is_mixed {
+  } else if (has_cross_script_confusable || has_mixed_triad) &&
+    script_res.is_mixed {
     SecurityRiskLevel::High
   } else if has_cross_script_confusable || script_res.is_mixed {
     SecurityRiskLevel::Medium

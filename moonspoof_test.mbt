@@ -133,3 +133,28 @@ test "identifier security profile: permissive allows mixed script" {
     is_allowed_identifier(mixed, profile=IdentifierProfile::permissive()),
   )
 }
+
+///|
+test "mixed script: triad detection flags Latin + Cyrillic spoof" {
+  let spoofed = "p\u0430ypal"
+  let report = analyze_identifier(spoofed)
+  assert_true(
+    report.rules_triggered.contains("RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD"),
+  )
+  assert_true(is_mixed_script(spoofed))
+  assert_false(is_single_script(spoofed))
+  assert_eq(
+    get_restriction_level(spoofed),
+    @script.RestrictionLevel::ModeratelyRestrictive,
+  )
+}
+
+///|
+test "mixed script: minimally restrictive classification for Cyrillic + Greek" {
+  let cyrillic_greek = "\u0430\u03BF" // Cyrillic a + Greek omicron
+  assert_eq(
+    get_restriction_level(cyrillic_greek),
+    @script.RestrictionLevel::MinimallyRestrictive,
+  )
+  assert_true(is_mixed_script(cyrillic_greek))
+}

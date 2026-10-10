@@ -78,12 +78,43 @@ pub fn contains_script(arr : Array[Script], s : Script) -> Bool {
 }
 
 ///|
+
+///|
+pub fn has_mixed_triad_scripts(scripts : Array[Script]) -> Bool {
+  let has_lat = contains_script(scripts, Latin)
+  let has_cyr = contains_script(scripts, Cyrillic)
+  let has_grk = contains_script(scripts, Greek)
+  (has_lat && has_cyr) || (has_lat && has_grk) || (has_cyr && has_grk)
+}
+
+///|
+pub fn is_recommended_script(s : Script) -> Bool {
+  match s {
+    Latin
+    | Cyrillic
+    | Greek
+    | Arabic
+    | Hebrew
+    | Han
+    | Hiragana
+    | Katakana
+    | Hangul => true
+    Common | Inherited | Unknown => false
+  }
+}
+
+///|
 pub fn analyze_scripts(input : String) -> ScriptAnalysis {
   let found : Array[Script] = []
   let mut primary = Script::Common
+  let mut has_disallowed = false
+
   for ch in input {
     let cp = ch.to_int()
     let s = get_script(cp)
+    if s == Unknown {
+      has_disallowed = true
+    }
     if s != Common && s != Inherited && s != Unknown {
       if !contains_script(found, s) {
         found.push(s)
@@ -95,7 +126,9 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
   }
   let count = found.length()
   let is_mixed = count > 1
-  let level = if count <= 1 {
+  let level = if has_disallowed {
+    RestrictionLevel::Unrestricted
+  } else if count <= 1 {
     RestrictionLevel::SingleScript
   } else if count == 2 &&
     (
@@ -109,14 +142,44 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
     contains_script(found, Han) &&
     (contains_script(found, Hiragana) || contains_script(found, Katakana)) {
     RestrictionLevel::HighlyRestrictive
-  } else if count <= 2 &&
+  } else if count == 2 &&
     (
       (contains_script(found, Latin) && contains_script(found, Cyrillic)) ||
-      (contains_script(found, Latin) && contains_script(found, Greek))
+      (contains_script(found, Latin) && contains_script(found, Greek)) ||
+      (contains_script(found, Latin) && contains_script(found, Arabic)) ||
+      (contains_script(found, Latin) && contains_script(found, Hebrew))
     ) {
     RestrictionLevel::ModeratelyRestrictive
   } else {
-    RestrictionLevel::Unrestricted
+    let mut all_rec = true
+    for s in found {
+      if !is_recommended_script(s) {
+        all_rec = false
+      }
+    }
+    if all_rec && count > 0 {
+      RestrictionLevel::MinimallyRestrictive
+    } else {
+      RestrictionLevel::Unrestricted
+    }
   }
   { primary_script: primary, scripts: found, is_mixed, level, }
+}
+
+///|
+pub fn is_single_script(input : String) -> Bool {
+  let res = analyze_scripts(input)
+  res.level == RestrictionLevel::SingleScript
+}
+
+///|
+pub fn is_mixed_script(input : String) -> Bool {
+  let res = analyze_scripts(input)
+  res.is_mixed
+}
+
+///|
+pub fn get_restriction_level(input : String) -> RestrictionLevel {
+  let res = analyze_scripts(input)
+  res.level
 }

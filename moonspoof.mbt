@@ -25,6 +25,24 @@ pub type UnicodeVersion = @unicode.UnicodeVersion
 pub type IdentifierProfile = @security.IdentifierProfile
 
 ///|
+pub type RestrictionLevel = @script.RestrictionLevel
+
+///|
+pub fn is_single_script(input : String) -> Bool {
+  @script.is_single_script(input)
+}
+
+///|
+pub fn is_mixed_script(input : String) -> Bool {
+  @script.is_mixed_script(input)
+}
+
+///|
+pub fn get_restriction_level(input : String) -> @script.RestrictionLevel {
+  @script.get_restriction_level(input)
+}
+
+///|
 pub fn skeleton(input : String) -> String {
   @confusable.skeleton(input)
 }

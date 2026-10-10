@@ -19,9 +19,15 @@ pub fn are_confusable_ignore_case(String, String) -> Bool
 
 pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
 
+pub fn get_restriction_level(String) -> @script.RestrictionLevel
+
 pub fn get_unicode_version() -> @unicode.UnicodeVersion
 
 pub fn is_allowed_identifier(String, profile? : @security.IdentifierProfile) -> Bool
+
+pub fn is_mixed_script(String) -> Bool
+
+pub fn is_single_script(String) -> Bool
 
 pub fn skeleton(String) -> String
 
@@ -41,6 +47,8 @@ pub using @batch {type ConfusableGroup}
 pub using @security {type DiagnosticReport}
 
 pub using @security {type IdentifierProfile}
+
+pub using @script {type RestrictionLevel}
 
 pub using @script {type Script}
 
