@@ -1,0 +1,17 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/bindings/web"
+
+// Values
+pub fn spoof_analyze(String) -> String
+
+pub fn spoof_batch_scan(String) -> String
+
+pub fn spoof_compare(String, String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

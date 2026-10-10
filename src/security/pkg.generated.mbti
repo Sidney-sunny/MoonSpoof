@@ -1,0 +1,46 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/security"
+
+import {
+  "Sidney-sunny/moonspoof/src/script",
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn analyze_identifier(String) -> DiagnosticReport
+
+// Errors
+
+// Types and methods
+pub(all) struct CharDiagnostic {
+  char : Char
+  codepoint : Int
+  codepoint_hex : String
+  script : @script.Script
+  is_invisible : Bool
+  is_bidi : Bool
+  is_confusable : Bool
+  confusable_target : String
+} derive(@debug.Debug)
+
+pub(all) struct DiagnosticReport {
+  original : String
+  skeleton : String
+  script_analysis : @script.ScriptAnalysis
+  risk_level : SecurityRiskLevel
+  char_diagnostics : Array[CharDiagnostic]
+  rules_triggered : Array[String]
+} derive(@debug.Debug)
+
+pub(all) enum SecurityRiskLevel {
+  Safe
+  Low
+  Medium
+  High
+  Critical
+} derive(Eq, @debug.Debug)
+pub impl Show for SecurityRiskLevel
+
+// Type aliases
+
+// Traits

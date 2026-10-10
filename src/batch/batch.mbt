@@ -1,10 +1,12 @@
 // Package batch: High-throughput username & identifier collision scanner
 
+///|
 pub(all) struct ConfusableGroup {
   skeleton : String
   members : Array[String]
 } derive(Debug)
 
+///|
 pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup] {
   let buckets : Map[String, Array[String]] = Map([])
   for name in names {
@@ -21,7 +23,7 @@ pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup] {
   let results : Array[ConfusableGroup] = []
   for sk, members in buckets {
     if members.length() > 1 {
-      results.push({ skeleton: sk, members })
+      results.push({ skeleton: sk, members, })
     }
   }
   results

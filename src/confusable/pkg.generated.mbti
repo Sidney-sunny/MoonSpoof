@@ -1,0 +1,19 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/confusable"
+
+// Values
+pub fn are_confusable(String, String) -> Bool
+
+pub fn binary_search_confusable(Int) -> String?
+
+pub fn map_confusable_codepoint(Int) -> String
+
+pub fn skeleton(String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+
+// Traits

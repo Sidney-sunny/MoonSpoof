@@ -20,6 +20,7 @@
   <a href="#quickstart">Quickstart</a> ·
   <a href="docs/API_SPECIFICATION.md">API Specification</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
+  <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
   <a href="docs/SPECIFICATION.md">UTS #39 Compliance</a>
 </p>
 
@@ -120,6 +121,7 @@ for group in collisions {
 | Chinese Documentation / 中文说明书 | [README_zh.md](docs/README_zh.md) |
 | System Architecture & Pipeline | [ARCHITECTURE.md](docs/ARCHITECTURE.md) / [中文版](docs/ARCHITECTURE_zh.md) |
 | API Contracts & Data Types | [API_SPECIFICATION.md](docs/API_SPECIFICATION.md) / [中文版](docs/API_SPECIFICATION_zh.md) |
+| Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
 | UTS #39 Standard Compliance | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Brand Identity & Visual System | [BRANDING.md](docs/BRANDING.md) / [中文版](docs/BRANDING_zh.md) |
 

@@ -1,5 +1,6 @@
 // MoonSpoof Whitebox & Edge Case Test Suite
 
+///|
 test "whitebox: codepoint formatting" {
   let cp_null = @unicode.format_codepoint(0)
   assert_eq(cp_null, "U+0000")
@@ -11,6 +12,7 @@ test "whitebox: codepoint formatting" {
   assert_eq(cp_cyrillic, "U+0430")
 }
 
+///|
 test "whitebox: bidi and invisible control flags" {
   assert_true(@unicode.is_invisible_codepoint(0x200B)) // ZWSP
   assert_true(@unicode.is_invisible_codepoint(0xFEFF)) // BOM
@@ -20,6 +22,7 @@ test "whitebox: bidi and invisible control flags" {
   assert_false(@unicode.is_bidi_control_codepoint(0x0041))
 }
 
+///|
 test "whitebox: script identification ranges" {
   assert_eq(@script.get_script(0x0041), @script.Script::Latin)
   assert_eq(@script.get_script(0x0430), @script.Script::Cyrillic)

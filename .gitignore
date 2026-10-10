@@ -17,3 +17,8 @@ private/
 
 # Data generator raw downloads
 tools/data-generator/*.txt
+
+# Frontend & Playground builds
+node_modules/
+playground/node_modules/
+playground/dist/

@@ -1,5 +1,6 @@
 // Package security: Character-level diagnostics and identifier risk modeling
 
+///|
 pub(all) enum SecurityRiskLevel {
   Safe
   Low
@@ -8,7 +9,8 @@ pub(all) enum SecurityRiskLevel {
   Critical
 } derive(Eq, Debug)
 
-pub impl Show for SecurityRiskLevel with output(self, logger) {
+///|
+pub impl Show for SecurityRiskLevel with fn output(self, logger) {
   match self {
     Safe => logger.write_string("Safe")
     Low => logger.write_string("Low")
@@ -18,6 +20,7 @@ pub impl Show for SecurityRiskLevel with output(self, logger) {
   }
 }
 
+///|
 pub(all) struct CharDiagnostic {
   char : Char
   codepoint : Int
@@ -29,6 +32,7 @@ pub(all) struct CharDiagnostic {
   confusable_target : String
 } derive(Debug)
 
+///|
 pub(all) struct DiagnosticReport {
   original : String
   skeleton : String
@@ -38,6 +42,7 @@ pub(all) struct DiagnosticReport {
   rules_triggered : Array[String]
 } derive(Debug)
 
+///|
 pub fn analyze_identifier(input : String) -> DiagnosticReport {
   let sk = @confusable.skeleton(input)
   let script_res = @script.analyze_scripts(input)

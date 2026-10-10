@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MoonSpoof Playground — Unicode Spoof & Homoglyph Detection</title>
+  <meta name="description" content="UTS #39 Unicode Spoof and Homoglyph Detection Engine in MoonBit WebAssembly: Skeleton Transformation, Script Analysis, and Collision Scanning." />
+  <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="bg-obsidian-950 text-obsidian-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="border-b border-obsidian-800 bg-obsidian-900/90 backdrop-blur sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-3.5">
+      <img src="/logo.jpg" alt="MoonSpoof Logo" class="w-9 h-9 rounded border border-obsidian-700 shadow-sm object-cover" />
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="text-base font-semibold tracking-tight text-white">MoonSpoof</span>
+          <span class="text-[11px] px-2 py-0.5 rounded font-mono bg-obsidian-800 text-obsidian-300 border border-obsidian-700">UTS #39 v16.0.0</span>
+          <span class="text-[11px] px-2 py-0.5 rounded font-mono bg-obsidian-800 text-obsidian-300 border border-obsidian-700">WASM / JS Native</span>
+        </div>
+        <p class="text-xs text-obsidian-400">Unicode Homoglyph & Identifier Attack Defense Engine</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="flex items-center space-x-1 bg-obsidian-850 border border-obsidian-800 p-1 rounded-lg">
+      <button id="tab-btn-compare" class="tab-btn active px-3.5 py-1.5 text-xs font-medium rounded-md transition text-white bg-obsidian-700 shadow-sm" data-tab="compare">
+        Pair Comparison
+      </button>
+      <button id="tab-btn-scanner" class="tab-btn px-3.5 py-1.5 text-xs font-medium rounded-md transition text-obsidian-400 hover:text-obsidian-200" data-tab="scanner">
+        Collision Scanner
+      </button>
+      <button id="tab-btn-inspector" class="tab-btn px-3.5 py-1.5 text-xs font-medium rounded-md transition text-obsidian-400 hover:text-obsidian-200" data-tab="inspector">
+        Glyph Inspector
+      </button>
+    </nav>
+
+    <!-- Header Actions -->
+    <div class="flex items-center space-x-3">
+      <div id="latency-indicator" class="text-xs font-mono px-2.5 py-1 rounded bg-obsidian-850 text-obsidian-400 border border-obsidian-800 flex items-center space-x-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span id="latency-text">Engine Ready</span>
+      </div>
+      <a href="https://github.com/Sidney-sunny/MoonSpoof" target="_blank" rel="noopener noreferrer" class="text-xs px-3 py-1.5 rounded-md bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition">
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6">
+
+    <!-- ==================== TAB 1: PAIR COMPARISON ==================== -->
+    <section id="pane-compare" class="space-y-6">
+      
+      <!-- Top Presets Bar -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs font-medium text-obsidian-400 uppercase tracking-wider">Homoglyph Presets:</span>
+          <div class="flex flex-wrap gap-1.5" id="preset-buttons">
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="paypal">
+              PayPal vs PаyPal
+            </button>
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="apple">
+              apple vs appIe
+            </button>
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="micro">
+              micro vs µicro
+            </button>
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="invisible">
+              admin vs admin[ZWSP]
+            </button>
+            <button class="preset-btn text-xs px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono" data-preset="clean">
+              google vs goog1e
+            </button>
+          </div>
+        </div>
+        <button id="btn-swap-inputs" class="text-xs px-3 py-1 rounded bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-300 border border-obsidian-700 transition font-mono">
+          Swap Inputs
+        </button>
+      </div>
+
+      <!-- Equivalence Status Banner -->
+      <div id="compare-result-banner" class="border rounded-xl p-4 transition flex items-center justify-between bg-obsidian-900 border-obsidian-800">
+        <div class="flex items-center space-x-3">
+          <span id="compare-status-dot" class="w-3 h-3 rounded-full bg-obsidian-600"></span>
+          <div>
+            <h2 id="compare-status-title" class="text-sm font-semibold text-white tracking-wide">
+              Analyzing Equivalence...
+            </h2>
+            <p id="compare-status-desc" class="text-xs text-obsidian-400 mt-0.5">
+              Enter two identifiers to test UTS #39 Confusable Skeleton match.
+            </p>
+          </div>
+        </div>
+        <div id="compare-status-pill" class="text-xs font-mono font-medium px-3 py-1 rounded border bg-obsidian-850 text-obsidian-300 border-obsidian-700">
+          Pending
+        </div>
+      </div>
+
+      <!-- Side-by-Side Identifier Panels -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Identifier A Card -->
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-obsidian-400 font-mono">Identifier A (Reference)</span>
+            <span id="risk-pill-a" class="text-[11px] font-mono px-2 py-0.5 rounded border bg-obsidian-850 text-obsidian-400 border-obsidian-700">Safe</span>
+          </div>
+
+          <div>
+            <input type="text" id="input-a" value="paypal" class="w-full px-3.5 py-2.5 rounded-lg bg-obsidian-950 border border-obsidian-700 text-white font-mono text-base focus:outline-none focus:border-obsidian-500 transition" placeholder="Enter string A..." />
+          </div>
+
+          <div class="space-y-3 pt-2 text-xs">
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">UTS #39 Skeleton:</span>
+              <span id="skeleton-a" class="font-mono text-white select-all">paypal</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Primary Script:</span>
+              <span id="script-a" class="font-mono text-obsidian-200">Latin</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Restriction Level:</span>
+              <span id="restriction-a" class="font-mono text-obsidian-200">SingleScript</span>
+            </div>
+            <div class="space-y-1.5 pt-1">
+              <span class="text-obsidian-400 block">Triggered Rules:</span>
+              <div id="rules-a" class="flex flex-wrap gap-1 font-mono text-[11px]">
+                <span class="px-2 py-0.5 rounded bg-obsidian-800/60 text-obsidian-400 border border-obsidian-800">None</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Identifier B Card -->
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold uppercase tracking-wider text-obsidian-400 font-mono">Identifier B (Candidate)</span>
+            <span id="risk-pill-b" class="text-[11px] font-mono px-2 py-0.5 rounded border bg-obsidian-850 text-obsidian-400 border-obsidian-700">Safe</span>
+          </div>
+
+          <div>
+            <input type="text" id="input-b" value="pаypal" class="w-full px-3.5 py-2.5 rounded-lg bg-obsidian-950 border border-obsidian-700 text-white font-mono text-base focus:outline-none focus:border-obsidian-500 transition" placeholder="Enter string B..." />
+          </div>
+
+          <div class="space-y-3 pt-2 text-xs">
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">UTS #39 Skeleton:</span>
+              <span id="skeleton-b" class="font-mono text-white select-all">paypal</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Primary Script:</span>
+              <span id="script-b" class="font-mono text-obsidian-200">Latin</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-obsidian-800/80">
+              <span class="text-obsidian-400">Restriction Level:</span>
+              <span id="restriction-b" class="font-mono text-obsidian-200">ModeratelyRestrictive</span>
+            </div>
+            <div class="space-y-1.5 pt-1">
+              <span class="text-obsidian-400 block">Triggered Rules:</span>
+              <div id="rules-b" class="flex flex-wrap gap-1 font-mono text-[11px]">
+                <span class="px-2 py-0.5 rounded bg-obsidian-800/60 text-obsidian-400 border border-obsidian-800">None</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 2: COLLISION SCANNER ==================== -->
+    <section id="pane-scanner" class="hidden space-y-6">
+      
+      <!-- Controls & Input Bar -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 class="text-sm font-semibold text-white tracking-wide">Identifier Batch Collision Scanner</h2>
+            <p class="text-xs text-obsidian-400 mt-0.5">
+              High-throughput O(N) hash grouping to detect cross-script collisions and homoglyph clusters.
+            </p>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button id="btn-load-mock-batch" class="text-xs px-3 py-1.5 rounded-md bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono">
+              Load Attack Scenario
+            </button>
+            <button id="btn-clear-batch" class="text-xs px-3 py-1.5 rounded-md bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-300 border border-obsidian-700 transition font-mono">
+              Clear
+            </button>
+            <button id="btn-export-batch-json" class="text-xs px-3 py-1.5 rounded-md bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono">
+              Export JSON
+            </button>
+            <button id="btn-export-batch-csv" class="text-xs px-3 py-1.5 rounded-md bg-obsidian-800 hover:bg-obsidian-700 text-obsidian-200 border border-obsidian-700 transition font-mono">
+              Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <textarea id="scanner-input" rows="7" class="w-full px-3.5 py-2.5 rounded-lg bg-obsidian-950 border border-obsidian-700 text-obsidian-200 font-mono text-xs focus:outline-none focus:border-obsidian-500 transition" placeholder="Paste newline-separated or comma-separated usernames, domains, or identifiers..."></textarea>
+        </div>
+      </div>
+
+      <!-- Batch Summary Metrics -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4">
+          <span class="text-xs text-obsidian-400 block font-mono">Total Identifiers</span>
+          <span id="metric-total-names" class="text-2xl font-bold text-white font-mono mt-1 block">0</span>
+        </div>
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4">
+          <span class="text-xs text-obsidian-400 block font-mono">Collision Groups</span>
+          <span id="metric-collision-groups" class="text-2xl font-bold text-white font-mono mt-1 block">0</span>
+        </div>
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4">
+          <span class="text-xs text-obsidian-400 block font-mono">Colliding Members</span>
+          <span id="metric-colliding-members" class="text-2xl font-bold text-white font-mono mt-1 block">0</span>
+        </div>
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4">
+          <span class="text-xs text-obsidian-400 block font-mono">Engine Latency</span>
+          <span id="metric-scan-latency" class="text-2xl font-bold text-white font-mono mt-1 block">0 ms</span>
+        </div>
+      </div>
+
+      <!-- Collision Clusters Results -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-obsidian-400 font-mono">
+            Detected Collision Clusters
+          </h3>
+          <span id="scanner-group-counter" class="text-xs text-obsidian-500 font-mono">0 groups detected</span>
+        </div>
+
+        <div id="scanner-groups-container" class="space-y-3">
+          <!-- Groups rendered dynamically -->
+          <div class="py-8 text-center text-xs text-obsidian-500 font-mono">
+            No input provided. Paste identifiers or click "Load Attack Scenario" to run the scan.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 3: GLYPH INSPECTOR ==================== -->
+    <section id="pane-inspector" class="hidden space-y-6">
+      
+      <!-- Input Panel -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+        <div>
+          <h2 class="text-sm font-semibold text-white tracking-wide">Character & Codepoint Decompiler</h2>
+          <p class="text-xs text-obsidian-400 mt-0.5">
+            Detailed codepoint breakdown, Unicode script resolution, confusable targets, and invisible/bidi security flags.
+          </p>
+        </div>
+
+        <div>
+          <input type="text" id="inspector-input" value="pаypal​" class="w-full px-3.5 py-2.5 rounded-lg bg-obsidian-950 border border-obsidian-700 text-white font-mono text-base focus:outline-none focus:border-obsidian-500 transition" placeholder="Enter identifier to inspect..." />
+        </div>
+      </div>
+
+      <!-- Overall Identifier Health Card -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center space-x-3">
+            <span id="inspector-risk-dot" class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h3 class="text-sm font-semibold text-white">Risk Rating:</h3>
+                <span id="inspector-risk-title" class="text-xs font-mono font-bold text-rose-400">Critical</span>
+              </div>
+              <p id="inspector-risk-desc" class="text-xs text-obsidian-400 mt-0.5">
+                Contains invisible format characters and mixed-script homoglyphs.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4 text-xs font-mono">
+            <div>
+              <span class="text-obsidian-500">Skeleton:</span>
+              <span id="inspector-skeleton" class="text-white ml-1">paypal​</span>
+            </div>
+            <div>
+              <span class="text-obsidian-500">Primary Script:</span>
+              <span id="inspector-primary-script" class="text-obsidian-200 ml-1">Latin</span>
+            </div>
+            <div>
+              <span class="text-obsidian-500">Restriction:</span>
+              <span id="inspector-restriction" class="text-obsidian-200 ml-1">ModeratelyRestrictive</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-obsidian-800">
+          <span class="text-xs text-obsidian-400 font-mono block mb-1">Triggered Security Rules:</span>
+          <div id="inspector-rules" class="flex flex-wrap gap-1.5">
+            <!-- Rules rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Character Breakdown Table -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl overflow-hidden">
+        <div class="px-5 py-3 border-b border-obsidian-800 flex items-center justify-between">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-obsidian-400 font-mono">
+            Codepoint Decompilation Table
+          </h3>
+          <span id="inspector-char-count" class="text-xs text-obsidian-500 font-mono">7 codepoints</span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs font-mono">
+            <thead class="bg-obsidian-850 text-obsidian-400 border-b border-obsidian-800">
+              <tr>
+                <th class="px-4 py-2.5 font-medium">Index</th>
+                <th class="px-4 py-2.5 font-medium">Glyph</th>
+                <th class="px-4 py-2.5 font-medium">Codepoint</th>
+                <th class="px-4 py-2.5 font-medium">Decimal</th>
+                <th class="px-4 py-2.5 font-medium">Script</th>
+                <th class="px-4 py-2.5 font-medium">UTS #39 Target</th>
+                <th class="px-4 py-2.5 font-medium">Security Flags</th>
+              </tr>
+            </thead>
+            <tbody id="inspector-table-body" class="divide-y divide-obsidian-800/80 text-obsidian-200">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-obsidian-800 py-4 px-6 text-center text-xs text-obsidian-500 font-mono">
+    <span>MoonSpoof &copy; 2026</span>
+    <span class="mx-2">&middot;</span>
+    <span>UTS #39 Standard Unicode Security Engine</span>
+    <span class="mx-2">&middot;</span>
+    <span>Zero Dependencies &middot; Native MoonBit WASM Core</span>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 // Package confusable: UTS #39 Confusable Skeleton Generation & Comparison
 
+///|
 pub fn map_confusable_codepoint(cp : Int) -> String {
   let normalized_cp = if cp >= 0xFF01 && cp <= 0xFF5E {
     cp - 0xFEE0
@@ -12,6 +13,7 @@ pub fn map_confusable_codepoint(cp : Int) -> String {
   }
 }
 
+///|
 pub fn skeleton(input : String) -> String {
   let buf = StringBuilder()
   for ch in input {
@@ -22,6 +24,7 @@ pub fn skeleton(input : String) -> String {
   buf.to_string()
 }
 
+///|
 pub fn are_confusable(a : String, b : String) -> Bool {
   skeleton(a) == skeleton(b)
 }

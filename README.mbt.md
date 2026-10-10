@@ -12,12 +12,20 @@ Unicode Spoof and Homoglyph Detection for MoonBit, adhering to Unicode Technical
 
 ## Usage
 
-```moonbit
+```moonbit nocheck
+///|
 let authentic = "paypal"
+
+///|
 let candidate = "p\u0430ypal" // Cyrillic Small Letter A
 
+///|
 let is_confusable = @moonspoof.are_confusable(authentic, candidate)
+
+///|
 let skeleton = @moonspoof.skeleton(candidate)
+
+///|
 let report = @moonspoof.analyze_identifier(candidate)
 ```
 

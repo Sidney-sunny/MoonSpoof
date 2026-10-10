@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof"
+
+import {
+  "Sidney-sunny/moonspoof/src/batch",
+  "Sidney-sunny/moonspoof/src/script",
+  "Sidney-sunny/moonspoof/src/security",
+  "Sidney-sunny/moonspoof/src/unicode",
+}
+
+// Values
+pub fn analyze_identifier(String) -> @security.DiagnosticReport
+
+pub fn analyze_scripts(String) -> @script.ScriptAnalysis
+
+pub fn are_confusable(String, String) -> Bool
+
+pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
+
+pub fn get_unicode_version() -> @unicode.UnicodeVersion
+
+pub fn skeleton(String) -> String
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+pub using @security {type CharDiagnostic}
+
+pub using @batch {type ConfusableGroup}
+
+pub using @security {type DiagnosticReport}
+
+pub using @script {type Script}
+
+pub using @script {type ScriptAnalysis}
+
+pub using @security {type SecurityRiskLevel}
+
+pub using @unicode {type UnicodeVersion}
+
+// Traits

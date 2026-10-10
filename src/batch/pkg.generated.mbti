@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/batch"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn find_confusable_groups(Array[String]) -> Array[ConfusableGroup]
+
+// Errors
+
+// Types and methods
+pub(all) struct ConfusableGroup {
+  skeleton : String
+  members : Array[String]
+} derive(@debug.Debug)
+
+// Type aliases
+
+// Traits

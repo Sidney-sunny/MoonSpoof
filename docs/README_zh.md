@@ -20,6 +20,7 @@
   <a href="#快速开始">快速开始</a> ·
   <a href="API_SPECIFICATION_zh.md">接口规范</a> ·
   <a href="ARCHITECTURE_zh.md">架构设计</a> ·
+  <a href="BENCHMARKS_zh.md">基准测试</a> ·
   <a href="SPECIFICATION_zh.md">UTS #39 规范对照</a>
 </p>
 
@@ -118,6 +119,7 @@ for group in collisions {
 | :--- | :--- | :--- |
 | [架构设计](ARCHITECTURE_zh.md) | [ARCHITECTURE.md](ARCHITECTURE.md) | 系统管线、内存优化与 WASM 集成标准 |
 | [接口规范](API_SPECIFICATION_zh.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | 公共 API 参数、返回值与类型定义 |
+| [基准测试](BENCHMARKS_zh.md) | [BENCHMARKS.md](BENCHMARKS.md) | 实测吞吐量、单次延迟与算法复杂度报告 |
 | [规范对照](SPECIFICATION_zh.md) | [SPECIFICATION.md](SPECIFICATION.md) | UTS #39 覆盖范围与规则标识定义 |
 | [品牌视觉规范](BRANDING_zh.md) | [BRANDING.md](BRANDING.md) | 极简单色设计规范与品牌资产说明 |
 

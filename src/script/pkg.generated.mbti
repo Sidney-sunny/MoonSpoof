@@ -1,0 +1,54 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/script"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn analyze_scripts(String) -> ScriptAnalysis
+
+pub fn binary_search_script(Int) -> Script
+
+pub fn contains_script(Array[Script], Script) -> Bool
+
+pub fn get_script(Int) -> Script
+
+// Errors
+
+// Types and methods
+pub(all) enum RestrictionLevel {
+  SingleScript
+  HighlyRestrictive
+  ModeratelyRestrictive
+  MinimallyRestrictive
+  Unrestricted
+} derive(Eq, @debug.Debug)
+pub impl Show for RestrictionLevel
+
+pub(all) enum Script {
+  Common
+  Inherited
+  Latin
+  Cyrillic
+  Greek
+  Arabic
+  Hebrew
+  Han
+  Hiragana
+  Katakana
+  Hangul
+  Unknown
+} derive(Eq, @debug.Debug)
+pub impl Show for Script
+
+pub(all) struct ScriptAnalysis {
+  primary_script : Script
+  scripts : Array[Script]
+  is_mixed : Bool
+  level : RestrictionLevel
+} derive(@debug.Debug)
+
+// Type aliases
+
+// Traits

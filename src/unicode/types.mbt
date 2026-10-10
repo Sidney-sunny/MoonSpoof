@@ -1,14 +1,17 @@
 // Unicode types, general categories, and codepoint properties
 
+///|
 pub(all) struct UnicodeVersion {
   major : Int
   minor : Int
   update : Int
 } derive(Eq, Debug)
 
-pub let unicode_version : UnicodeVersion = { major: 16, minor: 0, update: 0 }
+///|
+pub let unicode_version : UnicodeVersion = { major: 16, minor: 0, update: 0, }
 
-pub enum GeneralCategory {
+///|
+pub(all) enum GeneralCategory {
   Lu // Letter, uppercase
   Ll // Letter, lowercase
   Lt // Letter, titlecase
@@ -41,6 +44,7 @@ pub enum GeneralCategory {
   Cn // Other, not assigned
 } derive(Eq, Debug)
 
+///|
 pub(all) struct CharInfo {
   codepoint : Int
   char : Char
@@ -50,10 +54,12 @@ pub(all) struct CharInfo {
   is_bidi_control : Bool
 } derive(Debug)
 
+///|
 pub fn is_ascii(cp : Int) -> Bool {
   cp >= 0 && cp <= 0x7F
 }
 
+///|
 pub fn is_invisible_codepoint(cp : Int) -> Bool {
   match cp {
     0x200B => true // ZERO WIDTH SPACE
@@ -68,6 +74,7 @@ pub fn is_invisible_codepoint(cp : Int) -> Bool {
   }
 }
 
+///|
 pub fn is_bidi_control_codepoint(cp : Int) -> Bool {
   match cp {
     0x200E => true // LEFT-TO-RIGHT MARK
@@ -86,6 +93,7 @@ pub fn is_bidi_control_codepoint(cp : Int) -> Bool {
   }
 }
 
+///|
 pub fn hex_char(digit : Int) -> Char {
   if digit < 10 {
     (48 + digit).unsafe_to_char()
@@ -94,6 +102,7 @@ pub fn hex_char(digit : Int) -> Char {
   }
 }
 
+///|
 pub fn format_codepoint(cp : Int) -> String {
   let buf = StringBuilder()
   buf.write_string("U+")

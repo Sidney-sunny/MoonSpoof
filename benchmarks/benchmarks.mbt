@@ -1,5 +1,6 @@
 // MoonSpoof Performance Benchmarks: 1,000 & 10,000 identifier scale tests
 
+///|
 pub fn benchmark_single_comparison() -> Unit {
   let a = "apple_administrator_service_account"
   let b = "аpple_аdministrаtor_service_аccount"
@@ -8,6 +9,7 @@ pub fn benchmark_single_comparison() -> Unit {
   }
 }
 
+///|
 pub fn generate_benchmark_dataset(count : Int) -> Array[String] {
   let list : Array[String] = []
   for i = 0; i < count; i = i + 1 {
@@ -22,12 +24,14 @@ pub fn generate_benchmark_dataset(count : Int) -> Array[String] {
   list
 }
 
+///|
 pub fn benchmark_batch_1000() -> Int {
   let dataset = generate_benchmark_dataset(1000)
   let collisions = @moonspoof.find_confusable_groups(dataset)
   collisions.length()
 }
 
+///|
 pub fn benchmark_batch_10000() -> Int {
   let dataset = generate_benchmark_dataset(10000)
   let collisions = @moonspoof.find_confusable_groups(dataset)

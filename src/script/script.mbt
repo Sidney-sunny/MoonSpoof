@@ -1,5 +1,6 @@
 // Package script: Unicode Script & Script_Extensions classification and analysis
 
+///|
 pub(all) enum Script {
   Common
   Inherited
@@ -15,7 +16,8 @@ pub(all) enum Script {
   Unknown
 } derive(Eq, Debug)
 
-pub impl Show for Script with output(self, logger) {
+///|
+pub impl Show for Script with fn output(self, logger) {
   match self {
     Common => logger.write_string("Common")
     Inherited => logger.write_string("Inherited")
@@ -32,6 +34,7 @@ pub impl Show for Script with output(self, logger) {
   }
 }
 
+///|
 pub(all) enum RestrictionLevel {
   SingleScript
   HighlyRestrictive
@@ -40,7 +43,8 @@ pub(all) enum RestrictionLevel {
   Unrestricted
 } derive(Eq, Debug)
 
-pub impl Show for RestrictionLevel with output(self, logger) {
+///|
+pub impl Show for RestrictionLevel with fn output(self, logger) {
   match self {
     SingleScript => logger.write_string("SingleScript")
     HighlyRestrictive => logger.write_string("HighlyRestrictive")
@@ -50,6 +54,7 @@ pub impl Show for RestrictionLevel with output(self, logger) {
   }
 }
 
+///|
 pub(all) struct ScriptAnalysis {
   primary_script : Script
   scripts : Array[Script]
@@ -57,10 +62,12 @@ pub(all) struct ScriptAnalysis {
   level : RestrictionLevel
 } derive(Debug)
 
+///|
 pub fn get_script(cp : Int) -> Script {
   binary_search_script(cp)
 }
 
+///|
 pub fn contains_script(arr : Array[Script], s : Script) -> Bool {
   for item in arr {
     if item == s {
@@ -70,6 +77,7 @@ pub fn contains_script(arr : Array[Script], s : Script) -> Bool {
   false
 }
 
+///|
 pub fn analyze_scripts(input : String) -> ScriptAnalysis {
   let found : Array[Script] = []
   let mut primary = Script::Common
@@ -98,10 +106,8 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
     ) {
     RestrictionLevel::HighlyRestrictive
   } else if count <= 3 &&
-    (
-      contains_script(found, Han) &&
-      (contains_script(found, Hiragana) || contains_script(found, Katakana))
-    ) {
+    contains_script(found, Han) &&
+    (contains_script(found, Hiragana) || contains_script(found, Katakana)) {
     RestrictionLevel::HighlyRestrictive
   } else if count <= 2 &&
     (
@@ -112,5 +118,5 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
   } else {
     RestrictionLevel::Unrestricted
   }
-  { primary_script: primary, scripts: found, is_mixed, level }
+  { primary_script: primary, scripts: found, is_mixed, level, }
 }

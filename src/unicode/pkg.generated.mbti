@@ -1,0 +1,74 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/src/unicode"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn format_codepoint(Int) -> String
+
+pub fn hex_char(Int) -> Char
+
+pub fn is_ascii(Int) -> Bool
+
+pub fn is_bidi_control_codepoint(Int) -> Bool
+
+pub fn is_invisible_codepoint(Int) -> Bool
+
+pub let unicode_version : UnicodeVersion
+
+// Errors
+
+// Types and methods
+pub(all) struct CharInfo {
+  codepoint : Int
+  char : Char
+  name : String
+  category : GeneralCategory
+  is_invisible : Bool
+  is_bidi_control : Bool
+} derive(@debug.Debug)
+
+pub enum GeneralCategory {
+  Lu
+  Ll
+  Lt
+  Lm
+  Lo
+  Mn
+  Mc
+  Me
+  Nd
+  Nl
+  No
+  Pc
+  Pd
+  Ps
+  Pe
+  Pi
+  Pf
+  Po
+  Sm
+  Sc
+  Sk
+  So
+  Zs
+  Zl
+  Zp
+  Cc
+  Cf
+  Cs
+  Co
+  Cn
+} derive(Eq, @debug.Debug)
+
+pub(all) struct UnicodeVersion {
+  major : Int
+  minor : Int
+  update : Int
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits

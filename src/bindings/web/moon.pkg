@@ -1,0 +1,16 @@
+pkgtype(kind: "foreign_library")
+
+import {
+  "Sidney-sunny/moonspoof",
+}
+
+options(
+  link: {
+    "js": {
+      "exports": [ "spoof_compare", "spoof_analyze", "spoof_batch_scan" ],
+    },
+    "wasm": {
+      "exports": [ "spoof_compare", "spoof_analyze", "spoof_batch_scan" ],
+    },
+  },
+)
