@@ -77,3 +77,23 @@ test "fuzzing: security diagnostic never panics on arbitrary input" {
     assert_true(report.char_diagnostics.length() == s.length())
   }
 }
+
+///|
+test "property: script classification consistency" {
+  let samples = get_fuzz_samples()
+  for s in samples {
+    let single = is_single_script(s)
+    let mixed = is_mixed_script(s)
+    let level = get_restriction_level(s)
+    if single {
+      assert_false(mixed)
+      assert_eq(level, @script.RestrictionLevel::SingleScript)
+    }
+    if mixed {
+      assert_false(single)
+      assert_true(level != @script.RestrictionLevel::SingleScript)
+    }
+    let _ = validate_identifier(s)
+    let _ = is_allowed_identifier(s)
+  }
+}
