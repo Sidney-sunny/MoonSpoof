@@ -4,11 +4,17 @@ package "Sidney-sunny/moonspoof/src/confusable"
 // Values
 pub fn are_confusable(String, String) -> Bool
 
+pub fn are_confusable_ignore_case(String, String) -> Bool
+
 pub fn binary_search_confusable(Int) -> String?
 
 pub fn map_confusable_codepoint(Int) -> String
 
 pub fn skeleton(String) -> String
+
+pub fn skeleton_case_folded(String) -> String
+
+pub fn to_lower_ascii(String) -> String
 
 // Errors
 

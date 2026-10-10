@@ -15,11 +15,19 @@ pub fn analyze_scripts(String) -> @script.ScriptAnalysis
 
 pub fn are_confusable(String, String) -> Bool
 
+pub fn are_confusable_ignore_case(String, String) -> Bool
+
 pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
 
 pub fn get_unicode_version() -> @unicode.UnicodeVersion
 
+pub fn is_allowed_identifier(String, profile? : @security.IdentifierProfile) -> Bool
+
 pub fn skeleton(String) -> String
+
+pub fn skeleton_case_folded(String) -> String
+
+pub fn validate_identifier(String, profile? : @security.IdentifierProfile) -> Result[Unit, String]
 
 // Errors
 
@@ -31,6 +39,8 @@ pub using @security {type CharDiagnostic}
 pub using @batch {type ConfusableGroup}
 
 pub using @security {type DiagnosticReport}
+
+pub using @security {type IdentifierProfile}
 
 pub using @script {type Script}
 

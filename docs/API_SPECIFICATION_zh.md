@@ -41,7 +41,23 @@ pub fn are_confusable(a : String, b : String) -> Bool
 
 ---
 
-### 1.3 `analyze_scripts`
+### 1.3 `are_confusable_ignore_case` 与 `skeleton_case_folded`
+
+依据 UTS #39 第 4 节执行大小写折叠（Case-Folding）下的混淆等价性检测。
+
+```moonbit
+pub fn are_confusable_ignore_case(a : String, b : String) -> Bool
+pub fn skeleton_case_folded(input : String) -> String
+```
+
+- **参数**：
+  - `a : String`, `b : String` — 待比对候选标识符。
+- **返回值**：`Bool` — 当 `are_confusable(a, b)` 成立或双方折叠骨架相等时返回 `true`。
+- **行为保证**：在骨架变换前后均执行规范化 ASCII 折叠，具备完全幂等性。
+
+---
+
+### 1.4 `analyze_scripts`
 
 分析标识符中包含的 Unicode 字系，并依照 UTS #39 第 5 节规范评估其限制级别。
 
@@ -58,7 +74,7 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis
 
 ---
 
-### 1.4 `analyze_identifier`
+### 1.5 `analyze_identifier`
 
 对标识符执行字符级逐一深度诊断，并评估安全风险与规则触发情况。
 
@@ -77,7 +93,30 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 
 ---
 
-### 1.5 `find_confusable_groups`
+### 1.6 `validate_identifier` 与 `is_allowed_identifier`
+
+强制执行 UTS #39 第 3 节规定的标识符安全配置规范（Identifier Profiles）。
+
+```moonbit
+pub fn validate_identifier(
+  input : String,
+  profile~ : IdentifierProfile = IdentifierProfile::default()
+) -> Result[Unit, String]
+
+pub fn is_allowed_identifier(
+  input : String,
+  profile~ : IdentifierProfile = IdentifierProfile::default()
+) -> Bool
+```
+
+- **参数**：
+  - `input : String` — 候选标识符。
+  - `profile~ : IdentifierProfile` — 可配置的合法性校验规则。
+- **返回值**：`Result[Unit, String]` 或布尔值，指示是否合规。
+
+---
+
+### 1.7 `find_confusable_groups`
 
 对批量用户名或标识符进行 $O(N)$ 复杂度的冲突分桶检测。
 

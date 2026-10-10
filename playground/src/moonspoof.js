@@ -1135,6 +1135,56 @@ function _M0FP414Sidney_2dsunny9moonspoof3src10confusable8skeleton(input) {
 function _M0FP414Sidney_2dsunny9moonspoof3src10confusable15are__confusable(a, b) {
   return _M0FP414Sidney_2dsunny9moonspoof3src10confusable8skeleton(a) === _M0FP414Sidney_2dsunny9moonspoof3src10confusable8skeleton(b);
 }
+function _M0FP414Sidney_2dsunny9moonspoof3src10confusable16to__lower__ascii(s) {
+  const buf = _M0MPB13StringBuilder21StringBuilder_2einner(0);
+  const _bind = s.length;
+  let _tmp = 0;
+  while (true) {
+    const _string_index = _tmp;
+    if (_string_index < _bind) {
+      let _decoded_next_string_index;
+      let _decoded_char;
+      _L: {
+        const _bind$2 = s.charCodeAt(_string_index);
+        if (_bind$2 >= 55296 && _bind$2 <= 56319 && (_string_index + 1 | 0) < _bind) {
+          const _bind$3 = s.charCodeAt(_string_index + 1 | 0);
+          if (_bind$3 >= 56320 && _bind$3 <= 57343) {
+            _decoded_next_string_index = _string_index + 2 | 0;
+            _decoded_char = _M0MPC13int3Int16unsafe__to__char((((Math.imul(_bind$2 - 55296 | 0, 1024) | 0) + _bind$3 | 0) - 56320 | 0) + 65536 | 0);
+            break _L;
+          } else {
+            _decoded_next_string_index = _string_index + 1 | 0;
+            _decoded_char = _M0MPC13int3Int16unsafe__to__char(_bind$2);
+            break _L;
+          }
+        } else {
+          _decoded_next_string_index = _string_index + 1 | 0;
+          _decoded_char = _M0MPC13int3Int16unsafe__to__char(_bind$2);
+          break _L;
+        }
+      }
+      const _next_string_index = _decoded_next_string_index;
+      const ch = _decoded_char;
+      const cp = ch;
+      if (cp >= 65 && cp <= 90) {
+        _M0IPB13StringBuilderPB6Logger13write__string(buf, _M0IPC14char4CharPB4Show10to__string(cp + 32 | 0));
+      } else {
+        _M0IPB13StringBuilderPB6Logger13write__string(buf, _M0IPC14char4CharPB4Show10to__string(ch));
+      }
+      _tmp = _next_string_index;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return _M0MPB13StringBuilder10to__string(buf);
+}
+function _M0FP414Sidney_2dsunny9moonspoof3src10confusable22skeleton__case__folded(input) {
+  return _M0FP414Sidney_2dsunny9moonspoof3src10confusable16to__lower__ascii(_M0FP414Sidney_2dsunny9moonspoof3src10confusable8skeleton(_M0FP414Sidney_2dsunny9moonspoof3src10confusable16to__lower__ascii(input)));
+}
+function _M0FP414Sidney_2dsunny9moonspoof3src10confusable29are__confusable__ignore__case(a, b) {
+  return _M0FP414Sidney_2dsunny9moonspoof3src10confusable15are__confusable(a, b) || _M0FP414Sidney_2dsunny9moonspoof3src10confusable22skeleton__case__folded(a) === _M0FP414Sidney_2dsunny9moonspoof3src10confusable22skeleton__case__folded(b);
+}
 function _M0FP414Sidney_2dsunny9moonspoof3src5batch24find__confusable__groups(names) {
   const _bind = [];
   const buckets = _M0MPB3Map3MapGsRPB5ArrayGsEE(new _M0TPB9ArrayViewGUsRPB5ArrayGsEEE(_bind, 0, 0), undefined);
@@ -1556,8 +1606,14 @@ function _M0FP414Sidney_2dsunny9moonspoof3src8security19analyze__identifier(inpu
   const risk = has_invisible.val || has_bidi.val ? 4 : has_cross_script_confusable.val && script_res.is_mixed ? 3 : has_cross_script_confusable.val || script_res.is_mixed ? 2 : _M0IP016_24default__implPB2Eq10not__equalGsE(sk, input) ? 1 : 0;
   return new _M0TP414Sidney_2dsunny9moonspoof3src8security16DiagnosticReport(input, sk, script_res, risk, char_diags, rules);
 }
+function _M0FP214Sidney_2dsunny9moonspoof22skeleton__case__folded(input) {
+  return _M0FP414Sidney_2dsunny9moonspoof3src10confusable22skeleton__case__folded(input);
+}
 function _M0FP214Sidney_2dsunny9moonspoof15are__confusable(a, b) {
   return _M0FP414Sidney_2dsunny9moonspoof3src10confusable15are__confusable(a, b);
+}
+function _M0FP214Sidney_2dsunny9moonspoof29are__confusable__ignore__case(a, b) {
+  return _M0FP414Sidney_2dsunny9moonspoof3src10confusable29are__confusable__ignore__case(a, b);
 }
 function _M0FP214Sidney_2dsunny9moonspoof19analyze__identifier(input) {
   return _M0FP414Sidney_2dsunny9moonspoof3src8security19analyze__identifier(input);
@@ -1682,6 +1738,8 @@ function _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web19write__report__json(
   _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web12escape__json(rep.original));
   _M0IPB13StringBuilderPB6Logger13write__string(sb, "\",\"skeleton\":\"");
   _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web12escape__json(rep.skeleton));
+  _M0IPB13StringBuilderPB6Logger13write__string(sb, "\",\"skeleton_case_folded\":\"");
+  _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web12escape__json(_M0FP214Sidney_2dsunny9moonspoof22skeleton__case__folded(rep.original)));
   _M0IPB13StringBuilderPB6Logger13write__string(sb, "\",\"risk_level\":\"");
   _M0IPB13StringBuilderPB6Logger13write__string(sb, _M0IP016_24default__implPB4Show10to__stringGRP414Sidney_2dsunny9moonspoof3src8security17SecurityRiskLevelE(rep.risk_level));
   _M0IPB13StringBuilderPB6Logger13write__string(sb, "\",\"primary_script\":\"");
@@ -1713,11 +1771,14 @@ function _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web19write__report__json(
 }
 function _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web14spoof__compare(a, b) {
   const is_confusable = _M0FP214Sidney_2dsunny9moonspoof15are__confusable(a, b);
+  const is_confusable_ignore_case = _M0FP214Sidney_2dsunny9moonspoof29are__confusable__ignore__case(a, b);
   const rep_a = _M0FP214Sidney_2dsunny9moonspoof19analyze__identifier(a);
   const rep_b = _M0FP214Sidney_2dsunny9moonspoof19analyze__identifier(b);
   const sb = _M0MPB13StringBuilder21StringBuilder_2einner(0);
   _M0IPB13StringBuilderPB6Logger13write__string(sb, "{\"are_confusable\":");
   _M0IPB13StringBuilderPB6Logger13write__string(sb, is_confusable ? "true" : "false");
+  _M0IPB13StringBuilderPB6Logger13write__string(sb, ",\"are_confusable_ignore_case\":");
+  _M0IPB13StringBuilderPB6Logger13write__string(sb, is_confusable_ignore_case ? "true" : "false");
   _M0IPB13StringBuilderPB6Logger13write__string(sb, ",\"a\":");
   _M0FP514Sidney_2dsunny9moonspoof3src8bindings3web19write__report__json(sb, rep_a);
   _M0IPB13StringBuilderPB6Logger13write__string(sb, ",\"b\":");

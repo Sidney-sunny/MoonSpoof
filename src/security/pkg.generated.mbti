@@ -9,6 +9,10 @@ import {
 // Values
 pub fn analyze_identifier(String) -> DiagnosticReport
 
+pub fn is_allowed_identifier(String, profile? : IdentifierProfile) -> Bool
+
+pub fn validate_identifier(String, profile? : IdentifierProfile) -> Result[Unit, String]
+
 // Errors
 
 // Types and methods
@@ -31,6 +35,14 @@ pub(all) struct DiagnosticReport {
   char_diagnostics : Array[CharDiagnostic]
   rules_triggered : Array[String]
 } derive(@debug.Debug)
+
+pub(all) struct IdentifierProfile {
+  allow_mixed_script : Bool
+  allow_invisible : Bool
+  max_length : Int
+} derive(Eq, @debug.Debug)
+pub fn IdentifierProfile::default() -> Self
+pub fn IdentifierProfile::permissive() -> Self
 
 pub(all) enum SecurityRiskLevel {
   Safe

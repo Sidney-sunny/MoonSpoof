@@ -90,3 +90,46 @@ test "issue-003: general category classifier coverage" {
     @unicode.GeneralCategory::Other,
   )
 }
+
+///|
+test "case-insensitive confusable detection" {
+  let authentic_caps = "PAYPAL"
+  let spoofed_mixed = "P\u0430yPal" // Cyrillic Small Letter A (U+0430)
+  assert_true(are_confusable_ignore_case(authentic_caps, spoofed_mixed))
+  assert_eq(skeleton_case_folded(authentic_caps), "paypal")
+  assert_eq(skeleton_case_folded(spoofed_mixed), "paypal")
+}
+
+///|
+test "identifier security profile: reject invisible format controls" {
+  let malicious = "admin\u200B"
+  let res = validate_identifier(malicious)
+  assert_true(res is Err(_))
+  assert_false(is_allowed_identifier(malicious))
+}
+
+///|
+test "identifier security profile: reject mixed script under default profile" {
+  let mixed = "p\u0430ypal"
+  let res = validate_identifier(mixed)
+  assert_true(res is Err(_))
+  assert_false(is_allowed_identifier(mixed))
+}
+
+///|
+test "identifier security profile: accept valid single-script identifier" {
+  let valid = "paypal_service"
+  let res = validate_identifier(valid)
+  assert_true(res is Ok(_))
+  assert_true(is_allowed_identifier(valid))
+}
+
+///|
+test "identifier security profile: permissive allows mixed script" {
+  let mixed = "p\u0430ypal"
+  let res = validate_identifier(mixed, profile=IdentifierProfile::permissive())
+  assert_true(res is Ok(_))
+  assert_true(
+    is_allowed_identifier(mixed, profile=IdentifierProfile::permissive()),
+  )
+}

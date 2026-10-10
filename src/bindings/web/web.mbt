@@ -48,12 +48,15 @@ fn split_input_lines(input : String) -> Array[String] {
 /// Compare two strings and return JSON diagnostic
 pub fn spoof_compare(a : String, b : String) -> String {
   let is_confusable = @moonspoof.are_confusable(a, b)
+  let is_confusable_ignore_case = @moonspoof.are_confusable_ignore_case(a, b)
   let rep_a = @moonspoof.analyze_identifier(a)
   let rep_b = @moonspoof.analyze_identifier(b)
 
   let sb = StringBuilder()
   sb.write_string("{\"are_confusable\":")
   sb.write_string(if is_confusable { "true" } else { "false" })
+  sb.write_string(",\"are_confusable_ignore_case\":")
+  sb.write_string(if is_confusable_ignore_case { "true" } else { "false" })
   sb.write_string(",\"a\":")
   write_report_json(sb, rep_a)
   sb.write_string(",\"b\":")
@@ -71,6 +74,8 @@ fn write_report_json(
   sb.write_string(escape_json(rep.original))
   sb.write_string("\",\"skeleton\":\"")
   sb.write_string(escape_json(rep.skeleton))
+  sb.write_string("\",\"skeleton_case_folded\":\"")
+  sb.write_string(escape_json(@moonspoof.skeleton_case_folded(rep.original)))
   sb.write_string("\",\"risk_level\":\"")
   sb.write_string(rep.risk_level.to_string())
   sb.write_string("\",\"primary_script\":\"")

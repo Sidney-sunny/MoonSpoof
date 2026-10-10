@@ -41,7 +41,23 @@ pub fn are_confusable(a : String, b : String) -> Bool
 
 ---
 
-### 1.3 `analyze_scripts`
+### 1.3 `are_confusable_ignore_case` & `skeleton_case_folded`
+
+Performs case-insensitive confusable equivalence matching per UTS #39 Section 4.
+
+```moonbit
+pub fn are_confusable_ignore_case(a : String, b : String) -> Bool
+pub fn skeleton_case_folded(input : String) -> String
+```
+
+- **Parameters**:
+  - `a : String`, `b : String` — Candidate identifiers to compare.
+- **Returns**: `Bool` — `true` if `are_confusable(a, b)` or `skeleton_case_folded(a) == skeleton_case_folded(b)`.
+- **Invariants**: Case folding is applied both pre- and post-skeleton transformation to ensure idempotency.
+
+---
+
+### 1.4 `analyze_scripts`
 
 Analyzes the Unicode scripts present in an identifier and evaluates its restriction level according to UTS #39 Section 5.
 
@@ -58,7 +74,7 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis
 
 ---
 
-### 1.4 `analyze_identifier`
+### 1.5 `analyze_identifier`
 
 Performs an in-depth character-by-character diagnostic audit and evaluates security risk rules.
 
@@ -77,7 +93,30 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 
 ---
 
-### 1.5 `find_confusable_groups`
+### 1.6 `validate_identifier` & `is_allowed_identifier`
+
+Enforces UTS #39 Section 3 Identifier Security Profiles.
+
+```moonbit
+pub fn validate_identifier(
+  input : String,
+  profile~ : IdentifierProfile = IdentifierProfile::default()
+) -> Result[Unit, String]
+
+pub fn is_allowed_identifier(
+  input : String,
+  profile~ : IdentifierProfile = IdentifierProfile::default()
+) -> Bool
+```
+
+- **Parameters**:
+  - `input : String` — The candidate identifier string.
+  - `profile~ : IdentifierProfile` — Configurable validation criteria.
+- **Returns**: `Result[Unit, String]` or `Bool` indicating compliance.
+
+---
+
+### 1.7 `find_confusable_groups`
 
 Scans a collection of names and partitions them into confusable collision buckets in $O(N)$ time.
 

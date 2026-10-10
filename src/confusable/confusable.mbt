@@ -35,3 +35,27 @@ pub fn skeleton(input : String) -> String {
 pub fn are_confusable(a : String, b : String) -> Bool {
   skeleton(a) == skeleton(b)
 }
+
+///|
+pub fn to_lower_ascii(s : String) -> String {
+  let buf = StringBuilder()
+  for ch in s {
+    let cp = ch.to_int()
+    if cp >= 65 && cp <= 90 {
+      buf.write_string((cp + 32).unsafe_to_char().to_string())
+    } else {
+      buf.write_string(ch.to_string())
+    }
+  }
+  buf.to_string()
+}
+
+///|
+pub fn skeleton_case_folded(input : String) -> String {
+  to_lower_ascii(skeleton(to_lower_ascii(input)))
+}
+
+///|
+pub fn are_confusable_ignore_case(a : String, b : String) -> Bool {
+  are_confusable(a, b) || skeleton_case_folded(a) == skeleton_case_folded(b)
+}
