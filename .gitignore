@@ -10,10 +10,12 @@ target
 .env.*
 *.local
 
-# Private submissions & sensitive forms
+# Private submissions, audit logs & sensitive forms
 *proposal*
 *PROPOSAL*
 private/
+ISSUE.md
+issue.md
 
 # Data generator raw downloads
 tools/data-generator/*.txt
