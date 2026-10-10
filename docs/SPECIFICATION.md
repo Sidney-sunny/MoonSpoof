@@ -20,8 +20,9 @@ This document outlines the scope of Unicode Technical Standard #39 (UTS #39) com
 ### 2.1 UTS #39 Section 4: Confusable Detection
 
 - **Supported**: Full single-codepoint confusable mapping transformation (`skeleton(S)`).
+- **Supported**: Automatic stripping of default ignorable and invisible format characters (ZWSP U+200B, ZWNJ U+200C, ZWJ U+200D) to empty string in `skeleton`.
 - **Supported**: Identification of cross-script homoglyphic substitution (e.g. Cyrillic `а` / Greek `ο` replacing Latin `a` / `o`).
-- **Supported**: Fullwidth ASCII (U+FF01–U+FF5E) canonicalization to standard ASCII.
+- **Supported**: Fullwidth ASCII (U+FF01–U+FF5E) and Ideographic Space (U+3000) canonicalization to standard ASCII.
 - **Invariants**: Normalization differences and confusable equivalence are strictly evaluated.
 
 ### 2.2 UTS #39 Section 5: Mixed-Script Detection & Restriction Levels
