@@ -99,3 +99,18 @@ pub fn find_confusable_groups(
 pub fn get_unicode_version() -> @unicode.UnicodeVersion {
   @unicode.unicode_version
 }
+
+///|
+pub fn has_bidi_controls(input : String) -> Bool {
+  @security.has_bidi_controls(input)
+}
+
+///|
+pub fn has_bidi_override(input : String) -> Bool {
+  @security.has_bidi_override(input)
+}
+
+///|
+pub fn has_invisible_characters(input : String) -> Bool {
+  @security.has_invisible_characters(input)
+}

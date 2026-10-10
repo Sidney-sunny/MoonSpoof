@@ -158,3 +158,23 @@ test "mixed script: minimally restrictive classification for Cyrillic + Greek" {
   )
   assert_true(is_mixed_script(cyrillic_greek))
 }
+
+///|
+test "security: bidi override triggers critical risk and file spoof rule" {
+  let malicious_filename = "invoice\u202Eexe.pdf" // RLO Trojan Source style spoof
+  let report = analyze_identifier(malicious_filename)
+  assert_eq(report.risk_level, @security.SecurityRiskLevel::Critical)
+  assert_true(report.rules_triggered.contains("RULE_BIDI_CONTROL_CHARACTER"))
+  assert_true(report.rules_triggered.contains("RULE_BIDI_OVERRIDE_CHARACTER"))
+  assert_true(report.rules_triggered.contains("RULE_BIDI_FILE_EXTENSION_SPOOF"))
+  assert_true(has_bidi_controls(malicious_filename))
+  assert_true(has_bidi_override(malicious_filename))
+}
+
+///|
+test "security: character predicate helpers on clean vs malicious strings" {
+  assert_true(has_invisible_characters("admin\u200B"))
+  assert_false(has_invisible_characters("admin"))
+  assert_false(has_bidi_controls("admin"))
+  assert_false(has_bidi_override("admin"))
+}

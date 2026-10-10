@@ -9,6 +9,12 @@ import {
 // Values
 pub fn analyze_identifier(String) -> DiagnosticReport
 
+pub fn has_bidi_controls(String) -> Bool
+
+pub fn has_bidi_override(String) -> Bool
+
+pub fn has_invisible_characters(String) -> Bool
+
 pub fn is_allowed_identifier(String, profile? : IdentifierProfile) -> Bool
 
 pub fn validate_identifier(String, profile? : IdentifierProfile) -> Result[Unit, String]

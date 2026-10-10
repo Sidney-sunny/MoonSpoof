@@ -10,11 +10,19 @@ pub fn format_codepoint(Int) -> String
 
 pub fn get_general_category(Int) -> GeneralCategory
 
+pub fn has_bidi_controls(String) -> Bool
+
+pub fn has_bidi_override(String) -> Bool
+
+pub fn has_invisible_characters(String) -> Bool
+
 pub fn hex_char(Int) -> Char
 
 pub fn is_ascii(Int) -> Bool
 
 pub fn is_bidi_control_codepoint(Int) -> Bool
+
+pub fn is_bidi_override_codepoint(Int) -> Bool
 
 pub fn is_invisible_codepoint(Int) -> Bool
 

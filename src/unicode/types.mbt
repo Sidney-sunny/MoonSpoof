@@ -99,6 +99,41 @@ pub fn is_bidi_control_codepoint(cp : Int) -> Bool {
 }
 
 ///|
+pub fn is_bidi_override_codepoint(cp : Int) -> Bool {
+  cp == 0x202D || cp == 0x202E // LRO, RLO
+}
+
+///|
+pub fn has_bidi_controls(input : String) -> Bool {
+  for ch in input {
+    if is_bidi_control_codepoint(ch.to_int()) {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn has_bidi_override(input : String) -> Bool {
+  for ch in input {
+    if is_bidi_override_codepoint(ch.to_int()) {
+      return true
+    }
+  }
+  false
+}
+
+///|
+pub fn has_invisible_characters(input : String) -> Bool {
+  for ch in input {
+    if is_invisible_codepoint(ch.to_int()) {
+      return true
+    }
+  }
+  false
+}
+
+///|
 pub fn hex_char(digit : Int) -> Char {
   if digit < 10 {
     (48 + digit).unsafe_to_char()

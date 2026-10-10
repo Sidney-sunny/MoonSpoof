@@ -23,6 +23,12 @@ pub fn get_restriction_level(String) -> @script.RestrictionLevel
 
 pub fn get_unicode_version() -> @unicode.UnicodeVersion
 
+pub fn has_bidi_controls(String) -> Bool
+
+pub fn has_bidi_override(String) -> Bool
+
+pub fn has_invisible_characters(String) -> Bool
+
 pub fn is_allowed_identifier(String, profile? : @security.IdentifierProfile) -> Bool
 
 pub fn is_mixed_script(String) -> Bool
