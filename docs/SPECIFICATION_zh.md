@@ -43,7 +43,10 @@ MoonSpoof 输出标准、机器可读的规则标识，确保诊断报告的可�
 
 | 规则标识 | 触发条件 | 风险定级 |
 | :--- | :--- | :--- |
-| `RULE_INVISIBLE_OR_FORMAT_CHARACTER` | 包含零宽空格 (U+200B)、连字控制符 (U+200C/D) 或软连字符等不可见格式字符 | **Critical** (极高) |
-| `RULE_BIDI_CONTROL_CHARACTER` | 包含 LRM、RLM 或双向文本覆盖控制符 (U+202A–202E, U+2066–2069) | **Critical** (极高) |
+| `RULE_INVISIBLE_OR_FORMAT_CHARACTER` | 包含零宽空格 (U+200B)、连字控制符 (U+200C/D) 或软连字符等不可见格式字符 | **Critical** (严重) |
+| `RULE_BIDI_CONTROL_CHARACTER` | 包含 LRM、RLM 或双向文本控制符 (U+202A–202E, U+2066–2069) | **Critical** (严重) |
+| `RULE_BIDI_OVERRIDE_CHARACTER` | 包含从右至左强制覆盖符 RLO (U+202E) 或从左至右强制覆盖符 LRO (U+202D) | **Critical** (严重) |
+| `RULE_BIDI_FILE_EXTENSION_SPOOF` | 双向强制覆盖符与可疑文件名后缀结合使用（如 Trojan Source 伪装 .exe, .pdf, .scr） | **Critical** (严重) |
 | `RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH` | 包含假借非拉丁字符冒用拉丁字符外观的同形异义字 | **High** (高) |
+| `RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD` | 跨拉丁、西里尔、希腊三元字系混合，高度疑似视觉欺骗注入 | **High** (高) |
 | `RULE_MIXED_SCRIPT_IDENTIFIER` | 包含两个或以上无合理语言关联的跨字系混合字符 | **Medium** (中) |

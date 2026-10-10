@@ -45,5 +45,8 @@ MoonSpoof evaluates security risks using explicit, machine-readable rule identif
 | :--- | :--- | :--- |
 | `RULE_INVISIBLE_OR_FORMAT_CHARACTER` | Contains zero-width space (U+200B), joiners (U+200C/D), or soft hyphens | **Critical** |
 | `RULE_BIDI_CONTROL_CHARACTER` | Contains LRM, RLM, or bidirectional overrides (U+202A–202E, U+2066–2069) | **Critical** |
+| `RULE_BIDI_OVERRIDE_CHARACTER` | Contains Right-to-Left Override (U+202E) or Left-to-Right Override (U+202D) | **Critical** |
+| `RULE_BIDI_FILE_EXTENSION_SPOOF` | Bidi override paired with deceptive executable/document extension (.exe, .pdf, .scr) | **Critical** |
 | `RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH` | Contains non-Latin glyphs masquerading as Latin characters | **High** |
+| `RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD` | Identifier mixes Latin, Cyrillic, or Greek alphabets vulnerable to homoglyphs | **High** |
 | `RULE_MIXED_SCRIPT_IDENTIFIER` | Contains conflicting characters from two or more unrelated scripts | **Medium** |
