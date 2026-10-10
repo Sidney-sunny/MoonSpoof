@@ -100,8 +100,22 @@ let collisions = @moonspoof.find_confusable_groups(registered_users)
 
 // Each group aggregates conflicting homoglyphic accounts
 for group in collisions {
-  println("Skeleton: \{group.skeleton}, Members: \{group.members}")
+  println("Skeleton: \{group.skeleton}")
 }
+```
+
+### 5. Identifier Profiles & Case-Insensitive Matching
+
+```moonbit
+// Case-insensitive confusable matching (UTS #39 Section 4)
+let is_conf = @moonspoof.are_confusable_ignore_case("PAYPAL", "P\u0430yPal") // true
+
+// UTS #39 Section 3 IdentifierProfile validation
+let check = @moonspoof.validate_identifier("p\u0430ypal") // Err("Identifier contains disallowed mixed scripts")
+let allowed = @moonspoof.is_allowed_identifier("valid_user") // true
+
+// Restriction level querying (UTS #39 Section 5)
+let level = @moonspoof.get_restriction_level("p\u0430ypal") // ModeratelyRestrictive
 ```
 
 ---

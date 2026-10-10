@@ -99,8 +99,22 @@ let registered_users = ["admin", "adm\u0456n", "alice", "bob", "al\u0456ce"]
 let collisions = @moonspoof.find_confusable_groups(registered_users)
 
 for group in collisions {
-  println("骨架: \{group.skeleton}, 冲突名称列表: \{group.members}")
+  println("骨架: \{group.skeleton}")
 }
+```
+
+### 5. 标识符安全配置与忽略大小写匹配
+
+```moonbit
+// 忽略大小写混淆匹配（UTS #39 第 4 节）
+let is_conf = @moonspoof.are_confusable_ignore_case("PAYPAL", "P\u0430yPal") // true
+
+// UTS #39 第 3 节 IdentifierProfile 校验
+let check = @moonspoof.validate_identifier("p\u0430ypal") // Err("Identifier contains disallowed mixed scripts")
+let allowed = @moonspoof.is_allowed_identifier("valid_user") // true
+
+// 混合字系限制等级查询（UTS #39 第 5 节）
+let level = @moonspoof.get_restriction_level("p\u0430ypal") // ModeratelyRestrictive
 ```
 
 ---

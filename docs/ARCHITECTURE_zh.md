@@ -76,8 +76,44 @@ MoonSpoof 采用**基于 Skeleton 的哈希分桶索引**：
 
 ---
 
-## 4. WebAssembly 架构与跨语言集成
+## 4. WebAssembly 架构与外部函数接口 (FFI)
 
-- **MoonBit 核心编译为 WASM**：所有 Unicode 数据检索、Skeleton 算法与规则引擎均运行在纯 MoonBit 编译产物内，杜绝双重标准差异。
-- **纯粹的前端展现层**：JavaScript 仅负责 DOM 交互、事件分发与组件渲染。
+MoonSpoof 提供跨运行时的零开销互操作契约：
+- **MoonBit 核心编译为 WASM / 本地代码**：所有 Unicode 数据检索、Skeleton 算法、字系分析、标识符规范校验与规则引擎均运行在纯 MoonBit 编译产物内，保证各平台行为 100% 一致。
+- **Web FFI 导出绑定 (`src/bindings`)**：
+  - `spoof_skeleton(s : String) -> String`：计算 UTS #39 规范骨架。
+  - `spoof_skeleton_case_folded(s : String) -> String`：计算忽略大小写的大小写折叠骨架。
+  - `spoof_are_confusable(a : String, b : String) -> Bool`：精确判断两字符串是否属于混淆同形对。
+  - `spoof_are_confusable_ignore_case(a : String, b : String) -> Bool`：忽略大小写判断混淆等价。
+  - `spoof_analyze_identifier(s : String) -> String`：导出字符级全量诊断报告（结构化 JSON）。
+  - `spoof_find_groups_json(names_json : String) -> String`：对 JSON 字符串数组执行 O(N) 批量冲突分桶分析。
+  - `spoof_validate_profile(s : String, strict : Bool) -> String`：校验 UTS #39 第 3 节 IdentifierProfile 安全配置。
 - **离线安全沙箱**：无需将待检测的敏感用户名或代码标识符上传至任何后端服务器，完全在客户端沙箱内本地完成。
+
+---
+
+## 5. 命令行运行入口 (`cmd/main`)
+
+MoonSpoof 随库附带纯 MoonBit 编写的命令行验证与演示套件：
+- 通过 MoonBit 工具链直接运行：
+  ```bash
+  moon run cmd/main
+  ```
+- 覆盖五大核心检验流：
+  1. 覆盖拉丁、西里尔、希腊、全角及零宽不可见字符的混淆等价比对；
+  2. UTS #39 第 4 节大小写折叠混淆验证；
+  3. 附带字符级码点十六进制、字系归属、映射目标的结构化安全诊断报告；
+  4. UTS #39 第 3 节严格与宽松安全配置校验（IdentifierProfile）；
+  5. 批量候选用户名集合的高吞吐 $O(N)$ 冲突聚类扫描。
+
+---
+
+## 6. 混合字系限制等级评定 (UTS #39 第 5 节)
+
+MoonSpoof 完整实现 UTS #39 推荐的五级限制等级（RestrictionLevel）：
+- **SingleScript（单一字系）**：标识符所有字符属于单一推荐字系（如全拉丁文、全汉字）。
+- **HighlyRestrictive（高限制级）**：允许的混合字系组合，包括日文（`Latin + Han + Hiragana + Katakana`）和韩文（`Latin + Han + Hangul`）。
+- **ModeratelyRestrictive（中限制级）**：拉丁文与任一非拉丁推荐字系的二元混合（`Latin + Cyrillic`、`Latin + Greek`、`Latin + Arabic`、`Latin + Hebrew`）。
+- **MinimallyRestrictive（低限制级）**：所有字符均属于 Unicode 推荐字系集合的任意组合（如 `Cyrillic + Greek`）。
+- **Unrestricted（无限制级）**：包含未分类（Unknown）字系或未分配码点。
+- **三元字系攻击规则（`RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD`）**：针对拉丁、西里尔、希腊字母之间普遍存在的欺骗性同形字符实施专属特征预警。

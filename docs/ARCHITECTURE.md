@@ -77,9 +77,44 @@ MoonSpoof employs **Hash-Indexed Skeleton Bucketing**:
 
 ---
 
-## 4. WebAssembly Architecture & Boundary
+## 4. WebAssembly Architecture & Foreign Function Interface (FFI)
 
-For the WebAssembly Playground:
-- **Core Logic in MoonBit**: All Unicode properties, skeleton computation, script parsing, and risk modeling compile into pure WASM.
-- **Minimal JavaScript Glue**: JavaScript only manages DOM rendering, text input capture, and UI event binding.
-- **Zero Network Egress**: The entire database runs offline within the browser sandbox.
+MoonSpoof provides zero-overhead interoperability across multiple runtimes:
+- **Core Logic in MoonBit**: All Unicode properties, skeleton computation, script parsing, profile validation, and risk modeling compile into pure WebAssembly and native binaries.
+- **Web FFI Export Bindings (`src/bindings`)**:
+  - `spoof_skeleton(s : String) -> String`: Computes canonical UTS #39 skeleton.
+  - `spoof_skeleton_case_folded(s : String) -> String`: Computes case-folded canonical skeleton.
+  - `spoof_are_confusable(a : String, b : String) -> Bool`: Tests confusable equivalence.
+  - `spoof_are_confusable_ignore_case(a : String, b : String) -> Bool`: Tests case-insensitive equivalence.
+  - `spoof_analyze_identifier(s : String) -> String`: Returns complete character-level diagnostic report as structured JSON.
+  - `spoof_find_groups_json(names_json : String) -> String`: Performs O(N) batch collision clustering on JSON array.
+  - `spoof_validate_profile(s : String, strict : Bool) -> String`: Evaluates UTS #39 Section 3 IdentifierProfile.
+- **Zero Network Egress**: The entire Unicode database runs completely client-side in the browser or embedded runtime without telemetry or external network calls.
+
+---
+
+## 5. Command-Line Interface (`cmd/main`)
+
+The MoonSpoof executable provides a turnkey demonstration and testing CLI:
+- Run directly via the MoonBit toolchain:
+  ```bash
+  moon run cmd/main
+  ```
+- Evaluates five standardized inspection routines:
+  1. Confusable equivalence matching across Latin, Cyrillic, Greek, fullwidth, and invisible codepoints.
+  2. Case-insensitive confusable validation under UTS #39 Section 4.
+  3. Structured diagnostic reports with character-level scripts, hex codepoints, and security rules.
+  4. UTS #39 Section 3 IdentifierProfile enforcement (Strict vs. Permissive).
+  5. High-throughput $O(N)$ batch collision scanning across candidate identifier pools.
+
+---
+
+## 6. Mixed-Script Restriction Levels (UTS #39 Section 5)
+
+MoonSpoof implements full UTS #39 Section 5 Restriction Level categorization:
+- **SingleScript**: All characters belong to a single recommended script (e.g. Latin-only, Han-only).
+- **HighlyRestrictive**: Allowed multi-script combinations including Japanese (`Latin + Han + Hiragana + Katakana`) and Korean (`Latin + Han + Hangul`).
+- **ModeratelyRestrictive**: Single non-Latin recommended script paired with Latin (`Latin + Cyrillic`, `Latin + Greek`, `Latin + Arabic`, `Latin + Hebrew`).
+- **MinimallyRestrictive**: Arbitrary combinations where all scripts belong to the Unicode Recommended Identifier Scripts set (e.g. `Cyrillic + Greek`).
+- **Unrestricted**: Identifiers containing `Unknown` scripts, unassigned ranges, or disallowed characters.
+- **Triad Attack Rule (`RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD`)**: Flags cross-script mixing between Latin, Cyrillic, and Greek alphabets where deceptive visual homoglyphs are prevalent.
