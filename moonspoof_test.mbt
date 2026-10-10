@@ -1,9 +1,31 @@
-// MoonSpoof Standard Unit Tests
+// MoonSpoof Standard Unit Tests & Official UTS #39 Conformance Vectors
 
 test "confusable detection: Latin vs Cyrillic paypal" {
   let authentic = "paypal"
   let spoofed = "p\u0430ypal" // Cyrillic Small Letter A (U+0430)
   assert_true(are_confusable(authentic, spoofed))
+}
+
+test "confusable detection: Cyrillic google" {
+  let authentic = "google"
+  let spoofed = "g\u043E\u043Egle" // Cyrillic Small Letter O (U+043E)
+  assert_true(are_confusable(authentic, spoofed))
+  assert_eq(skeleton(spoofed), "google")
+}
+
+test "confusable detection: Greek micro (m -> rn in UTS #39)" {
+  let authentic = "micro"
+  let spoofed = "micr\u03BF" // Greek Small Letter Omicron (U+03BF)
+  assert_true(are_confusable(authentic, spoofed))
+  assert_eq(skeleton(authentic), "rnicro")
+  assert_eq(skeleton(spoofed), "rnicro")
+}
+
+test "confusable detection: Fullwidth ASCII admin" {
+  let fullwidth = "\uFF41\uFF44\uFF4D\uFF49\uFF4E" // ａｄｍｉｎ
+  assert_true(are_confusable("admin", fullwidth))
+  assert_eq(skeleton(fullwidth), "adrnin")
+  assert_eq(skeleton("admin"), "adrnin")
 }
 
 test "confusable skeleton equivalence" {

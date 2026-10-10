@@ -58,35 +58,7 @@ pub(all) struct ScriptAnalysis {
 } derive(Debug)
 
 pub fn get_script(cp : Int) -> Script {
-  if (cp >= 0x0041 && cp <= 0x005A) ||
-    (cp >= 0x0061 && cp <= 0x007A) ||
-    (cp >= 0x00C0 && cp <= 0x024F) ||
-    (cp >= 0x1E00 && cp <= 0x1EFF) {
-    Latin
-  } else if (cp >= 0x0400 && cp <= 0x04FF) || (cp >= 0x0500 && cp <= 0x052F) {
-    Cyrillic
-  } else if (cp >= 0x0370 && cp <= 0x03FF) || (cp >= 0x1F00 && cp <= 0x1FFF) {
-    Greek
-  } else if (cp >= 0x0600 && cp <= 0x06FF) || (cp >= 0x0750 && cp <= 0x077F) {
-    Arabic
-  } else if cp >= 0x0590 && cp <= 0x05FF {
-    Hebrew
-  } else if (cp >= 0x4E00 && cp <= 0x9FFF) || (cp >= 0x3400 && cp <= 0x4DBF) {
-    Han
-  } else if cp >= 0x3040 && cp <= 0x309F {
-    Hiragana
-  } else if cp >= 0x30A0 && cp <= 0x30FF {
-    Katakana
-  } else if (cp >= 0xAC00 && cp <= 0xD7AF) || (cp >= 0x1100 && cp <= 0x11FF) {
-    Hangul
-  } else if (cp >= 0x0020 && cp <= 0x0040) ||
-    (cp >= 0x005B && cp <= 0x0060) ||
-    (cp >= 0x007B && cp <= 0x007E) ||
-    (cp >= 0x0030 && cp <= 0x0039) {
-    Common
-  } else {
-    Unknown
-  }
+  binary_search_script(cp)
 }
 
 pub fn contains_script(arr : Array[Script], s : Script) -> Bool {
