@@ -206,3 +206,47 @@ pub fn spoof_validate_profile(input : String, is_permissive : Bool) -> String {
   }
   sb.to_string()
 }
+
+///|
+/// Direct UTS #39 canonical skeleton transformation
+pub fn spoof_skeleton(input : String) -> String {
+  @moonspoof.skeleton(input)
+}
+
+///|
+/// Direct UTS #39 case-folded skeleton transformation
+pub fn spoof_skeleton_case_folded(input : String) -> String {
+  @moonspoof.skeleton_case_folded(input)
+}
+
+///|
+/// Query structured restriction level info
+pub fn spoof_get_restriction_info(input : String) -> String {
+  let sa = @moonspoof.analyze_scripts(input)
+  let sb = StringBuilder()
+  sb.write_string("{\"restriction_level\":\"")
+  sb.write_string(sa.level.to_string())
+  sb.write_string("\",\"primary_script\":\"")
+  sb.write_string(sa.primary_script.to_string())
+  sb.write_string("\",\"is_mixed\":")
+  sb.write_string(if sa.is_mixed { "true" } else { "false" })
+  sb.write_string(",\"is_single_script\":")
+  sb.write_string(
+    if sa.level == @moonspoof.RestrictionLevel::SingleScript {
+      "true"
+    } else {
+      "false"
+    },
+  )
+  sb.write_string(",\"scripts\":[")
+  for i in 0..<sa.scripts.length() {
+    if i > 0 {
+      sb.write_string(",")
+    }
+    sb.write_string("\"")
+    sb.write_string(escape_json(sa.scripts[i].to_string()))
+    sb.write_string("\"")
+  }
+  sb.write_string("]}")
+  sb.to_string()
+}
