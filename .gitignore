@@ -9,3 +9,8 @@ target
 .env
 .env.*
 *.local
+
+# Private submissions & sensitive forms
+*proposal*
+*PROPOSAL*
+private/
