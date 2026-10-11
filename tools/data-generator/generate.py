@@ -293,7 +293,15 @@ def main():
     generate_confusable_tables(mappings, confusable_out)
     generate_script_tables(ranges, script_out)
     generate_unicode_tables(data_dir, Path(project_root) / "src" / "unicode" / "tables.mbt")
-    sources = {path.name: {"sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "url": CONFUSABLES_URL if path.name == "confusables.txt" else SCRIPTS_URL if path.name == "Scripts.txt" else f"{UCD_URL}/{path.name}"} for path in sorted(data_dir.glob("*.txt")) if path.name in {"confusables.txt", "Scripts.txt", "UnicodeData.txt", "CaseFolding.txt", "DerivedCoreProperties.txt", "NormalizationTest.txt"}}
+    sources = {}
+    source_names = {"confusables.txt", "Scripts.txt", "UnicodeData.txt", "CaseFolding.txt", "DerivedCoreProperties.txt", "NormalizationTest.txt"}
+    # pathlib compares Windows paths case-insensitively, unlike POSIX paths.
+    # Sort filenames explicitly so the manifest is reproducible on both hosts.
+    for source_path in sorted(data_dir.glob("*.txt"), key=lambda path: path.name.casefold()):
+        if source_path.name not in source_names:
+            continue
+        source_url = CONFUSABLES_URL if source_path.name == "confusables.txt" else SCRIPTS_URL if source_path.name == "Scripts.txt" else f"{UCD_URL}/{source_path.name}"
+        sources[source_path.name] = {"sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(), "url": source_url}
     (data_dir / "sources.json").write_text(json.dumps({"unicode_version": UNICODE_VERSION, "sources": sources}, indent=2) + "\n", encoding="utf-8")
     print("Done generating MoonBit static tables!")
 
