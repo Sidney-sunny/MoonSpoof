@@ -98,9 +98,13 @@ println(report.rules_triggered) // ["RULE_INVISIBLE_OR_FORMAT_CHARACTER"]
 let registered_users = ["admin", "adm\u0456n", "alice", "bob", "al\u0456ce"]
 let collisions = @moonspoof.find_confusable_groups(registered_users)
 
+// Case-insensitive batch collision clustering under UTS #39 Section 4
+let mixed_users = ["PAYPAL", "p\u0430ypal", "Paypal", "stripe"]
+let folded_collisions = @moonspoof.find_confusable_groups_ignore_case(mixed_users)
+
 // Each group aggregates conflicting homoglyphic accounts
 for group in collisions {
-  println("Skeleton: \{group.skeleton}")
+  println("Skeleton: \{group.skeleton}, Members: \{group.members}")
 }
 ```
 

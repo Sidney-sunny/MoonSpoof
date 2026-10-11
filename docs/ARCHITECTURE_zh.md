@@ -69,10 +69,11 @@ MoonSpoof 的实现策略：
 若对 $N$ 个用户名进行两两逐对比较，算法复杂度为 $O(N^2)$。当用户名数量达到 10,000 至 100,000 时，比较次数将高达数亿次，无法在实际生产中运行。
 
 MoonSpoof 采用**基于 Skeleton 的哈希分桶索引**：
-1. 遍历输入的 $N$ 个用户名，对每个名称计算骨架字符串 $\text{sk}_i = \text{skeleton}(S_i)$，单次耗时 $O(L)$（$L$ 为字符串长度）。
+1. 遍历输入的 $N$ 个用户名，对每个名称计算骨架字符串 $\text{sk}_i = \text{skeleton}(S_i)$（或启用忽略大小写时的 $\text{skeleton\_case\_folded}(S_i)$），单次耗时 $O(L)$（$L$ 为字符串长度）。
 2. 将用户名归入对应骨架的哈希桶：$\text{Buckets}[\text{sk}_i] \leftarrow \text{append}(S_i)$。
 3. 提取所有容量大于 1 的哈希桶，即为存在混淆冒用风险的分组。
 4. 全局时间复杂度线性降至 $O(N \cdot L)$，内存开销为 $O(N)$。
+5. **大小写不敏感模式**：由 `find_confusable_groups_ignore_case` 原生提供，统一将诸如 `PAYPAL`、`pаypal`（西里尔字母 `а`）与 `Paypal` 汇聚至同一折叠规范特征 `paypal` 冲突簇中。
 
 ---
 
@@ -80,14 +81,15 @@ MoonSpoof 采用**基于 Skeleton 的哈希分桶索引**：
 
 MoonSpoof 提供跨运行时的零开销互操作契约：
 - **MoonBit 核心编译为 WASM / 本地代码**：所有 Unicode 数据检索、Skeleton 算法、字系分析、标识符规范校验与规则引擎均运行在纯 MoonBit 编译产物内，保证各平台行为 100% 一致。
-- **Web FFI 导出绑定 (`src/bindings`)**：
+- **Web FFI 导出绑定 (`src/bindings/web`)**：
   - `spoof_skeleton(s : String) -> String`：计算 UTS #39 规范骨架。
   - `spoof_skeleton_case_folded(s : String) -> String`：计算忽略大小写的大小写折叠骨架。
-  - `spoof_are_confusable(a : String, b : String) -> Bool`：精确判断两字符串是否属于混淆同形对。
-  - `spoof_are_confusable_ignore_case(a : String, b : String) -> Bool`：忽略大小写判断混淆等价。
-  - `spoof_analyze_identifier(s : String) -> String`：导出字符级全量诊断报告（结构化 JSON）。
-  - `spoof_find_groups_json(names_json : String) -> String`：对 JSON 字符串数组执行 O(N) 批量冲突分桶分析。
-  - `spoof_validate_profile(s : String, strict : Bool) -> String`：校验 UTS #39 第 3 节 IdentifierProfile 安全配置。
+  - `spoof_compare(a : String, b : String, ignore_case : Bool) -> String`：支持严格与大小写折叠两种模式的双标识符混淆比对。
+  - `spoof_analyze(s : String) -> String`：导出字符级全量诊断报告（结构化 JSON）。
+  - `spoof_batch_scan(raw_input : String) -> String`：对分隔符隔开的标识符集合执行 O(N) 批量冲突聚类。
+  - `spoof_batch_scan_with_options(raw_input : String, ignore_case : Bool) -> String`：支持大小写折叠开关的高吞吐批量冲突扫描。
+  - `spoof_validate_profile(s : String, is_permissive : Bool) -> String`：校验 UTS #39 第 3 节 IdentifierProfile 安全配置。
+  - `spoof_get_restriction_info(s : String) -> String`：返回包含限制等级与字系数组的结构化 JSON。
 - **离线安全沙箱**：无需将待检测的敏感用户名或代码标识符上传至任何后端服务器，完全在客户端沙箱内本地完成。
 
 ---

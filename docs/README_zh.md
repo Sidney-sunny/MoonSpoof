@@ -93,13 +93,17 @@ println(report.rules_triggered) // ["RULE_INVISIBLE_OR_FORMAT_CHARACTER"]
 ```
 
 ### 4. 批量用户名冲突扫描
-
+ 
 ```moonbit
 let registered_users = ["admin", "adm\u0456n", "alice", "bob", "al\u0456ce"]
 let collisions = @moonspoof.find_confusable_groups(registered_users)
 
+// 忽略大小写批量碰撞聚类分析（UTS #39 第 4 节）
+let mixed_users = ["PAYPAL", "p\u0430ypal", "Paypal", "stripe"]
+let folded_collisions = @moonspoof.find_confusable_groups_ignore_case(mixed_users)
+
 for group in collisions {
-  println("骨架: \{group.skeleton}")
+  println("骨架: \{group.skeleton}, 成员: \{group.members}")
 }
 ```
 

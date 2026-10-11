@@ -70,10 +70,11 @@ A naive collision scanner comparing $N$ usernames pairwise requires $O(N^2)$ com
 $$\text{Pairwise Comparisons} = \frac{N(N-1)}{2} \approx 5 \times 10^7 \quad (N = 10,000)$$
 
 MoonSpoof employs **Hash-Indexed Skeleton Bucketing**:
-1. For each input name $S_i$, compute $\text{sk}_i = \text{skeleton}(S_i)$ in $O(L)$ time where $L$ is identifier length.
+1. For each input name $S_i$, compute $\text{sk}_i = \text{skeleton}(S_i)$ (or $\text{skeleton\_case\_folded}(S_i)$ when case-insensitive mode is enabled) in $O(L)$ time where $L$ is identifier length.
 2. Store into hash bucket $\text{Buckets}[\text{sk}_i] \leftarrow \text{append}(S_i)$.
 3. Collect all buckets with cardinality $\ge 2$.
 4. Total execution time scales linearly at $O(N \cdot L)$ with memory overhead $O(N)$.
+5. **Case-Insensitive Mode**: Supported natively via `find_confusable_groups_ignore_case`, grouping variants such as `PAYPAL`, `pаypal` (Cyrillic `а`), and `Paypal` into a single unified collision cluster under canonical folded signature `paypal`.
 
 ---
 
@@ -81,14 +82,15 @@ MoonSpoof employs **Hash-Indexed Skeleton Bucketing**:
 
 MoonSpoof provides zero-overhead interoperability across multiple runtimes:
 - **Core Logic in MoonBit**: All Unicode properties, skeleton computation, script parsing, profile validation, and risk modeling compile into pure WebAssembly and native binaries.
-- **Web FFI Export Bindings (`src/bindings`)**:
+- **Web FFI Export Bindings (`src/bindings/web`)**:
   - `spoof_skeleton(s : String) -> String`: Computes canonical UTS #39 skeleton.
   - `spoof_skeleton_case_folded(s : String) -> String`: Computes case-folded canonical skeleton.
-  - `spoof_are_confusable(a : String, b : String) -> Bool`: Tests confusable equivalence.
-  - `spoof_are_confusable_ignore_case(a : String, b : String) -> Bool`: Tests case-insensitive equivalence.
-  - `spoof_analyze_identifier(s : String) -> String`: Returns complete character-level diagnostic report as structured JSON.
-  - `spoof_find_groups_json(names_json : String) -> String`: Performs O(N) batch collision clustering on JSON array.
-  - `spoof_validate_profile(s : String, strict : Bool) -> String`: Evaluates UTS #39 Section 3 IdentifierProfile.
+  - `spoof_compare(a : String, b : String, ignore_case : Bool) -> String`: Compares two identifiers for confusable equivalence under strict or case-folded mode.
+  - `spoof_analyze(s : String) -> String`: Returns complete character-level diagnostic report as structured JSON.
+  - `spoof_batch_scan(raw_input : String) -> String`: Performs O(N) batch collision clustering across delimited identifier pools.
+  - `spoof_batch_scan_with_options(raw_input : String, ignore_case : Bool) -> String`: High-throughput collision scanning with case-insensitive clustering toggle.
+  - `spoof_validate_profile(s : String, is_permissive : Bool) -> String`: Evaluates UTS #39 Section 3 IdentifierProfile.
+  - `spoof_get_restriction_info(s : String) -> String`: Returns JSON script analysis with restriction level and scripts array.
 - **Zero Network Egress**: The entire Unicode database runs completely client-side in the browser or embedded runtime without telemetry or external network calls.
 
 ---
