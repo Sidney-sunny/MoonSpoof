@@ -131,6 +131,19 @@ pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup]
 
 ---
 
+### 1.8 `find_confusable_groups_ignore_case`
+
+依据 UTS #39 第 4 节规范，利用大小写折叠骨架（`skeleton_case_folded`）对批量候选名称执行大小写不敏感的 $O(N)$ 冲突聚类分桶。
+
+```moonbit
+pub fn find_confusable_groups_ignore_case(names : Array[String]) -> Array[ConfusableGroup]
+```
+
+- **参数**：`names : Array[String]` — 待扫描的名称集合。
+- **返回值**：`Array[ConfusableGroup]` — 所有在忽略大小写与同形替换后发生碰撞的分组（如 `PAYPAL`、`pаypal`、`Paypal` 汇聚至同一分组）。
+
+---
+
 ## 2. 核心数据类型定义
 
 ### 2.1 `SecurityRiskLevel` (安全风险等级)

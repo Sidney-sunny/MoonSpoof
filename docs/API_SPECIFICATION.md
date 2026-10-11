@@ -131,6 +131,19 @@ pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup]
 
 ---
 
+### 1.8 `find_confusable_groups_ignore_case`
+
+Scans a collection of names and partitions them into case-insensitive confusable collision buckets under UTS #39 Section 4 using `skeleton_case_folded`.
+
+```moonbit
+pub fn find_confusable_groups_ignore_case(names : Array[String]) -> Array[ConfusableGroup]
+```
+
+- **Parameters**: `names : Array[String]` — List of candidate identifiers or usernames.
+- **Returns**: `Array[ConfusableGroup]` — All groups containing 2 or more mutually confusable names under case folding (e.g. `PAYPAL`, `pаypal`, `Paypal`).
+
+---
+
 ## 2. Type Definitions
 
 ### 2.1 `SecurityRiskLevel`
