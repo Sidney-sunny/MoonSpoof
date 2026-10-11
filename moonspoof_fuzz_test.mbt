@@ -12,7 +12,9 @@ fn get_fuzz_samples() -> Array[String] {
      "\u30A2\u30A4\u30A6\u30A8\u30A4", // Katakana
      "\uAC00\uB098\uB2E4", // Hangul
      "MIXED_\u0430\u03BF\uFF41_TOKEN", "safe_identifier_sample", "invoice\u202Eexe.pdf",
-    "script\u202Dcom.bat",
+    "script\u202Dcom.bat", "\u{1D400}\u{1D401}\u{1D402}", // Mathematical Bold ABC (Astral plane U+1D400..)
+     "\u{1F600}\u{1F680}", // Emoji (Astral plane U+1F600..)
+     "\u{20000}\u{20001}", // CJK Extension B (Astral plane U+20000..)
   ]
 }
 
@@ -75,7 +77,11 @@ test "fuzzing: security diagnostic never panics on arbitrary input" {
   for s in samples {
     let report = analyze_identifier(s)
     assert_eq(report.original, s)
-    assert_true(report.char_diagnostics.length() == s.length())
+    let mut char_count = 0
+    for _ in s {
+      char_count += 1
+    }
+    assert_eq(report.char_diagnostics.length(), char_count)
   }
 }
 
@@ -115,6 +121,44 @@ test "property: bidi and invisible detection invariant" {
     }
     if has_inv || has_bidi {
       assert_eq(rep.risk_level, @security.SecurityRiskLevel::Critical)
+    }
+  }
+}
+
+///|
+test "property: batch confusable clustering invariants" {
+  let samples = get_fuzz_samples()
+  let groups = find_confusable_groups(samples)
+  for g in groups {
+    assert_true(g.members.length() >= 2)
+    let expected_sk = g.skeleton
+    for m in g.members {
+      assert_eq(skeleton(m), expected_sk)
+    }
+    // Mutual confusability
+    for i in 0..<g.members.length() {
+      for j in 0..<g.members.length() {
+        assert_true(are_confusable(g.members[i], g.members[j]))
+      }
+    }
+  }
+}
+
+///|
+test "property: batch confusable clustering ignore case invariants" {
+  let samples = get_fuzz_samples()
+  let groups = find_confusable_groups_ignore_case(samples)
+  for g in groups {
+    assert_true(g.members.length() >= 2)
+    let expected_sk = g.skeleton
+    for m in g.members {
+      assert_eq(skeleton_case_folded(m), expected_sk)
+    }
+    // Mutual case-insensitive confusability
+    for i in 0..<g.members.length() {
+      for j in 0..<g.members.length() {
+        assert_true(are_confusable_ignore_case(g.members[i], g.members[j]))
+      }
     }
   }
 }
