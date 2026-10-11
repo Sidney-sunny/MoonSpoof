@@ -117,3 +117,12 @@ MoonSpoof 完整实现 UTS #39 推荐的五级限制等级（RestrictionLevel）
 - **MinimallyRestrictive（低限制级）**：所有字符均属于 Unicode 推荐字系集合的任意组合（如 `Cyrillic + Greek`）。
 - **Unrestricted（无限制级）**：包含未分类（Unknown）字系或未分配码点。
 - **三元字系攻击规则（`RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD`）**：针对拉丁、西里尔、希腊字母之间普遍存在的欺骗性同形字符实施专属特征预警。
+
+---
+
+## 7. 双向文本与特洛伊木马源码防御 (CVE-2021-42574)
+
+MoonSpoof 为双向文本（Bi-directional Text）安全设计了专属的防御管线：
+- **强制方向覆盖符深度拦截**：专门识别从右至左覆盖符（`RLO` U+202E）与从左至右覆盖符（`LRO` U+202D），自动激活 `RULE_BIDI_OVERRIDE_CHARACTER`；
+- **扩展名边界混淆防御**：当双向覆盖符与文件名分隔点（`.`）共同出现时，即刻触发 `RULE_BIDI_FILE_EXTENSION_SPOOF`，彻底阻止攻击者利用图形界面反向渲染伪装恶意可执行载荷（如将 `.exe` 视觉颠倒为 `.pdf`）；
+- **工作台双重视角拆解 (Zone D)**：在 WebAssembly 演练平台中直观并列呈现人类图形界面渲染视觉序与系统物理内存字节序，让安全审计人员一目了然。

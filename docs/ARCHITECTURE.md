@@ -118,3 +118,12 @@ MoonSpoof implements full UTS #39 Section 5 Restriction Level categorization:
 - **MinimallyRestrictive**: Arbitrary combinations where all scripts belong to the Unicode Recommended Identifier Scripts set (e.g. `Cyrillic + Greek`).
 - **Unrestricted**: Identifiers containing `Unknown` scripts, unassigned ranges, or disallowed characters.
 - **Triad Attack Rule (`RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD`)**: Flags cross-script mixing between Latin, Cyrillic, and Greek alphabets where deceptive visual homoglyphs are prevalent.
+
+---
+
+## 7. Bidirectional Text & Trojan Source Defense (CVE-2021-42574)
+
+MoonSpoof incorporates specialized defense mechanisms against bidirectional text attacks:
+- **Directional Override Detection**: Explicitly tracks Right-to-Left Override (`RLO` U+202E) and Left-to-Right Override (`LRO` U+202D), triggering `RULE_BIDI_OVERRIDE_CHARACTER`.
+- **File Extension Boundary Defense**: Identifiers combining a bidirectional override with filename delimiter dots (`.`) trigger `RULE_BIDI_FILE_EXTENSION_SPOOF` to prevent GUI visual disguise of dangerous executables (e.g. `.exe`, `.scr`, `.bat`).
+- **Interactive Split Workbench (Zone D)**: The WebAssembly playground provides dual-pane inspection contrasting visual GUI appearance against physical in-memory byte streams.
