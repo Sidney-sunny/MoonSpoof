@@ -60,3 +60,32 @@ test "whitebox: all invisible format control codepoints validated" {
     assert_true(@unicode.is_invisible_codepoint(cp))
   }
 }
+
+///|
+test "whitebox: bidi override codepoints strictly distinguished" {
+  assert_true(@unicode.is_bidi_override_codepoint(0x202D)) // LRO
+  assert_true(@unicode.is_bidi_override_codepoint(0x202E)) // RLO
+  assert_false(@unicode.is_bidi_override_codepoint(0x200E)) // LRM
+  assert_false(@unicode.is_bidi_override_codepoint(0x200F)) // RLM
+  assert_false(@unicode.is_bidi_override_codepoint(0x202A)) // LRE
+  assert_false(@unicode.is_bidi_override_codepoint(0x0041)) // 'A'
+}
+
+///|
+test "whitebox: Trojan Source and file extension spoof matrix" {
+  let targets = [
+    ("invoice\u202Eexe.pdf", true),
+    ("document\u202Escr.doc", true),
+    ("setup\u202Dcom.png", true),
+    ("standard_file.pdf", false),
+    ("clean_archive.zip", false),
+  ]
+  for t in targets {
+    let (name, expected_spoof) = t
+    let rep = @security.analyze_identifier(name)
+    let has_rule = rep.rules_triggered.contains(
+      "RULE_BIDI_FILE_EXTENSION_SPOOF",
+    )
+    assert_eq(has_rule, expected_spoof)
+  }
+}

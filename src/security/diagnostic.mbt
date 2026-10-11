@@ -85,18 +85,7 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
 
   let has_mixed_triad = @script.has_mixed_triad_scripts(script_res.scripts)
   let has_bidi_override = @unicode.has_bidi_override(input)
-  let is_file_spoof = has_bidi_override &&
-    (
-      input.contains(".exe") ||
-      input.contains(".pdf") ||
-      input.contains(".scr") ||
-      input.contains(".com") ||
-      input.contains(".bat") ||
-      input.contains(".cmd") ||
-      input.contains(".sh") ||
-      input.contains(".vbs") ||
-      input.contains(".js")
-    )
+  let is_file_spoof = has_bidi_override && input.contains(".")
 
   if has_invisible {
     rules.push("RULE_INVISIBLE_OR_FORMAT_CHARACTER")
