@@ -35,6 +35,9 @@
       <button id="tab-btn-inspector" class="tab-btn px-3.5 py-1.5 text-xs font-medium rounded-md transition text-obsidian-400 hover:text-obsidian-200" data-tab="inspector">
         Glyph Inspector
       </button>
+      <button id="tab-btn-trojan" class="tab-btn px-3.5 py-1.5 text-xs font-medium rounded-md transition text-obsidian-400 hover:text-obsidian-200" data-tab="trojan">
+        Trojan Source & Bidi
+      </button>
     </nav>
 
     <!-- Header Actions -->
@@ -355,6 +358,114 @@
               <!-- Rendered dynamically -->
             </tbody>
           </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== TAB 4: TROJAN SOURCE & BIDI ==================== -->
+    <section id="pane-trojan" class="hidden space-y-6">
+      
+      <!-- Top Presets Bar -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center space-x-2">
+          <span class="text-xs font-semibold text-obsidian-400 font-mono uppercase tracking-wider">Attack Scenarios:</span>
+          <div class="flex flex-wrap gap-2">
+            <button class="trojan-preset-btn px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-750 text-obsidian-200 text-xs font-mono border border-obsidian-700 transition" data-val="invoice&#x202e;exe.pdf">
+              RLO File Spoof (exe.pdf)
+            </button>
+            <button class="trojan-preset-btn px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-750 text-obsidian-200 text-xs font-mono border border-obsidian-700 transition" data-val="photo_&#x202e;fdp.exe">
+              RLO Disguise (fdp.exe)
+            </button>
+            <button class="trojan-preset-btn px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-750 text-obsidian-200 text-xs font-mono border border-obsidian-700 transition" data-val="access_&#x202d;admin_role&#x202c;">
+              LRO Role Override
+            </button>
+            <button class="trojan-preset-btn px-2.5 py-1 rounded bg-obsidian-800 hover:bg-obsidian-750 text-obsidian-200 text-xs font-mono border border-obsidian-700 transition" data-val="clean_document.pdf">
+              Clean Baseline (.pdf)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Panel -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-4">
+        <div>
+          <h2 class="text-sm font-semibold text-white tracking-wide">Trojan Source & Bidirectional Text Audit</h2>
+          <p class="text-xs text-obsidian-400 mt-0.5">
+            Detection of CVE-2021-42574 Trojan Source injection, Unicode bidirectional overrides (RLO/LRO/RLE/LRE/PDF), and deceptive file extension masquerading.
+          </p>
+        </div>
+
+        <div>
+          <input type="text" id="trojan-input" value="invoice&#x202e;exe.pdf" class="w-full px-3.5 py-2.5 rounded-lg bg-obsidian-950 border border-obsidian-700 text-white font-mono text-base focus:outline-none focus:border-obsidian-500 transition" placeholder="Enter filename or code token to test..." />
+        </div>
+      </div>
+
+      <!-- Split Card: Visual Appearance vs. Logical Byte Order -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-rose-400 uppercase tracking-wider font-mono">Rendered Display (Visual Order)</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-950/80 text-rose-400 border border-rose-800 font-mono">GUI Appearance</span>
+          </div>
+          <div id="trojan-rendered-view" class="p-3.5 rounded-lg bg-obsidian-950 border border-obsidian-800 text-white font-mono text-lg break-all select-all min-h-[52px] flex items-center">
+            invoicefdp.exe
+          </div>
+          <p class="text-[11px] text-obsidian-500">
+            What the operating system GUI, email client, or web browser renders to the human operator.
+          </p>
+        </div>
+
+        <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider font-mono">Logical Memory Sequence (Physical Order)</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800 font-mono">OS Execution</span>
+          </div>
+          <div id="trojan-logical-view" class="p-3.5 rounded-lg bg-obsidian-950 border border-obsidian-800 text-emerald-300 font-mono text-sm break-all select-all min-h-[52px] flex items-center">
+            invoice[U+202E]exe.pdf
+          </div>
+          <p class="text-[11px] text-obsidian-500">
+            Actual in-memory byte sequence passed to the execution environment or filesystem driver.
+          </p>
+        </div>
+      </div>
+
+      <!-- Threat Metrics Card -->
+      <div class="bg-obsidian-900 border border-obsidian-800 rounded-xl p-5 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center space-x-3">
+            <span id="trojan-risk-dot" class="w-3 h-3 rounded-full bg-rose-500"></span>
+            <div>
+              <div class="flex items-center space-x-2">
+                <h3 class="text-sm font-semibold text-white">Security Rating:</h3>
+                <span id="trojan-risk-title" class="text-xs font-mono font-bold text-rose-400">Critical</span>
+              </div>
+              <p id="trojan-risk-desc" class="text-xs text-obsidian-400 mt-0.5">
+                Contains bidirectional override character and deceptive file extension.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4 text-xs font-mono">
+            <div>
+              <span class="text-obsidian-500">Bidi Controls:</span>
+              <span id="trojan-has-bidi" class="text-rose-400 font-bold ml-1">Detected</span>
+            </div>
+            <div>
+              <span class="text-obsidian-500">Override Active:</span>
+              <span id="trojan-has-override" class="text-rose-400 font-bold ml-1">RLO Present</span>
+            </div>
+            <div>
+              <span class="text-obsidian-500">File Spoof Vector:</span>
+              <span id="trojan-is-filespoof" class="text-rose-400 font-bold ml-1">High Risk</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-obsidian-800">
+          <span class="text-xs text-obsidian-400 font-mono block mb-1">Triggered Security Rules:</span>
+          <div id="trojan-rules" class="flex flex-wrap gap-1.5">
+            <!-- Rules rendered dynamically -->
+          </div>
         </div>
       </div>
 

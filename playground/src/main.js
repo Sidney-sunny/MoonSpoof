@@ -132,6 +132,7 @@ function initTabs() {
     compare: document.getElementById('pane-compare'),
     scanner: document.getElementById('pane-scanner'),
     inspector: document.getElementById('pane-inspector'),
+    trojan: document.getElementById('pane-trojan'),
   };
 
   tabs.forEach(btn => {
@@ -554,6 +555,121 @@ function initInspectorZone() {
   runInspect();
 }
 
+// ==================== ZONE D: TROJAN SOURCE & BIDI ====================
+function initTrojanZone() {
+  const input = document.getElementById('trojan-input');
+  const renderedView = document.getElementById('trojan-rendered-view');
+  const logicalView = document.getElementById('trojan-logical-view');
+  const riskDot = document.getElementById('trojan-risk-dot');
+  const riskTitle = document.getElementById('trojan-risk-title');
+  const riskDesc = document.getElementById('trojan-risk-desc');
+  const hasBidiEl = document.getElementById('trojan-has-bidi');
+  const hasOverrideEl = document.getElementById('trojan-has-override');
+  const isFilespoofEl = document.getElementById('trojan-is-filespoof');
+  const rulesEl = document.getElementById('trojan-rules');
+  const presetBtns = document.querySelectorAll('.trojan-preset-btn');
+
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const val = btn.dataset.val;
+      if (val) {
+        input.value = val;
+        runAudit();
+      }
+    });
+  });
+
+  function formatLogical(str) {
+    let out = '';
+    for (let i = 0; i < str.length; i++) {
+      const cp = str.codePointAt(i);
+      if (cp === 0x202E) {
+        out += '<span class="text-rose-400 font-bold bg-rose-950 px-1 rounded">[RLO:U+202E]</span>';
+      } else if (cp === 0x202D) {
+        out += '<span class="text-rose-400 font-bold bg-rose-950 px-1 rounded">[LRO:U+202D]</span>';
+      } else if (cp === 0x200B) {
+        out += '<span class="text-amber-400 bg-amber-950 px-1 rounded">[ZWSP:U+200B]</span>';
+      } else if (cp === 0x202A || cp === 0x202B || cp === 0x202C || cp === 0x2066 || cp === 0x2067 || cp === 0x2069) {
+        out += `<span class="text-rose-400 bg-rose-950 px-1 rounded">[BIDI:U+${cp.toString(16).toUpperCase()}]</span>`;
+      } else {
+        out += escapeHtml(str[i]);
+      }
+    }
+    return out;
+  }
+
+  function runAudit() {
+    const val = input.value || '';
+    renderedView.textContent = val;
+    logicalView.innerHTML = formatLogical(val);
+
+    try {
+      const resRaw = spoof_analyze(val);
+      const res = JSON.parse(resRaw);
+
+      const styles = getRiskStyles(res.risk_level);
+      riskDot.className = `w-3 h-3 rounded-full ${styles.dot}`;
+      riskTitle.className = `text-xs font-mono font-bold ${styles.text}`;
+      riskTitle.textContent = res.risk_level;
+
+      const hasOverride = res.rules_triggered.includes('RULE_BIDI_OVERRIDE_CHARACTER');
+      const hasBidi = res.rules_triggered.includes('RULE_BIDI_CONTROL_CHARACTER');
+      const isFileSpoof = res.rules_triggered.includes('RULE_BIDI_FILE_EXTENSION_SPOOF');
+
+      if (hasBidi) {
+        hasBidiEl.textContent = 'Detected';
+        hasBidiEl.className = 'text-rose-400 font-bold ml-1';
+      } else {
+        hasBidiEl.textContent = 'Clean';
+        hasBidiEl.className = 'text-emerald-400 font-bold ml-1';
+      }
+
+      if (hasOverride) {
+        hasOverrideEl.textContent = 'Override Active';
+        hasOverrideEl.className = 'text-rose-400 font-bold ml-1';
+      } else {
+        hasOverrideEl.textContent = 'None';
+        hasOverrideEl.className = 'text-emerald-400 font-bold ml-1';
+      }
+
+      if (isFileSpoof) {
+        isFilespoofEl.textContent = 'High Threat';
+        isFilespoofEl.className = 'text-rose-400 font-bold ml-1';
+      } else {
+        isFilespoofEl.textContent = 'Safe';
+        isFilespoofEl.className = 'text-emerald-400 font-bold ml-1';
+      }
+
+      if (isFileSpoof) {
+        riskDesc.textContent = 'Critical Trojan Source file extension spoof detected. GUI visual order masks executable payload.';
+      } else if (hasOverride) {
+        riskDesc.textContent = 'Bidirectional text override detected. RLO/LRO disrupts logical-to-visual order.';
+      } else if (res.risk_level === 'Safe') {
+        riskDesc.textContent = 'Clean baseline identifier. Zero bidirectional control exploits detected.';
+      } else {
+        riskDesc.textContent = 'Identifier evaluated under UTS #39 Unicode security rules.';
+      }
+
+      rulesEl.innerHTML = '';
+      if (res.rules_triggered.length === 0) {
+        rulesEl.innerHTML = '<span class="text-xs text-obsidian-500 font-mono italic">No security rules triggered</span>';
+      } else {
+        res.rules_triggered.forEach(rule => {
+          const pill = document.createElement('span');
+          pill.className = 'px-2 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-900/60 text-[11px] font-mono';
+          pill.textContent = rule;
+          rulesEl.appendChild(pill);
+        });
+      }
+    } catch (err) {
+      console.error('Trojan audit error:', err);
+    }
+  }
+
+  input.addEventListener('input', runAudit);
+  runAudit();
+}
+
 function escapeHtml(str) {
   if (!str) return '';
   return str
@@ -570,4 +686,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initCompareZone();
   initScannerZone();
   initInspectorZone();
+  initTrojanZone();
 });
