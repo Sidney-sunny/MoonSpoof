@@ -8,6 +8,8 @@ import {
 // Values
 pub fn find_confusable_groups(Array[String]) -> Array[ConfusableGroup]
 
+pub fn find_confusable_groups_ignore_case(Array[String]) -> Array[ConfusableGroup]
+
 // Errors
 
 // Types and methods

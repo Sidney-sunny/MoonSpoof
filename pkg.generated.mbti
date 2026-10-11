@@ -19,6 +19,8 @@ pub fn are_confusable_ignore_case(String, String) -> Bool
 
 pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
 
+pub fn find_confusable_groups_ignore_case(Array[String]) -> Array[@batch.ConfusableGroup]
+
 pub fn get_restriction_level(String) -> @script.RestrictionLevel
 
 pub fn get_unicode_version() -> @unicode.UnicodeVersion

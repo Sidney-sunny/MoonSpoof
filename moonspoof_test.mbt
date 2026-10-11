@@ -178,3 +178,31 @@ test "security: character predicate helpers on clean vs malicious strings" {
   assert_false(has_bidi_controls("admin"))
   assert_false(has_bidi_override("admin"))
 }
+
+///|
+test "batch: case-insensitive collision grouping merges mixed-case homoglyphs" {
+  let pool = ["PAYPAL", "p\u0430ypal", "Paypal", "alice", "ALICE"]
+  let sensitive = find_confusable_groups(pool)
+  let insensitive = find_confusable_groups_ignore_case(pool)
+
+  // In sensitive mode, case differences prevent clustering
+  assert_eq(sensitive.length(), 0)
+
+  // In insensitive mode, case-folded skeletons cluster together
+  assert_eq(insensitive.length(), 2)
+
+  let mut found_paypal = false
+  let mut found_alice = false
+  for g in insensitive {
+    if g.skeleton == "paypal" {
+      assert_eq(g.members.length(), 3)
+      found_paypal = true
+    }
+    if g.skeleton == "alice" {
+      assert_eq(g.members.length(), 2)
+      found_alice = true
+    }
+  }
+  assert_true(found_paypal)
+  assert_true(found_alice)
+}

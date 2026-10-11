@@ -96,6 +96,13 @@ pub fn find_confusable_groups(
 }
 
 ///|
+pub fn find_confusable_groups_ignore_case(
+  names : Array[String],
+) -> Array[@batch.ConfusableGroup] {
+  @batch.find_confusable_groups_ignore_case(names)
+}
+
+///|
 pub fn get_unicode_version() -> @unicode.UnicodeVersion {
   @unicode.unicode_version
 }
