@@ -2,6 +2,8 @@ pkgtype(kind: "foreign_library")
 
 import {
   "Sidney-sunny/moonspoof",
+  "moonbitlang/core/json",
+  "Sidney-sunny/moonspoof/src/unicode",
 }
 
 options(
@@ -16,6 +18,7 @@ options(
         "spoof_skeleton",
         "spoof_skeleton_case_folded",
         "spoof_get_restriction_info",
+        "spoof_normalize_nfd",
       ],
     },
     "wasm": {
@@ -28,6 +31,7 @@ options(
         "spoof_skeleton",
         "spoof_skeleton_case_folded",
         "spoof_get_restriction_info",
+        "spoof_normalize_nfd",
       ],
     },
   },

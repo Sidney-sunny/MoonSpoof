@@ -6,6 +6,10 @@ import {
 }
 
 // Values
+pub fn case_fold(String) -> String
+
+pub fn combining_class(Int) -> Int
+
 pub fn format_codepoint(Int) -> String
 
 pub fn get_general_category(Int) -> GeneralCategory
@@ -24,7 +28,11 @@ pub fn is_bidi_control_codepoint(Int) -> Bool
 
 pub fn is_bidi_override_codepoint(Int) -> Bool
 
+pub fn is_default_ignorable(Int) -> Bool
+
 pub fn is_invisible_codepoint(Int) -> Bool
+
+pub fn normalize_nfd(String) -> String
 
 pub let unicode_version : UnicodeVersion
 

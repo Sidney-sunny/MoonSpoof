@@ -1,5 +1,7 @@
 # MoonSpoof 公共接口规范 (API Specification)
 
+[English](API_SPECIFICATION.md)
+
 本文档明确 MoonSpoof 导出的公共接口、数据类型定义、前置条件与行为保证。
 
 ---
@@ -10,7 +12,7 @@
 
 ### 1.1 `skeleton`
 
-计算给定 Unicode 字符串的 UTS #39 Confusable Skeleton（标准骨架字符串）。
+使用 Unicode 16.0 NFD、默认忽略字符与混淆映射计算稳定应用骨架。全角折叠与稳定化属于应用扩展，见[实现范围](SPECIFICATION_zh.md)。
 
 ```moonbit
 pub fn skeleton(input : String) -> String
@@ -37,13 +39,13 @@ pub fn are_confusable(a : String, b : String) -> Bool
   - `a : String` — 待比对的第一个标识符。
   - `b : String` — 待比对的第二个标识符。
 - **返回值**：`Bool` — 当且仅当 `skeleton(a) == skeleton(b)` 时返回 `true`。
-- **说明**：明确区分字符串物理相等（`a == b`）与视觉混淆关系。
+- **说明**：相同文本（`a == b`）也会返回 true，调用方应区别相同输入与不同文本的冲突。
 
 ---
 
 ### 1.3 `are_confusable_ignore_case` 与 `skeleton_case_folded`
 
-依据 UTS #39 第 4 节执行大小写折叠（Case-Folding）下的混淆等价性检测。
+使用完整默认 C/F Unicode 大小写折叠计算稳定应用键。
 
 ```moonbit
 pub fn are_confusable_ignore_case(a : String, b : String) -> Bool
@@ -52,14 +54,14 @@ pub fn skeleton_case_folded(input : String) -> String
 
 - **参数**：
   - `a : String`, `b : String` — 待比对候选标识符。
-- **返回值**：`Bool` — 当 `are_confusable(a, b)` 成立或双方折叠骨架相等时返回 `true`。
-- **行为保证**：在骨架变换前后均执行规范化 ASCII 折叠，具备完全幂等性。
+- **返回值**：`Bool` — 仅当双方折叠键相等时返回 `true`，不与敏感匹配结果做 OR。
+- **行为保证**：完整折叠与骨架变换重复至稳定键。两种模式是独立等价策略：敏感模式下 `I` / `l` 相同，折叠模式下不同。
 
 ---
 
 ### 1.4 `analyze_scripts`
 
-分析标识符中包含的 Unicode 字系，并依照 UTS #39 第 5 节规范评估其限制级别。
+分析标识符中包含的 Unicode 字系，估计限制级别，未覆盖完整 Script_Extensions 与 Identifier_Status 前提。
 
 ```moonbit
 pub fn analyze_scripts(input : String) -> ScriptAnalysis
@@ -67,8 +69,8 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis
 
 - **参数**：`input : String` — 待分析标识符。
 - **返回值**：`ScriptAnalysis` 结构体：
-  - `primary_script : Script` — 主导字系。
-  - `scripts : Array[Script]` — 出现的非通用字系列表。
+  - `primary_script : Script` — 首个已识别的非 Common/Inherited 字系；无则为 Common。
+  - `scripts : Array[Script]` — 具名字系列表，不包括 Common、Inherited、Unknown。
   - `is_mixed : Bool` — 是否包含两个及以上独立字系。
   - `level : RestrictionLevel` — 限制级别评级（`SingleScript`, `HighlyRestrictive`, `ModeratelyRestrictive`, `MinimallyRestrictive`, `Unrestricted`）。
 
@@ -85,7 +87,7 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 - **参数**：`input : String` — 待审计的标识符。
 - **返回值**：`DiagnosticReport`：
   - `original : String` — 原始输入。
-  - `skeleton : String` — 对应标准骨架。
+  - `skeleton : String` — 稳定应用骨架。
   - `script_analysis : ScriptAnalysis` — 字系分析结构体。
   - `risk_level : SecurityRiskLevel` — 综合安全风险等级（`Safe`, `Low`, `Medium`, `High`, `Critical`）。
   - `char_diagnostics : Array[CharDiagnostic]` — 逐字符诊断数组。
@@ -95,30 +97,30 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 
 ### 1.6 `validate_identifier` 与 `is_allowed_identifier`
 
-强制执行 UTS #39 第 3 节规定的标识符安全配置规范（Identifier Profiles）。
+执行自定义标识符检查，不是完整 Identifier_Status 或语法验证。默认策略拒绝混合字系和忽略字符，最多128码点；宽松策略允许混合字系、拒绝忽略字符，最多256码点。两者均拒绝空值及 C0/C1 控制字符。Unknown 字系与标点不会仅因分类而被拒绝。
 
 ```moonbit
 pub fn validate_identifier(
   input : String,
-  profile~ : IdentifierProfile = IdentifierProfile::default()
+  profile? : IdentifierProfile = IdentifierProfile::default()
 ) -> Result[Unit, String]
 
 pub fn is_allowed_identifier(
   input : String,
-  profile~ : IdentifierProfile = IdentifierProfile::default()
+  profile? : IdentifierProfile = IdentifierProfile::default()
 ) -> Bool
 ```
 
 - **参数**：
   - `input : String` — 候选标识符。
-  - `profile~ : IdentifierProfile` — 可配置的合法性校验规则。
+  - `profile? : IdentifierProfile` — 可配置的合法性校验规则。
 - **返回值**：`Result[Unit, String]` 或布尔值，指示是否合规。
 
 ---
 
 ### 1.7 `find_confusable_groups`
 
-对批量用户名或标识符进行 $O(N)$ 复杂度的冲突分桶检测。
+对批量用户名或标识符进行 按键哈希分组 复杂度的冲突分桶检测。
 
 ```moonbit
 pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup]
@@ -133,7 +135,7 @@ pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup]
 
 ### 1.8 `find_confusable_groups_ignore_case`
 
-依据 UTS #39 第 4 节规范，利用大小写折叠骨架（`skeleton_case_folded`）对批量候选名称执行大小写不敏感的 $O(N)$ 冲突聚类分桶。
+依据 应用折叠键策略规范，利用大小写折叠骨架（`skeleton_case_folded`）对批量候选名称执行大小写不敏感的 按键哈希分组 冲突聚类分桶。
 
 ```moonbit
 pub fn find_confusable_groups_ignore_case(names : Array[String]) -> Array[ConfusableGroup]

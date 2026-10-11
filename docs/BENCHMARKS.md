@@ -1,58 +1,24 @@
-# MoonSpoof Performance & Throughput Benchmarks
+# MoonSpoof benchmark report
 
-This report documents the empirical performance, throughput, and algorithmic scaling characteristics of MoonSpoof under Unicode 16.0.0 and UTS #39 datasets.
+[Chinese](BENCHMARKS_zh.md)
 
----
+Measured on 2026-10-11 against the refactored release JavaScript JSON ABI. Raw environment and results: [benchmark-results.json](benchmark-results.json). Earlier numbers from the previous implementation are superseded and are not comparable to this measurement.
 
-## 1. Benchmark Environment
+## Environment and method
 
-| Parameter | Specification |
-| :--- | :--- |
-| **Compiler** | MoonBit `0.1.20260904` |
-| **Target Runtime** | JavaScript / WebAssembly Core (Node.js v22 LTS runtime) |
-| **Unicode Version** | Unicode 16.0.0 |
-| **UTS #39 Table Size** | 6,355 confusable mappings, 929 script boundaries |
-| **Operating System** | Windows 11 x64 |
+Windows x64, Intel(R) Core(TM) i7-14650HX, Node v22.22.1, MoonBit 0.1.20260904. The benchmark is `tools/bench.mjs`; reproduce from the root with `pnpm --dir playground run bench`, which rebuilds the engine before measuring.
 
----
+Each case warms up first, then runs five rounds. The table reports the median round duration and the per-call mean derived from that round. Pair/diagnostic timings include report creation and JSON serialization. Batch timings include parsing the returned JSON. They exclude worker transport, browser rendering and user input. These are local measurements, not a latency guarantee, a statistical confidence interval or a comparison against ICU/Python.
 
-## 2. Empirical Benchmark Results
+| JSON ABI workload | Calls per round | Median round ms | Mean microseconds per call | Units per second |
+| --- | --- | --- | --- | --- |
+| spoof_compare(paypal, pаypal) | 10000 | 256.18 | 25.62 | 39,035 |
+| spoof_batch_scan(1000) | 20 | 61.76 | 3088.11 | 323,823 |
+| spoof_batch_scan(10000) | 20 | 701.29 | 35064.28 | 285,191 |
+| spoof_analyze(pаypal_service+ZWSP) | 10000 | 526.76 | 52.68 | 18,984 |
 
-### 2.1 Single Identifier Pair Comparison
+Units are calls for pair/diagnostics and names for batches. The 1,000-name fixture produces40 collision groups; the 10,000-name fixture produces200. Fixture duplicates intentionally count as collisions. Ten-thousand-name batches measure the unrestricted ABI, exceeding the demo worker's 5,000-name cap.
 
-Tests the latency and throughput of `are_confusable(a, b)` including full UTS #39 Skeleton normalization, pre-NFKD fullwidth decomposition, and binary search lookups over 50,000 iterations.
+## Scaling boundary
 
-| Metric | Measured Value |
-| :--- | :--- |
-| **Sample Count** | 50,000 operations |
-| **Total Wall Time** | 262.46 ms |
-| **Mean Latency** | 5.25 microseconds / operation |
-| **Throughput** | 190,507 operations / second |
-
-### 2.2 High-Throughput Batch Collision Scanning
-
-Tests the multi-identifier collision detection engine (`find_confusable_groups`) across 1,000 and 10,000 identifier datasets with mixed Latin, Cyrillic homoglyphs, and zero-width invisible controls.
-
-| Dataset Scale | Total Time | Throughput | Detected Collision Clusters |
-| :--- | :--- | :--- | :--- |
-| **1,000 Identifiers** | 6.69 ms | 149,392 names / second | 50 clusters |
-| **10,000 Identifiers** | 16.85 ms | 593,356 names / second | 200 clusters |
-
-### 2.3 Character-Level Security Diagnostic Audit
-
-Tests the latency and throughput of `analyze_identifier` over 20,000 iterations auditing suspicious identifiers containing mixed scripts, invisible controls, and confusable mappings.
-
-| Metric | Measured Value |
-| :--- | :--- |
-| **Sample Count** | 20,000 operations |
-| **Total Wall Time** | 243.73 ms |
-| **Mean Latency** | 12.19 microseconds / operation |
-| **Throughput** | 82,059 operations / second |
-
----
-
-## 3. Algorithmic Complexity
-
-- **Skeleton Transformation**: $O(L \log M)$, where $L$ is identifier character length and $M = 6,355$ is the static UTS #39 mapping table size (binary search).
-- **Batch Collision Grouping**: $O(N \cdot L \log M)$, where $N$ is total identifiers, enabled by single-pass hash indexing ($O(1)$ amortized map lookups).
-- **Script Analysis**: $O(L \log S)$, where $S = 929$ is the script boundary range count.
+Tables use binary searches; NFD expands some characters, orders combining segments, and key normalization may take multiple passes. Batch grouping hashes each key once instead of comparing every pair. Costs depend on total codepoints and key expansion, not only the number of names. No fixed O(N) throughput claim or competitor speed ranking follows from these fixtures.

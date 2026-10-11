@@ -24,3 +24,10 @@ tools/data-generator/*.txt
 node_modules/
 playground/node_modules/
 playground/dist/
+playground/src/generated/
+tools/data-generator/normalization-vectors.json
+.impeccable/review/
+.impeccable/build/
+.impeccable/mocks/
+.playwright-cli/
+output/playwright/

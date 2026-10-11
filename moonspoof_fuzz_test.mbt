@@ -60,13 +60,14 @@ test "property: symmetry of are_confusable" {
 }
 
 ///|
-test "property: confusable implies case-insensitive confusable" {
+test "property: case-insensitive comparison uses the same key as grouping" {
   let samples = get_fuzz_samples()
   for a in samples {
     for b in samples {
-      if are_confusable(a, b) {
-        assert_true(are_confusable_ignore_case(a, b))
-      }
+      assert_eq(
+        are_confusable_ignore_case(a, b),
+        skeleton_case_folded(a) == skeleton_case_folded(b),
+      )
     }
   }
 }

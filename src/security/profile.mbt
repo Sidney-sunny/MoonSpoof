@@ -25,14 +25,18 @@ pub fn validate_identifier(
   if input.length() == 0 {
     return Err("Identifier cannot be empty")
   }
-  if input.length() > profile.max_length {
-    return Err("Identifier length exceeds maximum allowed length")
-  }
-
+  let mut length = 0
   for ch in input {
+    length += 1
+    if length > profile.max_length {
+      return Err("Identifier length exceeds maximum allowed length")
+    }
     let cp = ch.to_int()
+    if cp < 0x20 || (cp >= 0x7F && cp <= 0x9F) {
+      return Err("Identifier contains disallowed control character")
+    }
     if !profile.allow_invisible {
-      if @unicode.is_invisible_codepoint(cp) {
+      if @unicode.is_default_ignorable(cp) {
         return Err("Identifier contains disallowed invisible format character")
       }
       if @unicode.is_bidi_control_codepoint(cp) {

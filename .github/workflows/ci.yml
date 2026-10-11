@@ -1,0 +1,54 @@
+name: Verify engine and showcase
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [wasm, js, native]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Test compiler target
+        run: moon test --target ${{ matrix.target }}
+
+  showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22.22.1'
+      - uses: pnpm/action-setup@v6
+        with:
+          version: '11.14.0'
+          run_install: false
+      - name: Install MoonBit
+        run: |
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Install locked frontend dependencies
+        run: pnpm --dir playground install --frozen-lockfile
+      - name: Regenerate pinned Unicode tables
+        run: python3 tools/data-generator/generate.py
+      - name: Check generated interfaces and formatting
+        run: |
+          moon info
+          moon fmt
+          git diff --exit-code -- '*.mbt' '*.mbti' tools/data-generator/sources.json
+      - name: Test ABI, worker lifecycle and production bundle
+        run: pnpm --dir playground run check
+      - name: Verify official Unicode vectors and mappings
+        run: pnpm --dir playground run verify:unicode

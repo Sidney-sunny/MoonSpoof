@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-11T05:15:20.070Z",
+  "environment": {
+    "compiler": "moon 0.1.20260904 (94521db 2026-09-04)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "node": "v22.22.1",
+    "os": "win32",
+    "architecture": "x64",
+    "cpu": "Intel(R) Core(TM) i7-14650HX"
+  },
+  "target": "MoonBit release JavaScript JSON ABI; worker transport and DOM excluded",
+  "results": [
+    {
+      "name": "spoof_compare(paypal, pаypal)",
+      "iterations": 10000,
+      "unitsPerOperation": 1,
+      "rounds": 5,
+      "medianMilliseconds": 256.18,
+      "microsecondsPerOperation": 25.62,
+      "unitsPerSecond": 39035,
+      "rangeMilliseconds": [
+        236.35,
+        270.45
+      ]
+    },
+    {
+      "name": "spoof_batch_scan(1000)",
+      "iterations": 20,
+      "unitsPerOperation": 1000,
+      "rounds": 5,
+      "medianMilliseconds": 61.76,
+      "microsecondsPerOperation": 3088.11,
+      "unitsPerSecond": 323823,
+      "rangeMilliseconds": [
+        60.67,
+        65.03
+      ],
+      "collisionGroups": 40
+    },
+    {
+      "name": "spoof_batch_scan(10000)",
+      "iterations": 20,
+      "unitsPerOperation": 10000,
+      "rounds": 5,
+      "medianMilliseconds": 701.29,
+      "microsecondsPerOperation": 35064.28,
+      "unitsPerSecond": 285191,
+      "rangeMilliseconds": [
+        674.92,
+        753.55
+      ],
+      "collisionGroups": 200
+    },
+    {
+      "name": "spoof_analyze(pаypal_service+ZWSP)",
+      "iterations": 10000,
+      "unitsPerOperation": 1,
+      "rounds": 5,
+      "medianMilliseconds": 526.76,
+      "microsecondsPerOperation": 52.68,
+      "unitsPerSecond": 18984,
+      "rangeMilliseconds": [
+        472.82,
+        569.66
+      ]
+    }
+  ]
+}

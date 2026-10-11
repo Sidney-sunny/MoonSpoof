@@ -1,5 +1,7 @@
 # MoonSpoof API Specification
 
+[Chinese](API_SPECIFICATION_zh.md)
+
 This document defines the public API contracts, input/output types, invariants, and error behaviors for MoonSpoof.
 
 ---
@@ -10,7 +12,7 @@ All public APIs are exposed at the root package level under module `Sidney-sunny
 
 ### 1.1 `skeleton`
 
-Computes the UTS #39 Confusable Skeleton of a Unicode string.
+Computes the stable application skeleton using pinned Unicode 16.0 NFD, default-ignorable removal and confusable mappings. Fullwidth folding and stabilization are application extensions; see [implementation scope](SPECIFICATION.md).
 
 ```moonbit
 pub fn skeleton(input : String) -> String
@@ -37,13 +39,13 @@ pub fn are_confusable(a : String, b : String) -> Bool
   - `a : String` — First identifier.
   - `b : String` — Second identifier.
 - **Returns**: `Bool` — `true` if `skeleton(a) == skeleton(b)`, otherwise `false`.
-- **Note**: Distinguishes between exact string equality (`a == b`) and visual spoofing. Two strings with `are_confusable(a, b) == true` may have completely different codepoint representations.
+- **Note**: Includes exact string equality (`a == b`); callers must distinguish identical text from a differing-text collision. Two strings with `are_confusable(a, b) == true` may have completely different codepoint representations.
 
 ---
 
 ### 1.3 `are_confusable_ignore_case` & `skeleton_case_folded`
 
-Performs case-insensitive confusable equivalence matching per UTS #39 Section 4.
+Compares stable application keys using full default C/F Unicode case folding.
 
 ```moonbit
 pub fn are_confusable_ignore_case(a : String, b : String) -> Bool
@@ -52,14 +54,14 @@ pub fn skeleton_case_folded(input : String) -> String
 
 - **Parameters**:
   - `a : String`, `b : String` — Candidate identifiers to compare.
-- **Returns**: `Bool` — `true` if `are_confusable(a, b)` or `skeleton_case_folded(a) == skeleton_case_folded(b)`.
-- **Invariants**: Case folding is applied both pre- and post-skeleton transformation to ensure idempotency.
+- **Returns**: `Bool` — `true` exactly when `skeleton_case_folded(a) == skeleton_case_folded(b)`. Sensitive matching is not ORed into this result.
+- **Invariants**: Folding followed by skeleton transformation repeats to a stable key. This is a separate equivalence policy: sensitive `I` / `l` matches need not match under folding.
 
 ---
 
 ### 1.4 `analyze_scripts`
 
-Analyzes the Unicode scripts present in an identifier and evaluates its restriction level according to UTS #39 Section 5.
+Analyzes the Unicode scripts present in an identifier and evaluates its restriction level as a scoped estimate, without full Script_Extensions or Identifier_Status prerequisites.
 
 ```moonbit
 pub fn analyze_scripts(input : String) -> ScriptAnalysis
@@ -67,8 +69,8 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis
 
 - **Parameters**: `input : String` — The identifier to analyze.
 - **Returns**: `ScriptAnalysis`:
-  - `primary_script : Script` — The dominant script of the identifier.
-  - `scripts : Array[Script]` — List of distinct non-Common scripts present.
+  - `primary_script : Script` — The first recognized non-Common/non-Inherited script, or Common if none.
+  - `scripts : Array[Script]` — Distinct recognized scripts, excluding Common, Inherited and Unknown.
   - `is_mixed : Bool` — `true` if more than one distinct script is detected.
   - `level : RestrictionLevel` — Evaluated restriction level (`SingleScript`, `HighlyRestrictive`, `ModeratelyRestrictive`, `MinimallyRestrictive`, `Unrestricted`).
 
@@ -85,7 +87,7 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 - **Parameters**: `input : String` — The identifier to audit.
 - **Returns**: `DiagnosticReport`:
   - `original : String` — The original input string.
-  - `skeleton : String` — Canonical UTS #39 skeleton.
+  - `skeleton : String` — Stable application skeleton.
   - `script_analysis : ScriptAnalysis` — Script composition metrics.
   - `risk_level : SecurityRiskLevel` — `Safe`, `Low`, `Medium`, `High`, or `Critical`.
   - `char_diagnostics : Array[CharDiagnostic]` — Detailed character-level breakdown.
@@ -95,37 +97,37 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport
 
 ### 1.6 `validate_identifier` & `is_allowed_identifier`
 
-Enforces UTS #39 Section 3 Identifier Security Profiles.
+Applies custom identifier checks; this is not full UTS #39 Identifier_Status or syntax validation. Default: no mixed scripts or ignorables, maximum128 codepoints. Permissive: mixed scripts allowed, ignorables rejected, maximum256 codepoints. Both reject C0/C1 controls and empty input. Unknown scripts and punctuation are not rejected solely for their category.
 
 ```moonbit
 pub fn validate_identifier(
   input : String,
-  profile~ : IdentifierProfile = IdentifierProfile::default()
+  profile? : IdentifierProfile = IdentifierProfile::default()
 ) -> Result[Unit, String]
 
 pub fn is_allowed_identifier(
   input : String,
-  profile~ : IdentifierProfile = IdentifierProfile::default()
+  profile? : IdentifierProfile = IdentifierProfile::default()
 ) -> Bool
 ```
 
 - **Parameters**:
   - `input : String` — The candidate identifier string.
-  - `profile~ : IdentifierProfile` — Configurable validation criteria.
+  - `profile? : IdentifierProfile` — Configurable validation criteria.
 - **Returns**: `Result[Unit, String]` or `Bool` indicating compliance.
 
 ---
 
 ### 1.7 `find_confusable_groups`
 
-Scans a collection of names and partitions them into confusable collision buckets in $O(N)$ time.
+Scans a collection of names and partitions them into confusable collision buckets using hash buckets, with cost proportional to computing each name's key rather than all pairwise comparisons.
 
 ```moonbit
 pub fn find_confusable_groups(names : Array[String]) -> Array[ConfusableGroup]
 ```
 
 - **Parameters**: `names : Array[String]` — List of candidate identifiers or usernames.
-- **Returns**: `Array[ConfusableGroup]` — All groups containing 2 or more mutually confusable names:
+- **Returns**: `Array[ConfusableGroup]` — Groups with at least two entries, including identical duplicates. Groups and members follow first-seen input order:
   - `skeleton : String` — The shared skeleton key.
   - `members : Array[String]` — The conflicting candidate names.
 

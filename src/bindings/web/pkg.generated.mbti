@@ -12,6 +12,8 @@ pub fn spoof_compare(String, String) -> String
 
 pub fn spoof_get_restriction_info(String) -> String
 
+pub fn spoof_normalize_nfd(String) -> String
+
 pub fn spoof_skeleton(String) -> String
 
 pub fn spoof_skeleton_case_folded(String) -> String

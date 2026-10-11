@@ -52,6 +52,7 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
   let mut has_invisible = false
   let mut has_bidi = false
   let mut has_cross_script_confusable = false
+  let mut has_control = false
 
   for ch in input {
     let cp = ch.to_int()
@@ -67,7 +68,10 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
     if bidi {
       has_bidi = true
     }
-    if is_conf && s != @script.Script::Latin {
+    if cp < 0x20 || (cp >= 0x7F && cp <= 0x9F) {
+      has_control = true
+    }
+    if is_conf && is_cross_script_mapping(s, mapped) {
       has_cross_script_confusable = true
     }
 
@@ -90,6 +94,9 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
   if has_invisible {
     rules.push("RULE_INVISIBLE_OR_FORMAT_CHARACTER")
   }
+  if has_control {
+    rules.push("RULE_CONTROL_CHARACTER")
+  }
   if has_bidi {
     rules.push("RULE_BIDI_CONTROL_CHARACTER")
   }
@@ -109,12 +116,14 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
     rules.push("RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH")
   }
 
-  let risk = if has_invisible || has_bidi || has_bidi_override {
+  let unexpected_mix = script_res.is_mixed &&
+    script_res.level != @script.RestrictionLevel::HighlyRestrictive
+  let risk = if has_invisible || has_bidi || has_control {
     SecurityRiskLevel::Critical
   } else if (has_cross_script_confusable || has_mixed_triad) &&
     script_res.is_mixed {
     SecurityRiskLevel::High
-  } else if has_cross_script_confusable || script_res.is_mixed {
+  } else if has_cross_script_confusable || unexpected_mix {
     SecurityRiskLevel::Medium
   } else if sk != input {
     SecurityRiskLevel::Low
@@ -130,6 +139,25 @@ pub fn analyze_identifier(input : String) -> DiagnosticReport {
     char_diagnostics: char_diags,
     rules_triggered: rules,
   }
+}
+
+///|
+fn is_cross_script_mapping(source : @script.Script, mapped : String) -> Bool {
+  if source == @script.Script::Common ||
+    source == @script.Script::Inherited ||
+    source == @script.Script::Unknown {
+    return false
+  }
+  for ch in mapped {
+    let target = @script.get_script(ch.to_int())
+    if target != source &&
+      target != @script.Script::Common &&
+      target != @script.Script::Inherited &&
+      target != @script.Script::Unknown {
+      return true
+    }
+  }
+  false
 }
 
 ///|

@@ -1,14 +1,14 @@
 # MoonSpoof
 
-Unicode Spoof and Homoglyph Detection for MoonBit, adhering to Unicode Technical Standard #39 (UTS #39).
+Unicode Spoof and Homoglyph Detection for MoonBit, implementing selected Unicode Technical Standard #39 mechanisms.
 
 ## Key Features
 
-- UTS #39 Confusable Skeleton calculation and equivalence checking.
-- Unicode Script and Script_Extensions analysis.
+- Unicode 16.0 NFD, full default folding, default-ignorable removal and stable confusable keys.
+- Limited Unicode Script analysis and restriction estimates.
 - Multi-script restriction level classification (Single Script, Highly Restrictive, Moderately Restrictive).
 - Detection of invisible zero-width formatting characters and bidirectional control codes.
-- High-throughput O(N) batch username collision scanning.
+- Stable hash-indexed batch collision grouping using the same keys as pair matching.
 
 ## Usage
 
@@ -28,5 +28,9 @@ let skeleton = @moonspoof.skeleton(candidate)
 ///|
 let report = @moonspoof.analyze_identifier(candidate)
 ```
+
+Full Script_Extensions, Identifier_Status and bidi skeleton reordering are not implemented. Fullwidth folding and key stabilization are application extensions.
+
+[Chinese](docs/README_zh.md)
 
 For complete documentation, see the [Documentation](./docs/README_zh.md) and [API Specification](./docs/API_SPECIFICATION.md).

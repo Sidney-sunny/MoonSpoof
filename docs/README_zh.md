@@ -1,168 +1,92 @@
-<p align="center">
-  <img src="assets/banner.jpg" alt="MoonSpoof: Unicode 视觉混淆识别基础库" width="960" />
-</p>
+<p align="center"><img src="assets/banner.jpg" alt="MoonSpoof" width="960" /></p>
 
-<p align="center">
-  <img alt="版本 0.1.0" src="https://img.shields.io/badge/版本-0.1.0-334155?style=flat-square" />
-  <img alt="Unicode 16.0" src="https://img.shields.io/badge/Unicode-16.0.0-334155?style=flat-square" />
-  <img alt="标准 UTS #39" src="https://img.shields.io/badge/标准-UTS_%2339-334155?style=flat-square" />
-  <img alt="支持目标 WASM JS Native" src="https://img.shields.io/badge/支持目标-WASM_%7C_JS_%7C_Native-334155?style=flat-square" />
-  <a href="../LICENSE"><img alt="Apache 2.0" src="https://img.shields.io/badge/协议-Apache_2.0-334155?style=flat-square" /></a>
-  <img alt="MoonBit 2026 黑客松" src="https://img.shields.io/badge/MoonBit-2026_Hackathon-000000?style=flat-square" />
-</p>
+<p align="center"><img alt="Unicode 16.0" src="https://img.shields.io/badge/Unicode-16.0.0-334155?style=flat-square" /> <img alt="Apache 2.0" src="https://img.shields.io/badge/License-Apache_2.0-334155?style=flat-square" /></p>
 
-<p align="center">
-  基于 Unicode UTS #39 规范的字符视觉混淆识别、标识符冒用检测与安全诊断基础库。
-</p>
+<p align="center">为 MoonBit 提供 Unicode 混淆键、字符证据与批量冲突检测。</p>
 
-<p align="center">
-  <a href="../README.md"><strong>English Version</strong></a> ·
-  <a href="#快速开始">快速开始</a> ·
-  <a href="API_SPECIFICATION_zh.md">接口规范</a> ·
-  <a href="ARCHITECTURE_zh.md">架构设计</a> ·
-  <a href="BENCHMARKS_zh.md">基准测试</a> ·
-  <a href="SPECIFICATION_zh.md">UTS #39 规范对照</a>
-</p>
+<p align="center"><a href="../README.md">English</a> · <a href="API_SPECIFICATION_zh.md">API 规范</a> · <a href="ARCHITECTURE_zh.md">架构</a> · <a href="SPECIFICATION_zh.md">实现范围</a></p>
 
----
+## 引擎能力
 
-## 字符混淆，精准识别与结构化诊断
+| 混淆键 | 字符证据 | 批量分组 |
+| --- | --- | --- |
+| Unicode 16.0 NFD 与完整默认大小写折叠 | 码点、字系、原始映射目标、风险规则 | 与双字符串比较使用同一键的哈希桶 |
+| 默认忽略字符与应用全角折叠 | 双向/控制字符检测与自定义标识符策略 | 保持首次出现顺序，保留重复输入 |
+| 纯 MoonBit，支持 JS、WASM、native | 有限字系分类，明确标准缺口 | 无须逐对比较每个名称 |
 
-| 标准 Skeleton 转换 | 字系与限制级别分析 | 高性能批量冲突扫描 |
-| :--- | :--- | :--- |
-| 严格基于 UTS #39 Confusable Skeleton 算法 | 自动化 Script 与 Script_Extensions 归属识别 | 基于 Skeleton 哈希分桶的 O(N) 冲突检测 |
-| 明确区分“视觉混淆”与普通字符串相等 | 智能识别混合字系，依据上下文合理定级 | 万级用户名批量碰撞扫描，免除 O(N^2) 耗时 |
-| 覆盖西里尔、希腊、拉丁及东亚 CJK 常用字系 | 精准拦截零宽不可见字符与双向文本控制符 | 零运行时依赖，原生编译为 WASM、JS 与 Native |
+本项目实现部分 UTS #39 机制，不声明完整合规。风险信号不证明恶意。[实现范围](SPECIFICATION_zh.md)记录具体边界。
 
-在现代多语言软件生态中，攻击者常利用字形极度相似的非拉丁字符（如西里尔字母 `а` U+0430 与拉丁字母 `a` U+0061）仿冒关键用户、代码标识符或网络域名。MoonSpoof 提供工业级、标准驱动的检测原语与可解释字符诊断报告，既防范恶意冒用，又避免对正常多语言文本的误伤。
+## 启动双语演示
 
----
-
-## 选择你的接入方式
-
-**基础库集成** — 直接作为 MoonBit 模块引入，供用户名注册系统、包管理器与编译器 Linter 调用。
-
-**CLI 命令行工具** — 快速对标识符、单词列表进行合规审计，输出终端可读诊断。
-
-**WebAssembly Playground** — 编译为 WebAssembly 嵌入浏览器安全看板，实现纯前端零延迟离线检测。
+[打开在线演示](https://sidney-sunny.github.io/MoonSpoof/)。GitHub Actions 在引擎与前端检查通过后，将 `main` 分支构建并发布到 Pages。
 
 ```powershell
-# 运行内置 CLI 演示程序
+pnpm --dir playground install --frozen-lockfile
+pnpm --dir playground dev
+```
+
+打开 Vite 输出的地址。默认中文，EN / 中文切换完整界面。浏览器使用工作线程中的新编译 MoonBit JavaScript，输入保留在本机。演示包含双字符串比较、字符证据、批量冲突与双向文本。竞品矩阵引用 ICU 与 confusable_homoglyphs 官方 API，不虚构性能排名。
+
+```powershell
 moon run cmd/main
 ```
 
----
+## 库接入
 
-## 快速开始
-
-### 1. 声明依赖
-
-在项目 `moon.mod` 中声明：
+执行 `moon add Sidney-sunny/moonspoof`，在包的 `moon.pkg` 中导入：
 
 ```moonbit
 import {
-  "Sidney-sunny/moonspoof" @lib,
+  "Sidney-sunny/moonspoof" @moonspoof,
 }
 ```
-
-### 2. 基础混淆检测与 Skeleton 生成
 
 ```moonbit
 let authentic = "paypal"
-let spoofed = "p\u0430ypal" // 西里尔小写字母 A (U+0430)
-
-// 判断两字符串是否存在视觉混淆关联
-let confusable : Bool = @moonspoof.are_confusable(authentic, spoofed)
-// confusable == true
-
-// 生成标准骨架字符串 (Skeleton)
-let sk : String = @moonspoof.skeleton(spoofed)
-// sk == "paypal"
+let candidate = "p\u0430ypal"
+@moonspoof.are_confusable(authentic, candidate) // true
+@moonspoof.skeleton(candidate) // "paypal"
+@moonspoof.analyze_identifier(candidate)
+@moonspoof.find_confusable_groups([authentic, candidate, "stripe"])
+@moonspoof.are_confusable_ignore_case("PAYPAL", "P\u0430yPal") // true
+@moonspoof.get_restriction_level(candidate) // MinimallyRestrictive
+@moonspoof.validate_identifier(candidate) // Err("Identifier contains disallowed mixed scripts")
 ```
 
-### 3. 字符级结构化安全诊断
+## 安全边界与兼容性
 
-```moonbit
-let report = @moonspoof.analyze_identifier("admin\u200B")
+引擎公开十一类字系及 Unknown，尚未实现完整 Script_Extensions、Identifier_Status、混合数字系统与双向骨架重排。标识符策略是可配置应用检查，不是完整 Unicode 标识符语法验证。全角折叠与重复归一化至稳定键属于应用扩展。
 
-// 查看综合风险等级：Safe, Low, Medium, High, Critical
-println(report.risk_level) // Critical
+敏感键与折叠键是独立策略：`I` / `l` 在敏感模式下可能匹配，而在折叠模式下不同。持久化键应记录库与数据版本，升级后重新计算。[API 规范](API_SPECIFICATION_zh.md)说明修正后的行为。
 
-// 查看触发的安全规则列表
-println(report.rules_triggered) // ["RULE_INVISIBLE_OR_FORMAT_CHARACTER"]
-```
+## 开发者与代理导航
 
-### 4. 批量用户名冲突扫描
- 
-```moonbit
-let registered_users = ["admin", "adm\u0456n", "alice", "bob", "al\u0456ce"]
-let collisions = @moonspoof.find_confusable_groups(registered_users)
+| 主题 | 文档 |
+| --- | --- |
+| 架构 | [ARCHITECTURE_zh.md](ARCHITECTURE_zh.md) |
+| API | [API_SPECIFICATION_zh.md](API_SPECIFICATION_zh.md) |
+| 标准范围 | [SPECIFICATION_zh.md](SPECIFICATION_zh.md) |
+| 性能 | [BENCHMARKS_zh.md](BENCHMARKS_zh.md) |
+| 品牌 | [BRANDING_zh.md](BRANDING_zh.md) |
 
-// 忽略大小写批量碰撞聚类分析（UTS #39 第 4 节）
-let mixed_users = ["PAYPAL", "p\u0430ypal", "Paypal", "stripe"]
-let folded_collisions = @moonspoof.find_confusable_groups_ignore_case(mixed_users)
-
-for group in collisions {
-  println("骨架: \{group.skeleton}, 成员: \{group.members}")
-}
-```
-
-### 5. 标识符安全配置与忽略大小写匹配
-
-```moonbit
-// 忽略大小写混淆匹配（UTS #39 第 4 节）
-let is_conf = @moonspoof.are_confusable_ignore_case("PAYPAL", "P\u0430yPal") // true
-
-// UTS #39 第 3 节 IdentifierProfile 校验
-let check = @moonspoof.validate_identifier("p\u0430ypal") // Err("Identifier contains disallowed mixed scripts")
-let allowed = @moonspoof.is_allowed_identifier("valid_user") // true
-
-// 混合字系限制等级查询（UTS #39 第 5 节）
-let level = @moonspoof.get_restriction_level("p\u0430ypal") // ModeratelyRestrictive
-```
-
----
-
-## 安全理念与设计边界
-
-1. **标准驱动，拒绝臆测**：所有混淆映射严格生成自 Unicode 16.0.0 与 UTS #39 官方规范表，绝不用简易正则表达式替代标准检测。
-2. **多语言平等，不预设立场**：中文汉字、日文假名、韩文谚文等属于合法的单一/高限制性字系，严禁默认标记为恶意。
-3. **明确非目标**：本项目是安全基础算法库，不开发钓鱼网站云端黑名单、信誉评分系统或网络爬虫。
-
----
-
-## 文档与技术索引
-
-| 文档名称 | 对应英文文档 | 说明 |
-| :--- | :--- | :--- |
-| [架构设计](ARCHITECTURE_zh.md) | [ARCHITECTURE.md](ARCHITECTURE.md) | 系统管线、内存优化与 WASM 集成标准 |
-| [接口规范](API_SPECIFICATION_zh.md) | [API_SPECIFICATION.md](API_SPECIFICATION.md) | 公共 API 参数、返回值与类型定义 |
-| [基准测试](BENCHMARKS_zh.md) | [BENCHMARKS.md](BENCHMARKS.md) | 实测吞吐量、单次延迟与算法复杂度报告 |
-| [规范对照](SPECIFICATION_zh.md) | [SPECIFICATION.md](SPECIFICATION.md) | UTS #39 覆盖范围与规则标识定义 |
-| [品牌视觉规范](BRANDING_zh.md) | [BRANDING.md](BRANDING.md) | 极简单色设计规范与品牌资产说明 |
-
----
-
-<details>
-<summary><strong>从源码构建与测试</strong></summary>
-
-需要安装 MoonBit 编译器工具链 (`moon`)。
+<details><summary><strong>从源码构建与验证</strong></summary>
 
 ```powershell
-# 语法与类型检查
 moon check
-
-# 运行单元测试
 moon test
-
-# 运行命令行程序
-moon run cmd/main
+moon test --target js
+moon test --target native
+pnpm --dir playground run check
+python tools/data-generator/generate.py
+moon info
+moon fmt
+pnpm --dir playground run verify:unicode
 ```
+
+Unicode 表来自六个记录哈希的官方数据文件。Node 检查会先重建引擎。纯库没有第三方运行时依赖。
 
 </details>
 
----
+## 许可
 
-## 开源协议
-
-基于 [Apache License, Version 2.0](../LICENSE) 开源发布。
+[Apache-2.0](../LICENSE)。

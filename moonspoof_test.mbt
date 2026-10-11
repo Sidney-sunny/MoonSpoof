@@ -145,7 +145,7 @@ test "mixed script: triad detection flags Latin + Cyrillic spoof" {
   assert_false(is_single_script(spoofed))
   assert_eq(
     get_restriction_level(spoofed),
-    @script.RestrictionLevel::ModeratelyRestrictive,
+    @script.RestrictionLevel::MinimallyRestrictive,
   )
 }
 

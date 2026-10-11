@@ -3,17 +3,27 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "packageManager": "pnpm@11.14.0",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "engine": "node ../tools/build-engine.mjs",
+    "dev": "pnpm run engine && vite --host 127.0.0.1",
+    "build": "pnpm run engine && vite build",
     "preview": "vite preview",
-    "check": "vite build"
+    "check": "pnpm run test && pnpm run build",
+    "test": "pnpm run engine && node --test tests/*.test.mjs",
+    "verify:unicode": "pnpm run engine && node ../tools/verify-unicode.mjs",
+    "bench": "pnpm run engine && node ../tools/bench.mjs"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@fontsource/manrope": "^5.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
-    "vite": "^5.4.10"
+    "vite": "^8.3.4"
   }
 }

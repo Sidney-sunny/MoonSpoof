@@ -51,5 +51,5 @@ test "web bindings: direct skeleton and restriction info" {
 
   let info = spoof_get_restriction_info("p\u0430ypal")
   assert_true(info.contains("\"is_mixed\":true"))
-  assert_true(info.contains("\"restriction_level\":\"ModeratelyRestrictive\""))
+  assert_true(info.contains("\"restriction_level\":\"MinimallyRestrictive\""))
 }

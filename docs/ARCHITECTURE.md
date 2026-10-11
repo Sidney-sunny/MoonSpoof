@@ -1,131 +1,59 @@
-# MoonSpoof System Architecture & Design Specification
+# MoonSpoof architecture
 
-This document details the internal design, algorithmic pipelines, data representations, and performance characteristics of MoonSpoof.
+[Chinese](ARCHITECTURE_zh.md)
 
----
+The root package is a stable facade over five pure MoonBit packages. The browser ABI serializes this same engine into JSON; React supplies presentation and lifecycle management. Browser execution uses the JavaScript target in a dedicated worker. WASM and native remain separate compiler targets.
 
-## 1. System Overview & Core Pipeline
-
-MoonSpoof implements a modular pipeline adhering to Unicode Technical Standard #39 (Unicode Security Mechanisms):
-
-```text
-[ Raw Input String ]
-        │
-        ├──▶ [ Unicode Codepoint Scanner ]
-        │         │
-        │         ├──▶ Category Classification (General Category)
-        │         ├──▶ Invisible / Bidi Control Interception
-        │         └──▶ Codepoint Formatting (U+XXXX)
-        │
-        ├──▶ [ Script Analysis Engine ]
-        │         │
-        │         ├──▶ Script & Script_Extensions Lookup
-        │         ├──▶ Mixed-Script Detection
-        │         └──▶ Restriction Level Assessment (UTS #39 Section 5)
-        │
-        ├──▶ [ Confusable Skeleton Engine ]
-        │         │
-        │         ├──▶ Codepoint Decomposition (NFD equivalence)
-        │         ├──▶ UTS #39 Confusable Mapping Lookup
-        │         └──▶ Canonical Skeleton Assembly
-        │
-        └──▶ [ Security Risk & Diagnostic Engine ]
-                  │
-                  ├──▶ Rule Evaluation Engine
-                  ├──▶ Risk Level Assignment (Safe / Low / Medium / High / Critical)
-                  └──▶ Structured Diagnostic Report (DiagnosticReport)
+```mermaid
+flowchart TD
+    Data[Unicode 16.0 source files and hashes] --> Generator[Python table generator]
+    Generator --> Unicode[Unicode NFD, folding, ignorables]
+    Generator --> Script[Limited script lookup]
+    Generator --> Confusable[Confusable table and stable keys]
+    Unicode --> Confusable
+    Unicode --> Security[Rules and custom policies]
+    Script --> Security
+    Confusable --> Security
+    Confusable --> Batch[Ordered hash grouping]
+    Security --> Facade[Public facade]
+    Batch --> Facade
+    Facade --> CLI[CLI demonstration]
+    Facade --> ABI[Typed JSON web ABI]
+    ABI --> Worker[Generated JS in Web Worker]
+    Worker --> UI[Bilingual React showcase]
 ```
 
----
+## Responsibilities
 
-## 2. Subsystem Layout
+| Boundary | Responsibility |
+| --- | --- |
+| src/unicode | Pinned NFD, combining classes, full default folding, ignorable ranges, bidi detection |
+| src/script | Script property binary search, first-recognized primary script, restriction estimates |
+| src/confusable | Table lookup, application extensions, stable sensitive and folded keys |
+| src/security | Structured character evidence, risk rules, configurable identifier checks |
+| src/batch | Shared key-based grouping; first-seen group and member order |
+| src/bindings/web | Core JSON serialization, common report schema, exported string ABI |
+| playground/src/engine | Request validation, worker dispatch, correlation, timeout and retry lifecycle |
+| playground/src/components | Controlled inputs and display of actual engine results |
 
-| Subsystem | Package Path | Primary Responsibility |
-| :--- | :--- | :--- |
-| **Unicode Core** | `Sidney-sunny/moonspoof/src/unicode` | Codepoint metadata, general categories, invisible char detection |
-| **Script Classifier** | `Sidney-sunny/moonspoof/src/script` | Script identification and restriction level determination |
-| **Confusable Engine** | `Sidney-sunny/moonspoof/src/confusable` | UTS #39 Confusable Skeleton transformation and comparison |
-| **Security Diagnostic**| `Sidney-sunny/moonspoof/src/security` | Character-level explainability, rule evaluation, risk grading |
-| **Batch Scanner** | `Sidney-sunny/moonspoof/src/batch` | O(N) collision grouping and bulk identifier auditing |
+NFD decompositions are flattened by the generator. Hangul decomposition is algorithmic. Combining marks within each starter segment are stably ordered by bounded combining-class buckets, avoiding quadratic insertion sorting on long combining sequences. Lookup tables use binary search. Skeleton mapping and folding repeat until the application key is stable; see [scope and compatibility](SPECIFICATION.md).
 
----
+Batch computation builds one hash bucket per key rather than comparing every pair. Cost depends on total input codepoints, table searches, decomposition expansion and stabilization passes; it is not a constant-time operation per name. An explicit first-seen key array makes output deterministic across map implementations. Identical duplicate entries are retained.
 
-## 3. Algorithmic Design & Optimization
+## Build and browser lifecycle
 
-### 3.1 UTS #39 Confusable Skeleton Transformation
+`tools/build-engine.mjs` compiles `src/bindings/web` with `moon build --target js --release` and copies the generated module into ignored `playground/src/generated/`. Both dev and production scripts regenerate it. No checked-in compiled engine can silently become stale.
 
-According to UTS #39 Section 4, determining whether two strings $S_1$ and $S_2$ are visually confusable requires mapping them to their canonical skeleton:
+The UI creates one EngineClient. It lazily boots a module worker, waits for its ready signal, and associates replies with request IDs. Startup and request deadlines are 30 seconds. A startup, transport, or timeout failure rejects pending requests and terminates the worker; a later retry creates another worker. Components match results to current inputs and discard obsolete completions. Switching tools or language preserves entered values. All tab panels remain mounted with unique input IDs and hidden inactive content.
 
-$$\text{skeleton}(S) = \text{NFD}\left( \bigcup_{c \in \text{NFD}(S)} \text{confusable\_map}(c) \right)$$
+The worker accepts only compare, inspect and batch operations. Demo limits are 512 codepoints per identifier, 5,000 batch entries and 200,000 UTF-16 units of batch text. These protect the demonstration; the pure library has no such batch cap. The default custom identifier policy allows 128 codepoints, the permissive one 256. Browser inputs never become HTML; React renders text and control characters can be escaped for evidence.
 
-MoonSpoof stores compact codepoint mapping tables generated directly from Unicode 16.0.0. When scanning an identifier:
-- Characters without confusable entries pass through untouched without redundant string cloning.
-- Confusable characters (e.g. Cyrillic `а` U+0430, Greek `ο` U+03BF) map directly to their standardized targets (e.g. `a`, `o`).
-- Identifiers $A$ and $B$ are confusable if and only if $\text{skeleton}(A) = \text{skeleton}(B)$.
+Fonts, brand logo and engine ship with the bundle. Inputs stay on the device. External documentation links navigate only when selected. The bilingual dictionary switches labels, results, rules and document language; API names and source code remain English.
 
-### 3.2 High-Throughput O(N) Batch Collision Scanning
+## ABI and evidence
 
-A naive collision scanner comparing $N$ usernames pairwise requires $O(N^2)$ comparisons, which becomes intractable for 10,000 to 100,000 names:
+`spoof_compare(a,b)` takes two strings and returns both sensitive and folded match flags with reports for a and b. `spoof_analyze(input)` returns extended report fields. Both share one serializer. `spoof_batch_scan_with_options(input,ignore_case)` splits newline, CR and comma records, trims and skips empty records. Core JSON encoding escapes all control characters correctly.
 
-$$\text{Pairwise Comparisons} = \frac{N(N-1)}{2} \approx 5 \times 10^7 \quad (N = 10,000)$$
+Character targets show direct source mappings, whereas final keys pass through normalization and stabilization. The distinction is intentional. Bidi display delegates to the browser; the escaped source preserves actual logical order. The engine detects controls but does not calculate a visual-order skeleton.
 
-MoonSpoof employs **Hash-Indexed Skeleton Bucketing**:
-1. For each input name $S_i$, compute $\text{sk}_i = \text{skeleton}(S_i)$ (or $\text{skeleton\_case\_folded}(S_i)$ when case-insensitive mode is enabled) in $O(L)$ time where $L$ is identifier length.
-2. Store into hash bucket $\text{Buckets}[\text{sk}_i] \leftarrow \text{append}(S_i)$.
-3. Collect all buckets with cardinality $\ge 2$.
-4. Total execution time scales linearly at $O(N \cdot L)$ with memory overhead $O(N)$.
-5. **Case-Insensitive Mode**: Supported natively via `find_confusable_groups_ignore_case`, grouping variants such as `PAYPAL`, `pаypal` (Cyrillic `а`), and `Paypal` into a single unified collision cluster under canonical folded signature `paypal`.
-
----
-
-## 4. WebAssembly Architecture & Foreign Function Interface (FFI)
-
-MoonSpoof provides zero-overhead interoperability across multiple runtimes:
-- **Core Logic in MoonBit**: All Unicode properties, skeleton computation, script parsing, profile validation, and risk modeling compile into pure WebAssembly and native binaries.
-- **Web FFI Export Bindings (`src/bindings/web`)**:
-  - `spoof_skeleton(s : String) -> String`: Computes canonical UTS #39 skeleton.
-  - `spoof_skeleton_case_folded(s : String) -> String`: Computes case-folded canonical skeleton.
-  - `spoof_compare(a : String, b : String, ignore_case : Bool) -> String`: Compares two identifiers for confusable equivalence under strict or case-folded mode.
-  - `spoof_analyze(s : String) -> String`: Returns complete character-level diagnostic report as structured JSON.
-  - `spoof_batch_scan(raw_input : String) -> String`: Performs O(N) batch collision clustering across delimited identifier pools.
-  - `spoof_batch_scan_with_options(raw_input : String, ignore_case : Bool) -> String`: High-throughput collision scanning with case-insensitive clustering toggle.
-  - `spoof_validate_profile(s : String, is_permissive : Bool) -> String`: Evaluates UTS #39 Section 3 IdentifierProfile.
-  - `spoof_get_restriction_info(s : String) -> String`: Returns JSON script analysis with restriction level and scripts array.
-- **Zero Network Egress**: The entire Unicode database runs completely client-side in the browser or embedded runtime without telemetry or external network calls.
-
----
-
-## 5. Command-Line Interface (`cmd/main`)
-
-The MoonSpoof executable provides a turnkey demonstration and testing CLI:
-- Run directly via the MoonBit toolchain:
-  ```bash
-  moon run cmd/main
-  ```
-- Evaluates five standardized inspection routines:
-  1. Confusable equivalence matching across Latin, Cyrillic, Greek, fullwidth, and invisible codepoints.
-  2. Case-insensitive confusable validation under UTS #39 Section 4.
-  3. Structured diagnostic reports with character-level scripts, hex codepoints, and security rules.
-  4. UTS #39 Section 3 IdentifierProfile enforcement (Strict vs. Permissive).
-  5. High-throughput $O(N)$ batch collision scanning across candidate identifier pools.
-
----
-
-## 6. Mixed-Script Restriction Levels (UTS #39 Section 5)
-
-MoonSpoof implements full UTS #39 Section 5 Restriction Level categorization:
-- **SingleScript**: All characters belong to a single recommended script (e.g. Latin-only, Han-only).
-- **HighlyRestrictive**: Allowed multi-script combinations including Japanese (`Latin + Han + Hiragana + Katakana`) and Korean (`Latin + Han + Hangul`).
-- **ModeratelyRestrictive**: Single non-Latin recommended script paired with Latin (`Latin + Cyrillic`, `Latin + Greek`, `Latin + Arabic`, `Latin + Hebrew`).
-- **MinimallyRestrictive**: Arbitrary combinations where all scripts belong to the Unicode Recommended Identifier Scripts set (e.g. `Cyrillic + Greek`).
-- **Unrestricted**: Identifiers containing `Unknown` scripts, unassigned ranges, or disallowed characters.
-- **Triad Attack Rule (`RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD`)**: Flags cross-script mixing between Latin, Cyrillic, and Greek alphabets where deceptive visual homoglyphs are prevalent.
-
----
-
-## 7. Bidirectional Text & Trojan Source Defense (CVE-2021-42574)
-
-MoonSpoof incorporates specialized defense mechanisms against bidirectional text attacks:
-- **Directional Override Detection**: Explicitly tracks Right-to-Left Override (`RLO` U+202E) and Left-to-Right Override (`LRO` U+202D), triggering `RULE_BIDI_OVERRIDE_CHARACTER`.
-- **File Extension Boundary Defense**: Identifiers combining a bidirectional override with filename delimiter dots (`.`) trigger `RULE_BIDI_FILE_EXTENSION_SPOOF` to prevent GUI visual disguise of dangerous executables (e.g. `.exe`, `.scr`, `.bat`).
-- **Interactive Split Workbench (Zone D)**: The WebAssembly playground provides dual-pane inspection contrasting visual GUI appearance against physical in-memory byte streams.
+Validation combines MoonBit tests on WASM, JS and native, Node tests against the freshly built ABI and worker client, official Unicode data verification, and desktop/mobile browser interaction checks. [Specification](SPECIFICATION.md) states the remaining standard gaps.

@@ -66,17 +66,7 @@ pub fn is_ascii(cp : Int) -> Bool {
 
 ///|
 pub fn is_invisible_codepoint(cp : Int) -> Bool {
-  match cp {
-    0x200B => true // ZERO WIDTH SPACE
-    0x200C => true // ZERO WIDTH NON-JOINER
-    0x200D => true // ZERO WIDTH JOINER
-    0x2060 => true // WORD JOINER
-    0xFEFF => true // ZERO WIDTH NO-BREAK SPACE (BOM)
-    0x00AD => true // SOFT HYPHEN
-    0x180E => true // MONGOLIAN VOWEL SEPARATOR
-    0x200E | 0x200F => true // LRM, RLM
-    _ => false
-  }
+  is_default_ignorable(cp)
 }
 
 ///|

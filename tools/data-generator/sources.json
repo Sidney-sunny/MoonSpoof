@@ -1,0 +1,29 @@
+{
+  "unicode_version": "16.0.0",
+  "sources": {
+    "CaseFolding.txt": {
+      "sha256": "6f1f9c588eb4a5c718d9e8f93b782685e5c7fec872cf05e8e6878053599e09bb",
+      "url": "https://www.unicode.org/Public/16.0.0/ucd/CaseFolding.txt"
+    },
+    "confusables.txt": {
+      "sha256": "95bd0aad6dced5ebc63436f459c06ab21a8d107cd842fb57f5c3a1e91bca8611",
+      "url": "https://www.unicode.org/Public/security/16.0.0/confusables.txt"
+    },
+    "DerivedCoreProperties.txt": {
+      "sha256": "39d35161f2954497f69e08bdb9e701493f476a3d30222de20028feda36c1dabd",
+      "url": "https://www.unicode.org/Public/16.0.0/ucd/DerivedCoreProperties.txt"
+    },
+    "NormalizationTest.txt": {
+      "sha256": "d811971453e7075e1ad56fb1b301eece5aa80757b81f6156e74a1bfb3ae5ceb1",
+      "url": "https://www.unicode.org/Public/16.0.0/ucd/NormalizationTest.txt"
+    },
+    "Scripts.txt": {
+      "sha256": "9e88f0a677df47311106340be8ede2ecdacd9c1c931831218d2be6d5508e0039",
+      "url": "https://www.unicode.org/Public/16.0.0/ucd/Scripts.txt"
+    },
+    "UnicodeData.txt": {
+      "sha256": "ff58e5823bd095166564a006e47d111130813dcf8bf234ef79fa51a870edb48f",
+      "url": "https://www.unicode.org/Public/16.0.0/ucd/UnicodeData.txt"
+    }
+  }
+}

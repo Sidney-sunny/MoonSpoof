@@ -8,30 +8,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        obsidian: {
-          950: '#080808',
-          900: '#0d0d0d',
-          850: '#141416',
-          800: '#1c1c1f',
-          700: '#27272a',
-          600: '#3f3f46',
-          500: '#52525b',
-          400: '#71717a',
-          300: '#a1a1aa',
-          200: '#d4d4d8',
-          100: '#f4f4f5',
-        },
-        risk: {
-          safe: '#10b981',
-          low: '#38bdf8',
-          medium: '#fbbf24',
-          high: '#f97316',
-          critical: '#ef4444',
-        }
+        ground: 'var(--ground)',
+        surface: 'var(--surface)',
+        ink: 'var(--ink)',
+        muted: 'var(--muted)',
+        signal: 'var(--signal)',
+        selected: 'var(--selected)',
+        error: 'var(--error)',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'Cascadia Code', 'monospace'],
+        sans: ['Manrope', 'ui-sans-serif', 'sans-serif'],
+        mono: ['Cascadia Code', 'SFMono-Regular', 'Consolas', 'monospace'],
       }
     },
   },

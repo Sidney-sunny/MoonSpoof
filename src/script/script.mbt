@@ -130,22 +130,10 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
     RestrictionLevel::Unrestricted
   } else if count <= 1 {
     RestrictionLevel::SingleScript
-  } else if count == 2 &&
-    (
-      (contains_script(found, Latin) && contains_script(found, Han)) ||
-      (contains_script(found, Latin) && contains_script(found, Hiragana)) ||
-      (contains_script(found, Latin) && contains_script(found, Katakana)) ||
-      (contains_script(found, Latin) && contains_script(found, Hangul))
-    ) {
-    RestrictionLevel::HighlyRestrictive
-  } else if count <= 3 &&
-    contains_script(found, Han) &&
-    (contains_script(found, Hiragana) || contains_script(found, Katakana)) {
+  } else if is_cjk_script_set(found) {
     RestrictionLevel::HighlyRestrictive
   } else if count == 2 &&
     (
-      (contains_script(found, Latin) && contains_script(found, Cyrillic)) ||
-      (contains_script(found, Latin) && contains_script(found, Greek)) ||
       (contains_script(found, Latin) && contains_script(found, Arabic)) ||
       (contains_script(found, Latin) && contains_script(found, Hebrew))
     ) {
@@ -164,6 +152,24 @@ pub fn analyze_scripts(input : String) -> ScriptAnalysis {
     }
   }
   { primary_script: primary, scripts: found, is_mixed, level, }
+}
+
+///|
+fn is_cjk_script_set(scripts : Array[Script]) -> Bool {
+  let mut japanese = true
+  let mut korean = true
+  for script in scripts {
+    if script != Latin &&
+      script != Han &&
+      script != Hiragana &&
+      script != Katakana {
+      japanese = false
+    }
+    if script != Latin && script != Han && script != Hangul {
+      korean = false
+    }
+  }
+  japanese || korean
 }
 
 ///|

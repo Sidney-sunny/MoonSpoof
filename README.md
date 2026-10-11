@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  Standard-compliant Unicode spoof detection and visual confusable identifier security for MoonBit.
+  Unicode confusable keys, character evidence, and batch collision detection for MoonBit.
 </p>
 
 <p align="center">
@@ -21,33 +21,33 @@
   <a href="docs/API_SPECIFICATION.md">API Specification</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
-  <a href="docs/SPECIFICATION.md">UTS #39 Compliance</a>
+  <a href="docs/SPECIFICATION.md">Implementation Scope</a>
 </p>
 
 ---
 
-## Visual Confusables, Identified with Precision
+## What the engine provides
 
-| Standard-Driven Skeleton | Script & Restriction Analysis | High-Throughput Batch Scanning |
-| :--- | :--- | :--- |
-| Strict UTS #39 Confusable Skeleton transformation | Automated Script and Script_Extensions resolution | Hash-indexed skeleton bucketing in O(N) time |
-| Distinguishes visual confusable from string equality | Multi-script isolation and context-aware grading | Batch username collision grouping without O(N^2) load |
-| Covers Cyrillic, Greek, Latin, Han, Kana, and Hangul | Full detection of zero-width and bidirectional controls | Zero dependencies, targeting WebAssembly, JS, and Native |
+| Confusable keys | Character evidence | Batch grouping |
+| --- | --- | --- |
+| Unicode 16.0 NFD and full default case folding | Codepoint, script, raw mapping target and risk rules | Hash buckets using the same keys as pair comparison |
+| Default ignorables and application fullwidth folding | Bidi/control detection and configurable identifier policy | Stable first-seen order; duplicates retained |
+| Pure MoonBit; JS, WASM and native targets | Limited script categories; explicit standards gaps | No pairwise comparison of every name |
 
-MoonSpoof evaluates identifiers against standard Unicode Technical Standard #39 security profiles. It accurately distinguishes between benign multilingual identifiers (such as CJK domain names) and malicious cross-script visual masquerading (such as substituting Latin characters with visually identical Cyrillic glyphs).
+MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk signals do not establish malicious intent. See [scope and compatibility](docs/SPECIFICATION.md).
 
----
+## Run the bilingual showcase
 
-## Choose Your Integration Mode
-
-**Library Engine** — Import directly into MoonBit applications for username registration, package managers, and token validators.
-
-**CLI Utility** — Audit identifier lists and inspect suspicious tokens with formatted terminal diagnostics.
-
-**WebAssembly Playground** — Embed inside browser security consoles with zero-latency client-side execution.
+[Open the live demo](https://sidney-sunny.github.io/MoonSpoof/). GitHub Actions builds and publishes the current `main` branch to Pages after the engine and frontend checks pass.
 
 ```powershell
-# Run the built-in CLI demonstration
+pnpm --dir playground install --frozen-lockfile
+pnpm --dir playground dev
+```
+
+Open the URL printed by Vite. Chinese is the default; EN / 中文 switches the entire interface. The browser runs freshly compiled MoonBit JavaScript in a worker and keeps inputs on the device. Compare identifiers, inspect character evidence, scan lists, and examine bidi rendering. The competitor matrix cites official ICU and confusable_homoglyphs APIs and makes no performance ranking.
+
+```powershell
 moon run cmd/main
 ```
 
@@ -57,11 +57,11 @@ moon run cmd/main
 
 ### 1. Add Dependency
 
-Declare in `moon.mod`:
+Add the module with `moon add Sidney-sunny/moonspoof`, then import it in your package's `moon.pkg`:
 
 ```moonbit
 import {
-  "Sidney-sunny/moonspoof" @lib,
+  "Sidney-sunny/moonspoof" @moonspoof,
 }
 ```
 
@@ -75,7 +75,7 @@ let spoofed = "p\u0430ypal" // Cyrillic Small Letter A (U+0430)
 let confusable : Bool = @moonspoof.are_confusable(authentic, spoofed)
 // confusable == true
 
-// Generate normalized UTS #39 skeleton
+// Generate the normalized application skeleton
 let sk : String = @moonspoof.skeleton(spoofed)
 // sk == "paypal"
 ```
@@ -98,7 +98,7 @@ println(report.rules_triggered) // ["RULE_INVISIBLE_OR_FORMAT_CHARACTER"]
 let registered_users = ["admin", "adm\u0456n", "alice", "bob", "al\u0456ce"]
 let collisions = @moonspoof.find_confusable_groups(registered_users)
 
-// Case-insensitive batch collision clustering under UTS #39 Section 4
+// Case-insensitive clustering using full default folded keys
 let mixed_users = ["PAYPAL", "p\u0430ypal", "Paypal", "stripe"]
 let folded_collisions = @moonspoof.find_confusable_groups_ignore_case(mixed_users)
 
@@ -111,24 +111,24 @@ for group in collisions {
 ### 5. Identifier Profiles & Case-Insensitive Matching
 
 ```moonbit
-// Case-insensitive confusable matching (UTS #39 Section 4)
+// Case-insensitive matching using the folded application key
 let is_conf = @moonspoof.are_confusable_ignore_case("PAYPAL", "P\u0430yPal") // true
 
-// UTS #39 Section 3 IdentifierProfile validation
+// Custom identifier policy validation
 let check = @moonspoof.validate_identifier("p\u0430ypal") // Err("Identifier contains disallowed mixed scripts")
 let allowed = @moonspoof.is_allowed_identifier("valid_user") // true
 
 // Restriction level querying (UTS #39 Section 5)
-let level = @moonspoof.get_restriction_level("p\u0430ypal") // ModeratelyRestrictive
+let level = @moonspoof.get_restriction_level("p\u0430ypal") // MinimallyRestrictive
 ```
 
 ---
 
-## Security Philosophy & Non-Goals
+## Security boundary
 
-1. **Standard-Driven, Not Heuristic Guesswork**: All confusable mappings derive strictly from official Unicode 16.0.0 and UTS #39 tables.
-2. **Context-Aware, Not Xenophobic**: Multilingual identifiers (Han, Japanese Hiragana/Katakana, Korean Hangul) are recognized as legitimate scripts and are never classified as malicious by default.
-3. **Non-Goals**: MoonSpoof is a foundational security primitive. It is not an antivirus engine, anti-phishing cloud crawler, reputation database, or machine-learning threat predictor.
+The engine exposes eleven script categories plus Unknown and does not implement Script_Extensions, Identifier_Status, mixed-number checks or bidi skeleton reordering. Identifier policies are configurable application checks, not full Unicode identifier syntax validation. Fullwidth folding and repeated normalization to stable keys are application extensions.
+
+Sensitive and folded keys are separate policies: `I` / `l` can match in the sensitive mode while differing in folded mode. Stored keys should carry a library/data version and be recomputed after changing versions. [API contracts](docs/API_SPECIFICATION.md) describe the corrected behavior.
 
 ---
 
@@ -140,7 +140,7 @@ let level = @moonspoof.get_restriction_level("p\u0430ypal") // ModeratelyRestric
 | System Architecture & Pipeline | [ARCHITECTURE.md](docs/ARCHITECTURE.md) / [中文版](docs/ARCHITECTURE_zh.md) |
 | API Contracts & Data Types | [API_SPECIFICATION.md](docs/API_SPECIFICATION.md) / [中文版](docs/API_SPECIFICATION_zh.md) |
 | Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
-| UTS #39 Standard Compliance | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
+| Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Brand Identity & Visual System | [BRANDING.md](docs/BRANDING.md) / [中文版](docs/BRANDING_zh.md) |
 
 ---
@@ -156,12 +156,15 @@ moon check
 
 # Execute unit and property tests
 moon test
+moon test --target js
+moon test --target native
+pnpm --dir playground run check
 
 # Run CLI demonstration
 moon run cmd/main
 ```
 
-All algorithms run deterministically without external C runtime or network dependencies.
+Unicode tables are generated from six checksum-recorded sources. To reproduce official NFD and mapping checks, run `python tools/data-generator/generate.py`, `moon info`, `moon fmt`, then `pnpm --dir playground run verify:unicode`. Node checks always rebuild the engine first. The library has no third-party runtime dependencies.
 
 </details>
 

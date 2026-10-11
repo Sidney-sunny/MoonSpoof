@@ -2,8 +2,8 @@
 
 ///|
 pub fn map_confusable_codepoint(cp : Int) -> String {
-  // Strip default ignorable / invisible format characters (UTS #39 Section 4)
-  if @unicode.is_invisible_codepoint(cp) {
+  // Unicode Default_Ignorable_Code_Point, including bidi controls.
+  if @unicode.is_default_ignorable(cp) {
     return ""
   }
   // Normalize Ideographic Space U+3000 to standard ASCII space 0x0020
@@ -21,14 +21,29 @@ pub fn map_confusable_codepoint(cp : Int) -> String {
 }
 
 ///|
-pub fn skeleton(input : String) -> String {
+fn skeleton_pass(input : String) -> String {
   let buf = StringBuilder()
-  for ch in input {
+  for ch in @unicode.normalize_nfd(input) {
     let cp = ch.to_int()
     let mapped = map_confusable_codepoint(cp)
     buf.write_string(mapped)
   }
-  buf.to_string()
+  @unicode.normalize_nfd(buf.to_string())
+}
+
+///|
+pub fn skeleton(input : String) -> String {
+  // Close mappings under NFD: some official prototypes contain composed Hangul
+  // whose decomposed trailing Jamo have another confusable mapping.
+  let mut current = @unicode.normalize_nfd(input)
+  while true {
+    let next = skeleton_pass(current)
+    if next == current {
+      return next
+    }
+    current = next
+  }
+  current
 }
 
 ///|
@@ -52,10 +67,20 @@ pub fn to_lower_ascii(s : String) -> String {
 
 ///|
 pub fn skeleton_case_folded(input : String) -> String {
-  to_lower_ascii(skeleton(to_lower_ascii(input)))
+  // Application key: full default case folding followed by skeleton mapping.
+  // Reapply until stable because mapping can introduce a cased prototype.
+  let mut current = input
+  while true {
+    let next = skeleton(@unicode.case_fold(current))
+    if next == current {
+      return next
+    }
+    current = next
+  }
+  current
 }
 
 ///|
 pub fn are_confusable_ignore_case(a : String, b : String) -> Bool {
-  are_confusable(a, b) || skeleton_case_folded(a) == skeleton_case_folded(b)
+  skeleton_case_folded(a) == skeleton_case_folded(b)
 }

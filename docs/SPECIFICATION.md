@@ -1,52 +1,61 @@
-# UTS #39 Unicode Security Specification & Compliance Matrix
+# Unicode security implementation scope
 
-This document outlines the scope of Unicode Technical Standard #39 (UTS #39) compliance implemented in MoonSpoof, referencing Unicode Character Database (UCD) 16.0.0.
+[Chinese](SPECIFICATION_zh.md)
 
----
+MoonSpoof implements selected Unicode security mechanisms using pinned Unicode 16.0.0 data. It does not claim full UTS #39 conformance. A matching skeleton or a risk signal does not establish malicious intent.
 
-## 1. Specification References & Pinned Data Versions
+## Data and reproducibility
 
-| Standard / Dataset | Official Specification | Pinned Version | Upstream Resource |
-| :--- | :--- | :--- | :--- |
-| **UTS #39** | Unicode Security Mechanisms | Revision 30 / 16.0.0 | [unicode.org/reports/tr39/](https://www.unicode.org/reports/tr39/) |
-| **Confusables** | Visual Confusable Mapping Data | 16.0.0 | [confusables.txt](https://www.unicode.org/Public/security/16.0.0/confusables.txt) |
-| **UCD Scripts** | Unicode Script Property Data | 16.0.0 | [Scripts.txt](https://www.unicode.org/Public/16.0.0/ucd/Scripts.txt) |
-| **UCD ScriptExtensions** | Script_Extensions (scx) | 16.0.0 | [ScriptExtensions.txt](https://www.unicode.org/Public/16.0.0/ucd/ScriptExtensions.txt) |
+The reference is [UTS #39 revision 30](https://www.unicode.org/reports/tr39/tr39-30.html). `tools/data-generator/sources.json` records official URLs and SHA-256 hashes for six files: confusables, Scripts, UnicodeData, CaseFolding, DerivedCoreProperties, and NormalizationTest. Regenerate with `python tools/data-generator/generate.py`, then run `moon info`, `moon fmt`, and `pnpm --dir playground run verify:unicode`.
 
----
+| Mechanism | Implemented behavior | Boundary |
+| --- | --- | --- |
+| NFD | Recursive canonical decomposition, algorithmic Hangul, stable combining-class ordering | NFKC and NFKD are not provided |
+| Confusable key | NFD, remove Default_Ignorable_Code_Point, map, NFD; repeat to stability | Application key, not the full bidiSkeleton procedure |
+| Case-insensitive key | Full default C/F case folding, then skeleton; repeat to stability | No Turkic T or locale-specific casing; a separate equivalence policy |
+| Script analysis | Scripts.txt lookup, eleven named categories plus Unknown | No Script_Extensions resolution; many scripts become Unknown |
+| Identifier policy | Empty/length/control/ignorable/mixed-script checks | Custom policy, not Identifier_Status, XID, or syntax validation |
+| Diagnostics | Codepoints, raw mapping targets, scripts, triggered rules, risk | A raw character target need not equal the final normalized key |
+| Bidi | Detect Unicode bidi controls and overrides | No UBA reordering or bidi skeleton; demo uses browser rendering |
+| Batch | Hash groups by the same key used in pair comparison | Duplicate identical entries also form collisions |
 
-## 2. Standard Compliance Coverage
+## Application extensions and compatibility
 
-### 2.1 UTS #39 Section 4: Confusable Detection
+Fullwidth ASCII U+FF01–U+FF5E and U+3000 are folded to their ASCII counterparts. Repeating normalization/mapping until stability handles targets that normalize into another mapped codepoint, including Hangul. Both are explicit application extensions; stored keys should be versioned with the library and Unicode data version.
 
-- **Supported**: Full single-codepoint confusable mapping transformation (`skeleton(S)`).
-- **Supported**: Automatic stripping of default ignorable and invisible format characters (ZWSP U+200B, ZWNJ U+200C, ZWJ U+200D) to empty string in `skeleton`.
-- **Supported**: Identification of cross-script homoglyphic substitution (e.g. Cyrillic `а` / Greek `ο` replacing Latin `a` / `o`).
-- **Supported**: Fullwidth ASCII (U+FF01–U+FF5E) and Ideographic Space (U+3000) canonicalization to standard ASCII.
-- **Invariants**: Normalization differences and confusable equivalence are strictly evaluated.
+`are_confusable_ignore_case(a,b)` now means only equality of folded keys. It no longer ORs this result with case-sensitive equality. For example, `I` and `l` collide under the case-sensitive key but differ under the folded key. Pair comparison and batch grouping therefore use the same equivalence relation.
 
-### 2.2 UTS #39 Section 5: Mixed-Script Detection & Restriction Levels
+## Restriction estimates
 
-- **Single Script**: Identifiers composed exclusively of a single script (plus `Common` and `Inherited` characters).
-- **Highly Restrictive**:
-  - `Latin` + `Han` / `Hiragana` / `Katakana` (Japanese standard)
-  - `Latin` + `Han` (Chinese standard)
-  - `Latin` + `Hangul` (Korean standard)
-- **Moderately Restrictive**: Identifiers mixing `Latin` with `Cyrillic` or `Greek`.
-- **Minimally Restrictive / Unrestricted**: Arbitrary script mixtures.
+`primary_script` is the first recognized non-Common/non-Inherited script, not a frequency-based dominant script. Unknown characters yield Unrestricted but are not included in the recognized `scripts` list.
 
----
+| Estimate | Recognized script set |
+| --- | --- |
+| SingleScript | Zero or one recognized script, with no Unknown codepoints |
+| HighlyRestrictive | More than one script, subset of Latin/Han/Hiragana/Katakana or Latin/Han/Hangul |
+| ModeratelyRestrictive | Exactly Latin+Arabic or Latin+Hebrew |
+| MinimallyRestrictive | Other combinations of the recognized named scripts, including Latin+Cyrillic and Latin+Greek |
+| Unrestricted | Any Unknown script |
 
-## 3. Security Rule Definitions
+These estimates omit the full standard's Identifier_Status and Script_Extensions prerequisites. The default custom identifier policy rejects every recognized mixed-script combination, even CJK combinations assigned HighlyRestrictive; callers may choose the permissive policy. Unknown-script text and punctuation may pass this policy, so callers must enforce their own identifier syntax.
 
-MoonSpoof evaluates security risks using explicit, machine-readable rule identifiers:
+## Risk rules
 
-| Rule Identifier | Trigger Condition | Severity Level |
-| :--- | :--- | :--- |
-| `RULE_INVISIBLE_OR_FORMAT_CHARACTER` | Contains zero-width space (U+200B), joiners (U+200C/D), or soft hyphens | **Critical** |
-| `RULE_BIDI_CONTROL_CHARACTER` | Contains LRM, RLM, or bidirectional overrides (U+202A–202E, U+2066–2069) | **Critical** |
-| `RULE_BIDI_OVERRIDE_CHARACTER` | Contains Right-to-Left Override (U+202E) or Left-to-Right Override (U+202D) | **Critical** |
-| `RULE_BIDI_FILE_EXTENSION_SPOOF` | Bidi override paired with deceptive executable/document extension (.exe, .pdf, .scr) | **Critical** |
-| `RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH` | Contains non-Latin glyphs masquerading as Latin characters | **High** |
-| `RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD` | Identifier mixes Latin, Cyrillic, or Greek alphabets vulnerable to homoglyphs | **High** |
-| `RULE_MIXED_SCRIPT_IDENTIFIER` | Contains conflicting characters from two or more unrelated scripts | **Medium** |
+| Rule | Trigger |
+| --- | --- |
+| RULE_INVISIBLE_OR_FORMAT_CHARACTER | Default_Ignorable_Code_Point |
+| RULE_CONTROL_CHARACTER | C0 U+0000–001F or C1 U+007F–009F |
+| RULE_BIDI_CONTROL_CHARACTER | A supported bidi control |
+| RULE_BIDI_OVERRIDE_CHARACTER | LRO or RLO |
+| RULE_BIDI_FILE_EXTENSION_SPOOF | LRO/RLO and any dot; heuristic, no extension parser |
+| RULE_MIXED_SCRIPT_IDENTIFIER | More than one recognized script |
+| RULE_MIXED_SCRIPT_CONFUSABLE_TRIAD | Any pair among Latin, Cyrillic, Greek |
+| RULE_CROSS_SCRIPT_CONFUSABLE_GLYPH | A raw mapped target uses a different recognized script, ignoring Common/Inherited/Unknown |
+
+Controls, ignorables, and bidi controls yield Critical. A cross-script mapping or triad combined with mixed scripts yields High. A cross-script mapping alone or an unexpected mixed set yields Medium. Remaining changed keys yield Low; otherwise Safe. A HighlyRestrictive CJK mix is not escalated to Medium solely for mixing.
+
+Mixed-number detection, Identifier_Status, full Script_Extensions, and bidi skeleton reordering remain unimplemented. The low-level `get_general_category` helper is a coarse legacy classifier, not complete UCD General_Category data.
+
+## Verification evidence
+
+The verifier checks 19,965 official NFD vectors (99,825 assertions), all 6,355 confusable source rows against a reference pipeline, 1,557 C/F case-fold mappings, and key stability for 7,561 source codepoints. The reference pipeline reuses the NFD implementation after official NFD verification. This evidence does not establish full UTS #39 conformance or prove every possible string property. Unit tests additionally cover JSON controls, astral lengths, ordering, CJK restrictions, and worker lifecycle failures.
