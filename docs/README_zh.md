@@ -1,4 +1,4 @@
-<p align="center"><img src="assets/banner.jpg" alt="MoonSpoof" width="960" /></p>
+<p align="center"><img src="assets/banner.png" alt="MoonSpoof" width="960" /></p>
 
 <p align="center"><img alt="Unicode 16.0" src="https://img.shields.io/badge/Unicode-16.0.0-334155?style=flat-square" /> <img alt="Apache 2.0" src="https://img.shields.io/badge/License-Apache_2.0-334155?style=flat-square" /></p>
 

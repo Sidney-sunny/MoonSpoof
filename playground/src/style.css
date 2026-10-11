@@ -15,6 +15,7 @@
     --selected: #203c50;
     --error: #ffb7c3;
     --code-string: #bddbdc;
+    --brand-paper: #f4f2f6;
     font-family: Manrope, ui-sans-serif, sans-serif;
     color: var(--ink);
     background: var(--ground);
@@ -51,7 +52,7 @@
   .skip-link:focus { transform: translateY(0); }
   .site-header { min-height: 92px; padding: 20px 48px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); gap: 20px; }
   .wordmark { display: inline-flex; gap: 12px; align-items: center; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
-  .brand-mark { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+  .brand-mark { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; background: var(--brand-paper); }
   .version { color: var(--muted); font-size: 11px; font-weight: 400; align-self: flex-start; padding-top: 3px; letter-spacing: 0; }
   .site-header nav { display: flex; gap: 36px; font-size: 13px; }
   .site-header nav a { min-height: 40px; display: flex; align-items: center; gap: 8px; }

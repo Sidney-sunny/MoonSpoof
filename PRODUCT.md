@@ -30,7 +30,7 @@ Preserve the public library API where practical. Unicode security analysis is a 
 
 ## Brand Commitments
 
-MoonSpoof name and the original crescent-and-twin-loop logo in docs/assets/logo.jpg; English technical artifacts; Chinese conversation; bilingual website; dark, matte, minimal visual presentation. The owner requested a fresh palette to distinguish another project: ink blue and ice cyan. Avoid decorative starter chips and fabricated benchmark claims.
+MoonSpoof name and the new sculpted MS identity in docs/assets/logo.png, with its matching README banner in docs/assets/banner.png. The owner authorized a new brand after rejecting a vermilion concept that matched another project. The brand uses a deep-grape and pearl-white visual direction; the showcase retains its ink-blue and ice-cyan interface. English technical artifacts; Chinese conversation; bilingual website; matte, minimal presentation. Avoid decorative starter chips and fabricated benchmark claims.
 
 ## Evidence on Hand
 

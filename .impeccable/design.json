@@ -153,6 +153,21 @@
           "oklch(84% 0.03182 199.05)",
           "oklch(95% 0.03182 199.05)"
         ]
+      },
+      "brand-paper": {
+        "role": "neutral",
+        "displayName": "Brand Pearl",
+        "canonical": "#f4f2f6",
+        "tonalRamp": [
+          "#211d24",
+          "#39313d",
+          "#514756",
+          "#6e6274",
+          "#897d8f",
+          "#a69bac",
+          "#cbc2d0",
+          "#f4f2f6"
+        ]
       }
     },
     "typographyMeta": {
@@ -284,7 +299,7 @@
   ],
   "narrative": {
     "northStar": "The Glyph Examination Bench",
-    "overview": "The Glyph Examination Bench treats character shapes as specimens and codepoints as evidence. Its world is dark, matte, ruled, and deliberately square. Large serif glyphs create the visual question; precise sans-serif controls and monospace diagnostics make the answer inspectable. The density suits a judge examining working code rather than a promotional catalogue.\n\nInk blue gives the canvas and working surfaces a quiet tonal separation. Ice cyan connects actions, selected glyphs, and findings; cold white carries primary text. The original crescent-and-twin-loop raster logo remains the identity asset. The owner rejected an authored replacement symbol and the earlier amber palette. This implementation uses no decorative imagery, gradient surfaces, or shadows.",
+    "overview": "The Glyph Examination Bench treats character shapes as specimens and codepoints as evidence. Its world is dark, matte, ruled, and deliberately square. Large serif glyphs create the visual question; precise sans-serif controls and monospace diagnostics make the answer inspectable. The density suits a judge examining working code rather than a promotional catalogue.\n\nInk blue gives the canvas and working surfaces a quiet tonal separation. Ice cyan connects actions, selected glyphs, and findings; cold white carries primary text. The owner subsequently commissioned the sculpted deep-grape MS logo and pearl-white README banner. The showcase retains its existing interface palette. This implementation uses no decorative imagery, gradient surfaces, or shadows.",
     "keyCharacteristics": [
       "Matte ink-blue surfaces with ice-cyan actions and evidence.",
       "Ruled rows, square controls, and flat tonal depth.",
@@ -311,12 +326,12 @@
     "dos": [
       "**Do** reuse the matte ink-blue palette and the shared cyan action/evidence signal.",
       "**Do** preserve square controls, ruled grouping, and flat tonal depth.",
-      "**Do** preserve the original raster logo and its asset identity.",
+      "**Do** preserve the supplied sculpted MS raster logo and its asset identity.",
       "**Do** keep both locales, keyboard navigation, visible focus, retained tool state, and overflow cues intact.",
       "**Do** distinguish visual specimens from monospace stored data and expose real diagnostic evidence."
     ],
     "donts": [
-      "**Don't** replace the original logo with an authored symbol or revive the rejected amber palette.",
+      "**Don't** replace the supplied MS logo with a newly drawn symbol or revive the rejected amber palette.",
       "**Don't** add glow, gradient surfaces, or shadows to this matte world.",
       "**Don't** hide overflowing table columns without the named scroll region and its localized cue.",
       "**Don't** add decorative starter chips or fabricate diagnostic/performance claims."

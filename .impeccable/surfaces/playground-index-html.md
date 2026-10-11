@@ -15,7 +15,7 @@ Use real runtime results; comparator claims cite primary sources. No speed ranki
 
 THESIS: Make visually identical identifiers yield inspectable evidence, rather than a brochure preceding a demo.
 
-OWN-WORLD: Ink-blue canvas, cold white glyphs, ice-cyan actions and findings; Manrope headings, monospace codepoints; ruled specimen rows and square controls. The owner requested a palette change to avoid matching another project. Preserve the original crescent-and-twin-loop raster logo; do not substitute an authored symbol.
+OWN-WORLD: Ink-blue canvas, cold white glyphs, ice-cyan actions and findings; Manrope headings, monospace codepoints; ruled specimen rows and square controls. The owner subsequently commissioned and authorized the sculpted deep-grape MS identity and matching pearl-white README banner. Reuse the supplied docs/assets/logo.png rather than drawing a replacement; its header/footer ground is pearl white. The interface palette remains unchanged.
 
 STORY: See a spoof, run the comparison, inspect the differing character, assess integrations against competitors.
 

@@ -59,4 +59,4 @@ export default function App() {
 }
 
 function External() { return <svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.4"><path d="M5 15 15 5M5 5h10v10" /></svg>; }
-function Mark() { return <img className="brand-mark" src={`${import.meta.env.BASE_URL}logo.jpg`} width="48" height="48" alt="" />; }
+function Mark() { return <img className="brand-mark" src={`${import.meta.env.BASE_URL}logo.png`} width="48" height="48" alt="" />; }

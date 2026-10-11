@@ -12,6 +12,7 @@ colors:
   selected: "#203c50"
   error: "#ffb7c3"
   code-string: "#bddbdc"
+  brand-paper: "#f4f2f6"
 typography:
   display:
     fontFamily: "Manrope, ui-sans-serif, sans-serif"
@@ -108,7 +109,7 @@ components:
 
 The Glyph Examination Bench treats character shapes as specimens and codepoints as evidence. Its world is dark, matte, ruled, and deliberately square. Large serif glyphs create the visual question; precise sans-serif controls and monospace diagnostics make the answer inspectable. The density suits a judge examining working code rather than a promotional catalogue.
 
-Ink blue gives the canvas and working surfaces a quiet tonal separation. Ice cyan connects actions, selected glyphs, and findings; cold white carries primary text. The original crescent-and-twin-loop raster logo remains the identity asset. The owner rejected an authored replacement symbol and the earlier amber palette. This implementation uses no decorative imagery, gradient surfaces, or shadows.
+Ink blue gives the canvas and working surfaces a quiet tonal separation. Ice cyan connects actions, selected glyphs, and findings; cold white carries primary text. The owner subsequently commissioned a sculpted deep-grape MS identity and matching pearl-white README banner; the showcase retains its existing interface palette. This implementation uses no decorative imagery, gradient surfaces, or shadows.
 
 **Key Characteristics:**
 
@@ -181,7 +182,7 @@ There are no box shadows. Depth comes from the ink-blue ground, a lighter workin
 
 Reusable controls and containers have square corners. Borders and table rules are thin (1px); tab and specimen selection use a stronger underline (2px). Focus is an external cyan outline (2px) with separation (5px), not an inset glow. Glyph-select targets retain an outlined square; native checkboxes use their browser shape with cyan accent.
 
-The canonical identity is `docs/assets/logo.jpg`, copied to `playground/public/logo.jpg` without authored replacement. The app displays it in both wordmarks (48px desktop, 36px compact); the same raster is the favicon. Its original square background is part of the asset. Do not trace it into a new mark, recolor it, or manufacture alternate identity artwork. The showcase uses inline SVG arrows for navigation and execution, and uses mathematical equality symbols as actual comparison content.
+The canonical identity is the sculpted MS logo in `docs/assets/logo.png`, copied to `playground/public/logo.png`. The transparent grape artwork sits on `--brand-paper` in the header and footer (48px desktop, 36px compact); the same PNG is the favicon. The README uses the matching `docs/assets/banner.png`. These generated assets replace the previous crescent-and-twin-loop identity at the owner's request. Do not trace, stretch or recolor the supplied artwork. The showcase uses inline SVG arrows for navigation and execution, and mathematical equality symbols as comparison content.
 
 ## Components
 
@@ -223,13 +224,13 @@ Tables use collapsed borders, ruled rows, and visible column labels. Character r
 
 - **Do** reuse the matte ink-blue palette and the shared cyan action/evidence signal.
 - **Do** preserve square controls, ruled grouping, and flat tonal depth.
-- **Do** preserve the original raster logo and its asset identity.
+- **Do** preserve the supplied sculpted MS raster logo and its asset identity.
 - **Do** keep both locales, keyboard navigation, visible focus, retained tool state, and overflow cues intact.
 - **Do** distinguish visual specimens from monospace stored data and expose real diagnostic evidence.
 
 ### Don't:
 
-- **Don't** replace the original logo with an authored symbol or revive the rejected amber palette.
+- **Don't** replace the supplied MS logo with a newly drawn symbol or revive the rejected amber palette.
 - **Don't** add glow, gradient surfaces, or shadows to this matte world.
 - **Don't** hide overflowing table columns without the named scroll region and its localized cue.
 - **Don't** add decorative starter chips or fabricate diagnostic/performance claims.

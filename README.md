@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/banner.jpg" alt="MoonSpoof: Unicode Spoof Detection for MoonBit" width="960" />
+  <img src="docs/assets/banner.png" alt="MoonSpoof: Unicode Spoof Detection for MoonBit" width="960" />
 </p>
 
 <p align="center">
