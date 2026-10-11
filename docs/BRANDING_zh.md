@@ -30,3 +30,14 @@ MoonSpoof 的品牌图形将月相精密度与字符安全相结合：
 
 - **官方横幅 (16:9)**：`docs/assets/banner.jpg`（及 `docs/assets/banner.png`）
 - **官方图标 (1:1)**：`docs/assets/logo.jpg`（及 `docs/assets/logo.png`）
+
+---
+
+## 4. 交互式演练平台 (Playground) 四大功能分区
+
+WebAssembly 在线演练工作台（`playground/`）划分为四个专注于不同防御维度的交互式功能分区：
+
+- **Zone A: 成对比对 (Pair Comparison)**：实时混淆等价性校验、标准骨架生成与 UTS #39 第 4 节大小写折叠混淆检测。
+- **Zone B: 批量碰撞扫描 (Collision Scanner)**：面向海量用户名的 $O(N)$ 线性分桶聚类，内置金融、运维与开发者平台预置攻击库。
+- **Zone C: 字符级反编译审查 (Glyph Inspector)**：逐字符十进制/十六进制码点反编译、字系归属查询、混淆目标对齐及 UTS #39 第 3 节安全配置校验。
+- **Zone D: 特洛伊木马源码与双向文本审查 (Trojan Source & Bidi)**：直观对比人眼视觉渲染效果与底层物理内存字节流，精准拦截 CVE-2021-42574 源码注入与从右至左覆盖符（`RLO`）伪装可执行文件扩展名攻击。

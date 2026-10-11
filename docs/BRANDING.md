@@ -32,3 +32,14 @@ All approved visual assets are located in `docs/assets/`:
 
 - **Banner (16:9)**: `docs/assets/banner.jpg` (and `docs/assets/banner.png`)
 - **Logo (1:1)**: `docs/assets/logo.jpg` (and `docs/assets/logo.png`)
+
+---
+
+## 4. Interactive Playground Architecture & Zones
+
+The WebAssembly Playground (`playground/`) implements an interactive visual workbench organized into four purpose-built zones:
+
+- **Zone A: Pair Comparison**: Real-time confusable equivalence verification, standard skeletons, and UTS #39 Section 4 case-folded matching.
+- **Zone B: Collision Scanner**: High-throughput $O(N)$ batch identifier collision bucketing across financial, administrative, and developer platform attack pools.
+- **Zone C: Glyph Inspector**: Character-level decompilation with decimal/hex codepoints, script resolution, confusable targets, and UTS #39 Section 3 IdentifierProfile validation.
+- **Zone D: Trojan Source & Bidi Inspector**: Split visual display vs. physical memory sequence, detecting CVE-2021-42574 Trojan Source code injections and Right-to-Left Override (`RLO`) file extension masquerading.
