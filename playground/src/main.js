@@ -1,4 +1,4 @@
-import { spoof_compare, spoof_analyze, spoof_batch_scan, spoof_validate_profile } from './moonspoof.js';
+import { spoof_compare, spoof_analyze, spoof_batch_scan_with_options, spoof_validate_profile } from './moonspoof.js';
 
 // Pre-defined presets for Pair Comparison
 const PRESETS = {
@@ -288,6 +288,7 @@ function initScannerZone() {
   const btnClear = document.getElementById('btn-clear-batch');
   const btnExportJson = document.getElementById('btn-export-batch-json');
   const btnExportCsv = document.getElementById('btn-export-batch-csv');
+  const ignoreCaseToggle = document.getElementById('scanner-ignore-case');
 
   const metricTotal = document.getElementById('metric-total-names');
   const metricGroups = document.getElementById('metric-collision-groups');
@@ -309,9 +310,10 @@ function initScannerZone() {
       return;
     }
 
+    const ignoreCase = ignoreCaseToggle ? ignoreCaseToggle.checked : false;
     const t0 = performance.now();
     try {
-      const rawJson = spoof_batch_scan(raw);
+      const rawJson = spoof_batch_scan_with_options(raw, ignoreCase);
       const res = JSON.parse(rawJson);
       const dt = (performance.now() - t0).toFixed(2);
 
@@ -368,6 +370,9 @@ function initScannerZone() {
   }
 
   textarea.addEventListener('input', runScan);
+  if (ignoreCaseToggle) {
+    ignoreCaseToggle.addEventListener('change', runScan);
+  }
 
   btnLoadMock.addEventListener('click', () => {
     textarea.value = ATTACK_SCENARIO_LIST;

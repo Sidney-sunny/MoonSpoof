@@ -153,14 +153,29 @@ pub fn spoof_analyze(input : String) -> String {
 ///|
 /// Batch collision scan from newline or comma separated usernames
 pub fn spoof_batch_scan(raw_input : String) -> String {
+  spoof_batch_scan_with_options(raw_input, false)
+}
+
+///|
+/// Batch collision scan with optional case-insensitive clustering
+pub fn spoof_batch_scan_with_options(
+  raw_input : String,
+  ignore_case : Bool,
+) -> String {
   let names = split_input_lines(raw_input)
-  let groups = @moonspoof.find_confusable_groups(names)
+  let groups = if ignore_case {
+    @moonspoof.find_confusable_groups_ignore_case(names)
+  } else {
+    @moonspoof.find_confusable_groups(names)
+  }
 
   let sb = StringBuilder()
   sb.write_string("{\"total_names\":")
   sb.write_string(names.length().to_string())
   sb.write_string(",\"group_count\":")
   sb.write_string(groups.length().to_string())
+  sb.write_string(",\"ignore_case\":")
+  sb.write_string(if ignore_case { "true" } else { "false" })
   sb.write_string(",\"groups\":[")
   for i in 0..<groups.length() {
     if i > 0 {

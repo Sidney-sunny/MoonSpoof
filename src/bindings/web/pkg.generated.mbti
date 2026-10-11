@@ -6,6 +6,8 @@ pub fn spoof_analyze(String) -> String
 
 pub fn spoof_batch_scan(String) -> String
 
+pub fn spoof_batch_scan_with_options(String, Bool) -> String
+
 pub fn spoof_compare(String, String) -> String
 
 pub fn spoof_get_restriction_info(String) -> String

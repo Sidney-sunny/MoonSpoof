@@ -22,6 +22,14 @@ test "web bindings: spoof_batch_scan JSON output" {
   let res = spoof_batch_scan(raw)
   assert_true(res.contains("\"total_names\":3"))
   assert_true(res.contains("\"group_count\":1"))
+
+  let mixed_case_raw = "PAYPAL, p\u0430ypal, Paypal"
+  let sensitive = spoof_batch_scan_with_options(mixed_case_raw, false)
+  assert_true(sensitive.contains("\"group_count\":0"))
+
+  let insensitive = spoof_batch_scan_with_options(mixed_case_raw, true)
+  assert_true(insensitive.contains("\"group_count\":1"))
+  assert_true(insensitive.contains("\"ignore_case\":true"))
 }
 
 ///|
