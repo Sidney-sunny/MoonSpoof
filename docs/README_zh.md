@@ -4,7 +4,7 @@
 
 <p align="center">为 MoonBit 提供 Unicode 混淆键、字符证据与批量冲突检测。</p>
 
-<p align="center"><a href="../README.md">English</a> · <a href="API_SPECIFICATION_zh.md">API 规范</a> · <a href="ARCHITECTURE_zh.md">架构</a> · <a href="SPECIFICATION_zh.md">实现范围</a></p>
+<p align="center"><a href="../README.md">English</a> · <a href="API_SPECIFICATION_zh.md">API 规范</a> · <a href="ARCHITECTURE_zh.md">架构</a> · <a href="SPECIFICATION_zh.md">实现范围</a> · <a href="CHANGELOG_zh.md">更新日志</a></p>
 
 ## 引擎能力
 

@@ -21,6 +21,7 @@
   <a href="docs/API_SPECIFICATION.md">API Specification</a> ·
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
+  <a href="CHANGELOG.md">Changelog</a> ·
   <a href="docs/SPECIFICATION.md">Implementation Scope</a>
 </p>
 
@@ -141,6 +142,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 | API Contracts & Data Types | [API_SPECIFICATION.md](docs/API_SPECIFICATION.md) / [中文版](docs/API_SPECIFICATION_zh.md) |
 | Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
 | Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
+| Release History | [CHANGELOG.md](CHANGELOG.md) / [中文版](docs/CHANGELOG_zh.md) |
 | Brand Identity & Visual System | [BRANDING.md](docs/BRANDING.md) / [中文版](docs/BRANDING_zh.md) |
 
 ---
