@@ -10,6 +10,57 @@ from unittest.mock import patch
 import generate
 
 
+class DownloadTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.directory = Path(temporary.name)
+        self.destination = self.directory / "Scripts.txt"
+        self.content = b"# pinned Unicode source fixture\n"
+        self.checksum = hashlib.sha256(self.content).hexdigest()
+        self.urlopen = self.enterContext(patch.object(generate.urllib.request, "urlopen"))
+        self.read = self.urlopen.return_value.__enter__.return_value.read
+        self.read.return_value = self.content
+
+    def download(self):
+        return generate.fetch_file(
+            generate.SCRIPTS_URL, self.destination, self.checksum
+        )
+
+    def test_valid_download_is_cached_without_temporary_files(self):
+        self.download()
+        self.assertEqual(self.destination.read_bytes(), self.content)
+        self.assertEqual(list(self.directory.iterdir()), [self.destination])
+
+    def test_bad_download_leaves_no_cache_and_can_be_retried(self):
+        self.read.return_value = b"truncated or unexpected response"
+        with self.assertRaisesRegex(ValueError, "checksum mismatch: Scripts.txt"):
+            self.download()
+        self.assertEqual(list(self.directory.iterdir()), [])
+        self.read.return_value = self.content
+        self.download()
+        self.assertEqual(self.destination.read_bytes(), self.content)
+        self.assertEqual(self.urlopen.call_count, 2)
+
+    def test_interrupted_download_leaves_no_cache(self):
+        self.read.side_effect = ConnectionResetError("connection interrupted")
+        with self.assertRaises(ConnectionResetError):
+            self.download()
+        self.assertEqual(list(self.directory.iterdir()), [])
+
+    def test_failed_publish_cleans_up_temporary_file(self):
+        with patch.object(generate.os, "replace", side_effect=OSError("write denied")):
+            with self.assertRaises(OSError):
+                self.download()
+        self.assertEqual(list(self.directory.iterdir()), [])
+
+    def test_cached_source_is_reused_without_network_access(self):
+        self.destination.write_bytes(self.content)
+        self.download()
+        self.urlopen.assert_not_called()
+        self.assertEqual(self.destination.read_bytes(), self.content)
+
+
 class PinnedSourcesTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()

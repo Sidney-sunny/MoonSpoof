@@ -23,4 +23,6 @@ pnpm --dir playground run verify:unicode
 | DerivedCoreProperties.txt | 默认忽略码点范围 |
 | NormalizationTest.txt | 官方 NFD 验证向量 |
 
+新下载必须先匹配固定的校验值，再通过同目录临时文件原子写入缓存；下载或写入失败不会留下不完整的缓存文件。已有缓存仍会在生成任何源码前进行校验。
+
 准确 URL 与哈希在 `sources.json`，未使用 ScriptExtensions.txt。更新版本需要明确审核清单，不能通过换哈希接受来源不明的差异。重新生成并格式化应复现已提交表。详见[实现范围](../../docs/SPECIFICATION_zh.md)。

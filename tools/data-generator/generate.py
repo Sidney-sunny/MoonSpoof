@@ -9,6 +9,7 @@ import os
 import re
 import json
 import hashlib
+import tempfile
 from pathlib import Path
 from functools import lru_cache
 
@@ -43,14 +44,27 @@ def load_source_manifest(path):
             raise ValueError(f"Invalid source checksum: {name}.")
     return manifest
 
-def fetch_file(url, local_path):
+def fetch_file(url, local_path, expected_sha256):
     if not os.path.exists(local_path):
         print(f"Downloading {url} -> {local_path} ...")
         req = urllib.request.Request(url, headers={'User-Agent': 'MoonSpoof-DataGen/1.0'})
         with urllib.request.urlopen(req, timeout=60) as resp:
             content = resp.read()
-        with open(local_path, 'wb') as f:
-            f.write(content)
+        destination = Path(local_path)
+        if hashlib.sha256(content).hexdigest() != expected_sha256:
+            raise ValueError(f"Source checksum mismatch: {destination.name}. Download was not cached; retry with the official pinned source.")
+        temporary_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="wb", dir=destination.parent,
+                prefix=f".{destination.name}.", suffix=".tmp", delete=False,
+            ) as temporary:
+                temporary_path = Path(temporary.name)
+                temporary.write(content)
+            os.replace(temporary_path, destination)
+        finally:
+            if temporary_path is not None:
+                temporary_path.unlink(missing_ok=True)
         print(f"Saved {local_path} ({len(content)} bytes)")
     return local_path
 
@@ -296,7 +310,7 @@ def main():
     data_dir = Path(script_dir)
     manifest = load_source_manifest(data_dir / "sources.json")
     for name, url in SOURCE_URLS.items():
-        fetch_file(url, data_dir / name)
+        fetch_file(url, data_dir / name, manifest["sources"][name]["sha256"])
 
     # A pinned manifest must not silently accept edited or corrupted downloads.
     for name, metadata in manifest["sources"].items():

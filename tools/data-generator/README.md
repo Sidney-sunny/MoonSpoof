@@ -23,4 +23,6 @@ The generator requires the reviewed `sources.json` manifest before downloading f
 | DerivedCoreProperties.txt | Default_Ignorable_Code_Point ranges |
 | NormalizationTest.txt | Official NFD verification vectors |
 
+New downloads must match the pinned checksum before they are published to the cache. Publication uses an atomic replacement from a temporary file in the same directory; failed downloads or writes do not leave a partial cache file. Existing cached files still undergo checksum verification before any generated source is written.
+
 Exact URLs and hashes live in `sources.json`. ScriptExtensions.txt is not consumed. Changing the data version requires an explicit manifest review; do not replace hashes to accept an unexplained mismatch. Regeneration plus formatting should reproduce committed tables without a diff. See [implementation scope](../../docs/SPECIFICATION.md).

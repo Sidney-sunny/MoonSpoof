@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- New Unicode downloads are checksum-checked before atomic cache publication; interrupted or invalid downloads no longer leave a bad cache that blocks subsequent retries.
 - Unicode regeneration now requires the complete, reviewed source manifest before downloading or generating files, validates the pinned version, URLs, and checksum fields, and never rewrites the manifest from cached data. Added offline regression checks to CI.
 - CI, Pages, and Copilot setup now install the shared compiler version from `.moon-version`, preventing unreviewed formatter and interface changes when the latest toolchain changes.
 
