@@ -5,13 +5,14 @@
 Python standard library only; no package installation is required. From the repository root:
 
 ```powershell
+python -m unittest discover -s tools/data-generator -p 'test_*.py'
 python tools/data-generator/generate.py
 moon info
 moon fmt
 pnpm --dir playground run verify:unicode
 ```
 
-The generator downloads missing Unicode 16.0.0 files, verifies their recorded SHA-256 checksums before writing source, and emits sorted confusable/script/normalization tables. Existing downloads are reused. Requests time out after 60 seconds. Raw `.txt` files and normalization vectors are ignored; generated MoonBit tables and `sources.json` are tracked.
+The generator requires the reviewed `sources.json` manifest before downloading files. It rejects missing or extra source entries, a changed Unicode version or URL, and invalid SHA-256 fields before network access. It then downloads missing Unicode 16.0.0 files, verifies all six recorded checksums before writing source, and emits sorted confusable/script/normalization tables. The manifest is read-only during regeneration; a missing manifest must be restored from version control, not recreated from cached files. Existing downloads are reused. Requests time out after 60 seconds. Raw `.txt` files and normalization vectors are ignored; generated MoonBit tables and `sources.json` are tracked.
 
 | Official file | Purpose |
 | --- | --- |

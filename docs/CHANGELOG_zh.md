@@ -2,6 +2,12 @@
 
 [English](../CHANGELOG.md)
 
+## 未发布
+
+### 修复
+
+- Unicode 再生成现在要求预先存在完整且已审核的来源清单，在下载或生成前校验固定版本、URL 和校验值字段，不再根据缓存数据重写清单；离线回归检查已接入 CI。
+
 ## [0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0) - 2026-10-12
 
 MoonSpoof 首个公开版本：使用纯 MoonBit 实现 Unicode 易混淆字符与标识符风险分析引擎，并提供双语浏览器演示站。

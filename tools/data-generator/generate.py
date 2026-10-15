@@ -16,6 +16,32 @@ UNICODE_VERSION = "16.0.0"
 CONFUSABLES_URL = f"https://www.unicode.org/Public/security/{UNICODE_VERSION}/confusables.txt"
 SCRIPTS_URL = f"https://www.unicode.org/Public/{UNICODE_VERSION}/ucd/Scripts.txt"
 UCD_URL = f"https://www.unicode.org/Public/{UNICODE_VERSION}/ucd"
+SOURCE_URLS = {
+    "confusables.txt": CONFUSABLES_URL,
+    "Scripts.txt": SCRIPTS_URL,
+    "UnicodeData.txt": f"{UCD_URL}/UnicodeData.txt",
+    "CaseFolding.txt": f"{UCD_URL}/CaseFolding.txt",
+    "DerivedCoreProperties.txt": f"{UCD_URL}/DerivedCoreProperties.txt",
+    "NormalizationTest.txt": f"{UCD_URL}/NormalizationTest.txt",
+}
+
+
+def load_source_manifest(path):
+    # Treat the reviewed manifest as input, never bootstrap hashes from the cache.
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict) or manifest.get("unicode_version") != UNICODE_VERSION:
+        raise ValueError("Unicode version changed: review and update sources.json explicitly.")
+    sources = manifest.get("sources")
+    if not isinstance(sources, dict) or set(sources) != set(SOURCE_URLS):
+        raise ValueError("Manifest source files must match the six pinned Unicode files.")
+    for name, url in SOURCE_URLS.items():
+        metadata = sources[name]
+        if not isinstance(metadata, dict) or metadata.get("url") != url:
+            raise ValueError(f"Source URL mismatch: {name}. Review sources.json explicitly.")
+        checksum = metadata.get("sha256")
+        if not isinstance(checksum, str) or not re.fullmatch(r"[0-9a-f]{64}", checksum):
+            raise ValueError(f"Invalid source checksum: {name}.")
+    return manifest
 
 def fetch_file(url, local_path):
     if not os.path.exists(local_path):
@@ -267,22 +293,16 @@ def main():
     confusables_file = os.path.join(script_dir, "confusables.txt")
     scripts_file = os.path.join(script_dir, "Scripts.txt")
 
-    fetch_file(CONFUSABLES_URL, confusables_file)
-    fetch_file(SCRIPTS_URL, scripts_file)
     data_dir = Path(script_dir)
-    for name in ("UnicodeData.txt", "CaseFolding.txt", "DerivedCoreProperties.txt", "NormalizationTest.txt"):
-        fetch_file(f"{UCD_URL}/{name}", data_dir / name)
+    manifest = load_source_manifest(data_dir / "sources.json")
+    for name, url in SOURCE_URLS.items():
+        fetch_file(url, data_dir / name)
 
     # A pinned manifest must not silently accept edited or corrupted downloads.
-    manifest_path = data_dir / "sources.json"
-    if manifest_path.exists():
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest["unicode_version"] != UNICODE_VERSION:
-            raise ValueError("Unicode version changed: review and update sources.json explicitly.")
-        for name, metadata in manifest["sources"].items():
-            actual = hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
-            if actual != metadata["sha256"]:
-                raise ValueError(f"Source checksum mismatch: {name}. Restore the official pinned file before generating.")
+    for name, metadata in manifest["sources"].items():
+        actual = hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
+        if actual != metadata["sha256"]:
+            raise ValueError(f"Source checksum mismatch: {name}. Restore the official pinned file before generating.")
 
     mappings = parse_confusables(confusables_file)
     ranges = parse_scripts(scripts_file)
@@ -293,16 +313,6 @@ def main():
     generate_confusable_tables(mappings, confusable_out)
     generate_script_tables(ranges, script_out)
     generate_unicode_tables(data_dir, Path(project_root) / "src" / "unicode" / "tables.mbt")
-    sources = {}
-    source_names = {"confusables.txt", "Scripts.txt", "UnicodeData.txt", "CaseFolding.txt", "DerivedCoreProperties.txt", "NormalizationTest.txt"}
-    # pathlib compares Windows paths case-insensitively, unlike POSIX paths.
-    # Sort filenames explicitly so the manifest is reproducible on both hosts.
-    for source_path in sorted(data_dir.glob("*.txt"), key=lambda path: path.name.casefold()):
-        if source_path.name not in source_names:
-            continue
-        source_url = CONFUSABLES_URL if source_path.name == "confusables.txt" else SCRIPTS_URL if source_path.name == "Scripts.txt" else f"{UCD_URL}/{source_path.name}"
-        sources[source_path.name] = {"sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(), "url": source_url}
-    (data_dir / "sources.json").write_text(json.dumps({"unicode_version": UNICODE_VERSION, "sources": sources}, indent=2) + "\n", encoding="utf-8")
     print("Done generating MoonBit static tables!")
 
 if __name__ == '__main__':

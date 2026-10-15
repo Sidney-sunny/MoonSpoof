@@ -5,13 +5,14 @@
 仅使用 Python 标准库，无须安装包。在仓库根目录执行：
 
 ```powershell
+python -m unittest discover -s tools/data-generator -p 'test_*.py'
 python tools/data-generator/generate.py
 moon info
 moon fmt
 pnpm --dir playground run verify:unicode
 ```
 
-生成器下载缺失的 Unicode 16.0.0 文件，在写入源码前验证已记录的 SHA-256，生成排序后的混淆、字系与归一化表。已有下载会复用，请求超时为60秒。原始 `.txt` 和归一化向量被忽略；MoonBit 表与 `sources.json` 纳入版本管理。
+生成器要求预先存在已审核的 `sources.json` 清单；来源条目缺失或多余、Unicode 版本或 URL 改变、SHA-256 字段无效时，会在联网前终止。随后下载缺失的 Unicode 16.0.0 文件，在写入源码前验证全部六份文件的校验值，生成排序后的混淆、字系与归一化表。再生成过程只读取清单；清单缺失时应从版本控制恢复，不能根据缓存文件重新建立校验值。已有下载会复用，请求超时为 60 秒。原始 `.txt` 和归一化向量被忽略；MoonBit 表与 `sources.json` 纳入版本管理。
 
 | 官方文件 | 用途 |
 | --- | --- |

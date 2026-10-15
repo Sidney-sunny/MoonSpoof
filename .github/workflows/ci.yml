@@ -41,6 +41,8 @@ jobs:
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Install locked frontend dependencies
         run: pnpm --dir playground install --frozen-lockfile
+      - name: Test Unicode source manifest validation
+        run: python3 -m unittest discover -s tools/data-generator -p 'test_*.py'
       - name: Regenerate pinned Unicode tables
         run: python3 tools/data-generator/generate.py
       - name: Check generated interfaces and formatting
