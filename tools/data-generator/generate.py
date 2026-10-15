@@ -203,14 +203,6 @@ def generate_unicode_tables(data_dir, out_path):
     sections.append(array("ignorable_ends", "Int", [x[1] for x in ignorables], lambda x: f"0x{x:X}"))
     out_path.write_text("\n///|\n".join(sections), encoding="utf-8")
 
-    # Official normalization vectors, covering composition, order, and Hangul.
-    vectors = []
-    for line in (data_dir / "NormalizationTest.txt").read_text(encoding="utf-8").splitlines():
-        fields = line.split("#", 1)[0].strip().split(";")
-        if len(fields) >= 5:
-            vectors.append(["".join(chr(int(x, 16)) for x in field.split()) for field in fields[:5]])
-    (data_dir / "normalization-vectors.json").write_text(json.dumps(vectors, ensure_ascii=True), encoding="utf-8")
-
 def generate_confusable_tables(mappings, out_path):
     print(f"Generating {out_path} ({len(mappings)} entries)...")
     with open(out_path, 'w', encoding='utf-8') as f:

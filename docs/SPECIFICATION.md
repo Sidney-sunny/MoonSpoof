@@ -58,4 +58,6 @@ Mixed-number detection, Identifier_Status, full Script_Extensions, and bidi skel
 
 ## Verification evidence
 
+Normalization vectors are parsed directly from the checksum-verified official `NormalizationTest.txt`; a derived JSON cache cannot reduce the checked suite. Empty input, malformed rows, and invalid scalar values fail verification.
+
 The verifier checks 19,965 official NFD vectors (99,825 assertions), all 6,355 confusable source rows against a reference pipeline, 1,557 C/F case-fold mappings, and key stability for 7,561 source codepoints. The reference pipeline reuses the NFD implementation after official NFD verification. This evidence does not establish full UTS #39 conformance or prove every possible string property. Unit tests additionally cover JSON controls, astral lengths, ordering, CJK restrictions, and worker lifecycle failures.

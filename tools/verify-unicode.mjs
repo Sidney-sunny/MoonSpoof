@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { parseNormalizationVectors } from './normalization-vectors.mjs';
 import * as engine from '../playground/src/generated/moonspoof.js';
 
 const directory = fileURLToPath(new URL('./data-generator/', import.meta.url));
@@ -12,7 +13,7 @@ for (const [name, { sha256 }] of Object.entries(manifest.sources)) {
   if (!existsSync(file)) throw new Error('Run python tools/data-generator/generate.py before Unicode verification.');
   assert.equal(createHash('sha256').update(readFileSync(file)).digest('hex'), sha256, `Source checksum: ${name}`);
 }
-const vectors = JSON.parse(readFileSync(path.join(directory, 'normalization-vectors.json'), 'utf8'));
+const vectors = parseNormalizationVectors(readFileSync(path.join(directory, 'NormalizationTest.txt'), 'utf8'));
 for (const [c1, c2, c3, c4, c5] of vectors) {
   for (const text of [c1, c2, c3]) assert.equal(engine.spoof_normalize_nfd(text), c3, 'Unicode NFD invariant c1/c2/c3');
   for (const text of [c4, c5]) assert.equal(engine.spoof_normalize_nfd(text), c5, 'Unicode NFD invariant c4/c5');
