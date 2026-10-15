@@ -7,6 +7,7 @@
 ### 修复
 
 - Unicode 再生成现在要求预先存在完整且已审核的来源清单，在下载或生成前校验固定版本、URL 和校验值字段，不再根据缓存数据重写清单；离线回归检查已接入 CI。
+- CI、Pages 和 Copilot 环境统一安装 `.moon-version` 中记录的编译器版本，避免最新工具链变化引入未经审核的格式化和接口变更。
 
 ## [0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0) - 2026-10-12
 

@@ -71,6 +71,8 @@ let candidate = "p\u0430ypal"
 
 <details><summary><strong>从源码构建与验证</strong></summary>
 
+CI、Pages 和 Copilot 环境统一安装 [`.moon-version`](../.moon-version) 中记录的编译器版本，当前为 `0.10.14+7d59c7ec9`。本地再生成和格式化应使用同一版本；升级工具链时需同时审核生成源码与接口的变化。
+
 ```powershell
 moon check
 moon test

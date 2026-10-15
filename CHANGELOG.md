@@ -7,6 +7,7 @@
 ### Fixed
 
 - Unicode regeneration now requires the complete, reviewed source manifest before downloading or generating files, validates the pinned version, URLs, and checksum fields, and never rewrites the manifest from cached data. Added offline regression checks to CI.
+- CI, Pages, and Copilot setup now install the shared compiler version from `.moon-version`, preventing unreviewed formatter and interface changes when the latest toolchain changes.
 
 ## [0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0) - 2026-10-12
 

@@ -150,7 +150,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 <details>
 <summary><strong>Building and Testing from Source</strong></summary>
 
-Requires MoonBit CLI toolchain (`moon`).
+Requires MoonBit CLI toolchain (`moon`). CI, Pages, and the Copilot setup install the compiler version recorded in [`.moon-version`](.moon-version), currently `0.10.14+7d59c7ec9`. Use the same version for regeneration and formatting; toolchain upgrades require reviewing generated source and interface changes together.
 
 ```powershell
 # Check project compilation
