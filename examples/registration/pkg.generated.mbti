@@ -1,0 +1,50 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Sidney-sunny/moonspoof/examples/registration"
+
+import {
+  "Sidney-sunny/moonspoof/src/security",
+  "moonbitlang/core/debug",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) enum Decision {
+  Accepted(StoredIdentifier)
+  Duplicate(StoredIdentifier)
+  Collision(StoredIdentifier, @security.DiagnosticReport)
+  Rejected(String, @security.DiagnosticReport)
+} derive(@debug.Debug)
+
+pub(all) struct IndexVersion {
+  library_version : String
+  unicode_version : String
+  key_policy : KeyPolicy
+  application_policy_version : String
+  profile : @security.IdentifierProfile
+} derive(Eq, @debug.Debug)
+
+pub(all) enum KeyPolicy {
+  Sensitive
+  Folded
+} derive(Eq, @debug.Debug)
+
+pub struct Registry {
+  // private fields
+}
+pub fn Registry::new(KeyPolicy, validate_syntax~ : (String) -> Result[Unit, String], application_policy_version~ : String, profile? : @security.IdentifierProfile) -> Self
+pub fn Registry::records(Self) -> Array[StoredIdentifier]
+pub fn Registry::register(Self, String) -> Decision
+pub fn Registry::version(Self) -> IndexVersion
+
+pub(all) struct StoredIdentifier {
+  name : String
+  key : String
+  version : IndexVersion
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
