@@ -4,6 +4,11 @@
 
 ## Unreleased
 
+### Documentation
+
+- Added a bilingual post-review roadmap with incomplete milestones, executable acceptance criteria, and proposed v0.2.0 release gates. The next implementation priority is a public-API account-registration reference integration.
+- Updated product positioning and README navigation for library integrators, distinguishing planned work and reference examples from actual application adoption.
+
 ### Fixed
 
 - Official NFD verification now reads its vectors directly from the checksum-verified source, rejects empty or malformed suites, and no longer depends on a derived JSON cache that could silently reduce coverage.

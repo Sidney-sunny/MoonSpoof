@@ -4,7 +4,7 @@
 
 <p align="center">为 MoonBit 提供 Unicode 混淆键、字符证据与批量冲突检测。</p>
 
-<p align="center"><a href="../README.md">English</a> · <a href="API_SPECIFICATION_zh.md">API 规范</a> · <a href="ARCHITECTURE_zh.md">架构</a> · <a href="SPECIFICATION_zh.md">实现范围</a> · <a href="CHANGELOG_zh.md">更新日志</a></p>
+<p align="center"><a href="../README.md">English</a> · <a href="API_SPECIFICATION_zh.md">API 规范</a> · <a href="ARCHITECTURE_zh.md">架构</a> · <a href="SPECIFICATION_zh.md">实现范围</a> · <a href="CHANGELOG_zh.md">更新日志</a> · <a href="ROADMAP_zh.md">路线图</a></p>
 
 ## 引擎能力
 
@@ -15,6 +15,10 @@
 | 纯 MoonBit，支持 JS、WASM、native | 有限字系分类，明确标准缺口 | 无须逐对比较每个名称 |
 
 本项目实现部分 UTS #39 机制，不声明完整合规。风险信号不证明恶意。[实现范围](SPECIFICATION_zh.md)记录具体边界。
+
+## 开发方向
+
+根据负责人反馈，项目已通过初审。下一项实现优先级是通过 MoonBit 公开 API 完成可运行的账号注册接入，再完善字系/标识符检查与参考对照。这些属于计划能力，不代表已经完成或已有应用采用。[路线图](ROADMAP_zh.md)记录里程碑验收条件与拟议 v0.2.0 的发布门槛。
 
 ## 启动双语演示
 
@@ -67,6 +71,7 @@ let candidate = "p\u0430ypal"
 | API | [API_SPECIFICATION_zh.md](API_SPECIFICATION_zh.md) |
 | 标准范围 | [SPECIFICATION_zh.md](SPECIFICATION_zh.md) |
 | 性能 | [BENCHMARKS_zh.md](BENCHMARKS_zh.md) |
+| 路线图 | [ROADMAP_zh.md](ROADMAP_zh.md) |
 | 品牌 | [BRANDING_zh.md](BRANDING_zh.md) |
 
 <details><summary><strong>从源码构建与验证</strong></summary>

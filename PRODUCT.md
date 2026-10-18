@@ -6,15 +6,15 @@
 
 ## Platform
 
-web
+MoonBit library targeting WASM, JavaScript, and native, with a browser showcase.
 
 ## Users
 
-Hackathon judges evaluating the project's technical contribution, correctness, usability, and integration potential. Confirmed by the project owner.
+Intended users are MoonBit developers checking account or package identifiers for confusable collisions. Reviewers use the showcase to inspect correctness and integration potential. Actual application adoption has not yet been documented.
 
 ## Product Purpose
 
-Make visually confusable Unicode identifiers inspectable and demonstrate a reusable MoonBit security library through real, locally executed inputs.
+Provide reusable Unicode confusable keys and diagnostic evidence at identifier registration and batch-review call sites. The next deliverable is a runnable account-registration reference integration; the showcase makes its underlying mechanisms inspectable.
 
 ## Positioning
 
@@ -22,7 +22,11 @@ A dependency-free MoonBit engine with generated Unicode 16.0 data, character dia
 
 ## Operating Context
 
-Judges open the showcase, compare two identifiers, inspect character evidence, scan a list, and examine implementation and competitor references.
+The planned registration integration loads existing identifiers, evaluates a candidate through the public library API, and distinguishes exact duplicates, confusable collisions, and policy failures. Applications choose their syntax and collision policy. Developers can inspect pair and batch results in the showcase without transmitting inputs.
+
+## Development Priorities
+
+The owner reports that preliminary review has passed. The [roadmap](ROADMAP.md) defines incomplete milestones and acceptance criteria: registration integration, script and identifier-status support, numeric mixing and reference comparisons, then integration review and release. Preliminary review does not establish final acceptance or production readiness.
 
 ## Capabilities and Constraints
 
@@ -34,7 +38,7 @@ MoonSpoof name and the new sculpted MS identity in docs/assets/logo.png, with it
 
 ## Evidence on Hand
 
-MoonBit source and tests, Unicode data generator, Apache-2.0 license, existing architecture and API documentation. Official ICU and confusable_homoglyphs APIs support feature comparisons. No controlled competitor performance benchmark is available.
+MoonBit source and tests, Unicode data generator, Apache-2.0 license, existing architecture and API documentation. Official ICU and confusable_homoglyphs APIs support feature comparisons. No controlled competitor performance benchmark or documented real application adoption is available. The planned reference integration must not be reported as external adoption.
 
 ## Product Principles
 

@@ -22,6 +22,7 @@
   <a href="docs/ARCHITECTURE.md">Architecture</a> ·
   <a href="docs/BENCHMARKS.md">Benchmarks</a> ·
   <a href="CHANGELOG.md">Changelog</a> ·
+  <a href="ROADMAP.md">Roadmap</a> ·
   <a href="docs/SPECIFICATION.md">Implementation Scope</a>
 </p>
 
@@ -36,6 +37,10 @@
 | Pure MoonBit; JS, WASM and native targets | Limited script categories; explicit standards gaps | No pairwise comparison of every name |
 
 MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk signals do not establish malicious intent. See [scope and compatibility](docs/SPECIFICATION.md).
+
+## Development direction
+
+The project has passed preliminary review, as reported by the owner. The next implementation priority is a runnable account-registration integration through the public MoonBit API, followed by better script/identifier checks and reference comparisons. These are planned capabilities, not completed work or evidence of application adoption. The [roadmap](ROADMAP.md) records milestone acceptance criteria and the proposed v0.2.0 release gates.
 
 ## Run the bilingual showcase
 
@@ -143,6 +148,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 | Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
 | Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Release History | [CHANGELOG.md](CHANGELOG.md) / [中文版](docs/CHANGELOG_zh.md) |
+| Development Roadmap | [ROADMAP.md](ROADMAP.md) / [中文版](docs/ROADMAP_zh.md) |
 | Brand Identity & Visual System | [BRANDING.md](docs/BRANDING.md) / [中文版](docs/BRANDING_zh.md) |
 
 ---
