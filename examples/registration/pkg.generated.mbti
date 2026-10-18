@@ -35,9 +35,17 @@ pub struct Registry {
   // private fields
 }
 pub fn Registry::new(KeyPolicy, validate_syntax~ : (String) -> Result[Unit, String], application_policy_version~ : String, profile? : @security.IdentifierProfile) -> Self
+pub fn Registry::rebuild(Snapshot, KeyPolicy, validate_syntax~ : (String) -> Result[Unit, String], application_policy_version~ : String, profile? : @security.IdentifierProfile) -> Result[Self, Array[Decision]]
 pub fn Registry::records(Self) -> Array[StoredIdentifier]
 pub fn Registry::register(Self, String) -> Decision
+pub fn Registry::restore(Snapshot, KeyPolicy, validate_syntax~ : (String) -> Result[Unit, String], application_policy_version~ : String, profile? : @security.IdentifierProfile) -> Result[Self, String]
+pub fn Registry::snapshot(Self) -> Snapshot
 pub fn Registry::version(Self) -> IndexVersion
+
+pub(all) struct Snapshot {
+  version : IndexVersion
+  records : Array[StoredIdentifier]
+} derive(@debug.Debug)
 
 pub(all) struct StoredIdentifier {
   name : String

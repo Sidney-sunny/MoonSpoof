@@ -25,6 +25,8 @@ jobs:
           "$HOME/.moon/bin/moon" version --all
       - name: Test compiler target
         run: moon test --target ${{ matrix.target }}
+      - name: Run registration reference integration
+        run: moon run cmd/registration --target ${{ matrix.target }}
 
   showcase:
     runs-on: ubuntu-latest

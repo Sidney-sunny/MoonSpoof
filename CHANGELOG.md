@@ -4,6 +4,12 @@
 
 ## Unreleased
 
+### Added
+
+- Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
+- Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.
+- A runnable `moon run cmd/registration` walkthrough, 15 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The core library API is unchanged.
+
 ### Documentation
 
 - Added a bilingual post-review roadmap with incomplete milestones, executable acceptance criteria, and proposed v0.2.0 release gates. The next implementation priority is a public-API account-registration reference integration.

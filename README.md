@@ -40,7 +40,15 @@ MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk sig
 
 ## Development direction
 
-The project has passed preliminary review, as reported by the owner. The next implementation priority is a runnable account-registration integration through the public MoonBit API, followed by better script/identifier checks and reference comparisons. These are planned capabilities, not completed work or evidence of application adoption. The [roadmap](ROADMAP.md) records milestone acceptance criteria and the proposed v0.2.0 release gates.
+The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Better script/identifier checks and reference comparisons remain planned. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
+
+## Run the registration integration
+
+```powershell
+moon run cmd/registration
+```
+
+Load existing accounts, distinguish duplicate and confusable registration attempts, inspect rejected invisible characters, and rebuild an index after changing policies. The [bilingual integration guide](examples/registration/README.md) documents call sites, expected outcomes, snapshot validation, and production storage responsibilities. No frontend dependencies are required.
 
 ## Run the bilingual showcase
 
@@ -149,6 +157,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 | Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Release History | [CHANGELOG.md](CHANGELOG.md) / [中文版](docs/CHANGELOG_zh.md) |
 | Development Roadmap | [ROADMAP.md](ROADMAP.md) / [中文版](docs/ROADMAP_zh.md) |
+| Account Registration Integration | [Example](examples/registration/README.md) / [中文版](examples/registration/README_zh.md) |
 | Brand Identity & Visual System | [BRANDING.md](docs/BRANDING.md) / [中文版](docs/BRANDING_zh.md) |
 
 ---

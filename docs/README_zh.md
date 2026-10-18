@@ -18,7 +18,15 @@
 
 ## 开发方向
 
-根据负责人反馈，项目已通过初审。下一项实现优先级是通过 MoonBit 公开 API 完成可运行的账号注册接入，再完善字系/标识符检查与参考对照。这些属于计划能力，不代表已经完成或已有应用采用。[路线图](ROADMAP_zh.md)记录里程碑验收条件与拟议 v0.2.0 的发布门槛。
+根据负责人反馈，项目已通过初审。可运行的账号注册参考接入已经通过 MoonBit 公开 API 展示注册决策、版本化快照和索引迁移；字系/标识符检查增强与参考对照仍在计划中。[路线图](ROADMAP_zh.md)记录里程碑证据与拟议 v0.2.0 发布门槛，仓库示例不代表已有外部应用采用。
+
+## 运行注册接入
+
+```powershell
+moon run cmd/registration
+```
+
+加载已有账号，区分重复和混淆注册，查看不可见字符拒绝原因，并在更换策略后重建索引。[双语接入指南](../examples/registration/README_zh.md)记录调用位置、预期结果、快照校验与生产存储职责。无须前端依赖。
 
 ## 启动双语演示
 
@@ -72,6 +80,7 @@ let candidate = "p\u0430ypal"
 | 标准范围 | [SPECIFICATION_zh.md](SPECIFICATION_zh.md) |
 | 性能 | [BENCHMARKS_zh.md](BENCHMARKS_zh.md) |
 | 路线图 | [ROADMAP_zh.md](ROADMAP_zh.md) |
+| 账号注册接入 | [示例指南](../examples/registration/README_zh.md) |
 | 品牌 | [BRANDING_zh.md](BRANDING_zh.md) |
 
 <details><summary><strong>从源码构建与验证</strong></summary>

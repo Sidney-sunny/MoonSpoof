@@ -18,26 +18,26 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 ## Milestone order
 
-All milestones below are planned and incomplete. Estimates are focused developer days, not calendar deadlines. Re-estimate after M1; no competition deadline has been supplied. Version numbers are proposals until their release gates pass.
+M1 is implemented as a reference integration; M2–M4 remain planned and incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
 
 | Order | Deliverable | Completion evidence | Estimate |
 | --- | --- | --- | --- |
-| M1 | Runnable account-registration example | Executable acceptance cases using the public library | 2–4 days |
+| M1 — complete | Runnable account-registration example | [Guide](examples/registration/README.md), executable and acceptance tests | Delivered 2026-10-18 |
 | M2 | Script sets and an explicit identifier-status policy | Pinned data, reviewed API changes, multilingual regressions | 4–7 days |
 | M3 | Mixed-number checks and reference comparisons | Reproducible results with explained differences | 3–5 days |
 | M4 | Integration review and proposed v0.2.0 release | Completed gates, migration notes, verified release artifacts | 2–3 days |
 
 ## M1 — Complete one integration
 
-Build a small runnable MoonBit registration example that imports the public API. Treat it as a reference integration until an actual application adopts it; do not describe a repository example as external usage.
+Implemented in [the registration example](examples/registration/README.md), importing the public API. Run `moon run cmd/registration` from the repository root. This remains a reference integration until an actual application adopts it; do not describe a repository example as external usage.
 
 Acceptance criteria:
 
-- [ ] A fresh checkout can run one documented command to load existing names and evaluate registration candidates without starting the showcase.
-- [ ] The example distinguishes accepted names, exact duplicates, confusable collisions, and policy failures. It returns the existing conflicting identifier and useful diagnostic evidence.
-- [ ] Executable cases cover `paypal` / `p\u0430ypal`, a valid multilingual name, a default-ignorable character, and the documented `I` / `l` difference between sensitive and folded modes. Syntax validation and the choice of collision policy are explicit application decisions.
-- [ ] The example records library/data versions and the selected key policy with stored keys, and demonstrates rebuilding the index after a version or policy change. Document the need for atomic collision enforcement in a concurrent production store; do not claim the in-memory example provides it.
-- [ ] English and Chinese integration instructions identify the import, call site, expected decisions, and limitations. Tests exercise the integration through public APIs.
+- [x] One documented command loads existing names and evaluates registration candidates without the showcase: [executable](cmd/registration/main.mbt). Verified from a clean source export; CI runs all three compiler targets.
+- [x] Accepted names, exact duplicates, collisions, and policy failures return explicit decisions and evidence: [store](examples/registration/registry.mbt).
+- [x] Public-API cases cover `paypal` / `p\u0430ypal`, multilingual names, default ignorables, the `I` / `l` policy difference, and independent syntax/profile decisions: [registration tests](examples/registration/registry_test.mbt).
+- [x] Stored keys carry versions and policy metadata; restore validates keys and rebuild rechecks original names without publishing a partial index: [migration implementation](examples/registration/snapshot.mbt) and [tests](examples/registration/snapshot_test.mbt). The guide documents production atomicity requirements.
+- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Fifteen acceptance tests exercise the public API integration.
 
 ## M2 — Improve script and identifier decisions
 
@@ -77,10 +77,10 @@ Acceptance criteria:
 
 ## Next two implementation rounds
 
-1. **Registration integration:** implement M1 as a bounded change; include public-API acceptance tests and bilingual instructions. This is the next coding priority after the roadmap.
-2. **Script foundation:** start M2 with reviewed source metadata, reproducible tables, and the script-set API decision. Complete the remaining M2 work in later commits if needed; do not mark M2 done when only tables exist.
+1. **Script foundation:** start M2 with reviewed source metadata, reproducible tables, and the script-set API decision. Preserve the existing facade and document compatibility before changing behavior.
+2. **Identifier decisions:** continue M2 with opt-in Identifier_Status checks, multilingual regressions, and updated restriction estimates and contracts. Do not mark M2 done when only tables exist.
 
-These describe future implementation work. The two documentation pushes that introduce this roadmap and align the product documentation do not complete M1 or M2.
+These describe future implementation work. M1's reference integration does not complete M2 or establish external application adoption.
 
 ## Scope control
 
