@@ -126,3 +126,11 @@ pub fn spoof_script_extensions(cp : Int) -> String {
 pub fn spoof_identifier_status_allowed(cp : Int) -> Bool {
   @moonspoof.get_identifier_status(cp) == @moonspoof.IdentifierStatus::Allowed
 }
+
+///|
+pub fn spoof_decimal_zero(cp : Int) -> Int {
+  match @moonspoof.get_decimal_zero(cp) {
+    Some(zero) => zero
+    None => -1
+  }
+}

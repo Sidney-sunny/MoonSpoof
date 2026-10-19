@@ -12,9 +12,9 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 - Released: [v0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0), with MoonBit APIs, a JavaScript engine artifact, and a bilingual showcase.
 - Implemented: Unicode 16.0.0 NFD, full default case folding, application skeletons, character diagnostics, configurable policies, and batch collision grouping.
-- Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, key-stability checks, and 3,342,336 script/status property assertions across the full code space. See [scope and evidence](docs/SPECIFICATION.md).
+- Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, key-stability checks, and 4,456,448 script/status/decimal property assertions across the full code space. See [scope and evidence](docs/SPECIFICATION.md).
 - Reproducibility: nine checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
-- Open gaps: legacy diagnostics retain eleven named script categories; separate full-script, resolved-set and opt-in literal Identifier_Status APIs now exist. Canonical-equivalence closure, mixed-number detection and bidi skeleton reordering remain pending. A real application integration has not yet been documented.
+- Open gaps: legacy diagnostics retain eleven named script categories; separate full-script, resolved-set and opt-in literal Identifier_Status APIs now exist. Opt-in decimal mixing checks are also implemented. Canonical-equivalence closure and bidi skeleton reordering remain pending. A real application integration has not yet been documented.
 
 ## Milestone order
 
@@ -24,7 +24,7 @@ M1 is implemented as a reference integration; M2 is complete within the explicit
 | --- | --- | --- | --- |
 | M1 — complete | Runnable account-registration example | [Guide](examples/registration/README.md), executable and acceptance tests | Delivered 2026-10-18 |
 | M2 — complete within stated scope | Script sets and an explicit identifier-status filter | [API contracts](docs/UNICODE_PROPERTIES.md), [status regressions](moonspoof_status_test.mbt), [migration tests](examples/registration/status_test.mbt) | Delivered 2026-10-19 |
-| M3 | Mixed-number checks and reference comparisons | Reproducible results with explained differences | 3–5 days |
+| M3 — in progress | Mixed-number checks and reference comparisons | Reproducible results with explained differences | 3–5 days |
 | M4 | Integration review and proposed v0.2.0 release | Completed gates, migration notes, verified release artifacts | 2–3 days |
 
 ## M1 — Complete one integration
@@ -37,7 +37,7 @@ Acceptance criteria:
 - [x] Accepted names, exact duplicates, collisions, and policy failures return explicit decisions and evidence: [store](examples/registration/registry.mbt).
 - [x] Public-API cases cover `paypal` / `p\u0430ypal`, multilingual names, default ignorables, the `I` / `l` policy difference, and independent syntax/profile decisions: [registration tests](examples/registration/registry_test.mbt).
 - [x] Stored keys carry versions and policy metadata; restore validates keys and rebuild rechecks original names without publishing a partial index: [migration implementation](examples/registration/snapshot.mbt) and [tests](examples/registration/snapshot_test.mbt). The guide documents production atomicity requirements.
-- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Seventeen acceptance tests exercise the public API integration, including optional status filtering and migration.
+- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Nineteen acceptance tests exercise the public API integration, including optional status/numeric filtering and migration.
 
 ## M2 — Improve script and identifier decisions
 
@@ -59,7 +59,7 @@ Use the same pinned Unicode version for reference comparisons. Differences cause
 
 Acceptance criteria:
 
-- [ ] Implement mixed-number detection from complete pinned numeric-property data, with tests for a single decimal system, mixed systems, and characters outside the intended check.
+- [x] Implemented [decimal mixing APIs](docs/NUMBER_SYSTEMS.md) from the pinned UnicodeData source, with [public regressions](moonspoof_numbers_test.mbt) for single/mixed systems and excluded numeric types, full-code-space property verification, and [registration migration tests](examples/registration/numbers_test.mbt).
 - [ ] Add a reproducible comparison harness against a pinned ICU build with compatible Unicode data. Record the ICU/data versions, compared APIs, corpus, and command; keep this optional reference dependency outside the library runtime.
 - [ ] Separate standard mechanisms from fullwidth folding, default-ignorable handling, stable application keys, and case-fold policy. Explain every observed difference in the committed comparison corpus.
 - [ ] Expand adversarial and multilingual regressions around combining marks, supplementary characters, controls, and long inputs. Retain pair/batch equivalence and key-stability checks.
@@ -79,8 +79,8 @@ Acceptance criteria:
 
 ## Next two implementation rounds
 
-1. **Numeric mixing:** start M3 with complete pinned numeric-property data, an explicit opt-in API and multilingual decimal-system regressions. Preserve existing default behavior and stored keys.
-2. **Reference comparisons:** pin a Unicode-compatible ICU build, commit the comparison corpus and command, and explain application-extension differences. Keep the reference dependency outside the library runtime.
+1. **Reference comparisons:** continue M3 by pinning a Unicode-compatible ICU build, committing the comparison corpus and command, and explaining application-extension differences. Keep the reference dependency outside the library runtime.
+2. **Coverage review:** expand adversarial and multilingual regressions and publish the mechanism coverage matrix. Retain key stability and document deferred work before starting M4 release gates.
 
 These describe future implementation work. M1/M2 evidence does not complete M3/M4 or establish external application adoption.
 

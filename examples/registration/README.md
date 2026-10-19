@@ -62,3 +62,7 @@ The walkthrough also defines `status_checked_syntax`: it calls `@moonspoof.valid
 When enabling it for existing accounts, use a new `application_policy_version`. Restore then rejects the old snapshot; rebuild reports accounts needing review and keeps the original index unchanged. [Integration tests](status_test.mbt) verify this migration.
 
 See the [roadmap](../../ROADMAP.md) for milestone evidence and remaining standard work.
+
+## Opt into decimal mixing checks
+
+The walkthrough's `number_checked_syntax` composes `validate_number_systems` with the status filter and application syntax. `account12` passes; `user1١` fails at U+0661, scalar 5. Use a new application policy version when enabling it. [Migration regressions](numbers_test.mbt) keep old indexes intact and report rejected accounts for review. See [decimal-system contracts and limits](../../docs/NUMBER_SYSTEMS.md), including the exclusion of non-decimal numeric characters from this check.

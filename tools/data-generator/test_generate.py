@@ -110,6 +110,41 @@ class SecurityPropertyTests(unittest.TestCase):
             self.parse()
 
 
+class DecimalSystemsTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.path = Path(temporary.name) / "UnicodeData.txt"
+
+    def fixture(self, zero=0x30):
+        return [f"{zero + n:04X};DIGIT;Nd;0;EN;;{n};{n};{n};N;;;;;" for n in range(10)]
+
+    def parse(self, lines):
+        self.path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return generate.parse_decimal_systems(self.path)
+
+    def test_complete_sorted_families_include_adjacent_mathematical_styles(self):
+        lines = self.fixture(0x1D7D8) + self.fixture(0x30) + self.fixture(0x1D7CE)
+        lines.append("00B2;SUPERSCRIPT TWO;No;0;EN;<super> 0032;;2;2;N;;;;;")
+        self.assertEqual(self.parse(lines), [0x30, 0x1D7CE, 0x1D7D8])
+
+    def test_incomplete_duplicate_or_invalid_digit_fails(self):
+        valid = self.fixture()
+        for lines in (valid[:-1], valid + [valid[0]],
+                      [valid[0].replace(";;0;", ";;10;")] + valid[1:]):
+            with self.subTest(lines=lines):
+                with self.assertRaises(ValueError):
+                    self.parse(lines)
+
+    def test_empty_malformed_or_non_decimal_value_fails(self):
+        for lines in ([], ["0030;broken"],
+                      ["110000;DIGIT;Nd;0;EN;;0;0;0;N;;;;;"],
+                      ["0030;DIGIT;No;0;EN;;0;0;0;N;;;;;"]):
+            with self.subTest(lines=lines):
+                with self.assertRaises(ValueError):
+                    self.parse(lines)
+
+
 class PinnedSourcesTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
@@ -130,6 +165,7 @@ class PinnedSourcesTests(unittest.TestCase):
         self.enterContext(patch.object(generate, "parse_confusables", return_value=[]))
         self.enterContext(patch.object(generate, "parse_scripts", return_value=[]))
         self.enterContext(patch.object(generate, "parse_security_properties", return_value=([], [], [])))
+        self.decimal_parser = self.enterContext(patch.object(generate, "parse_decimal_systems", return_value=[0x30]))
         self.writers = [
             self.enterContext(patch.object(generate, name))
             for name in (
@@ -137,6 +173,7 @@ class PinnedSourcesTests(unittest.TestCase):
                 "generate_script_tables",
                 "generate_unicode_tables",
                 "generate_security_properties",
+                "generate_numeric_tables",
             )
         ]
 
@@ -165,6 +202,12 @@ class PinnedSourcesTests(unittest.TestCase):
         self.fetch.assert_not_called()
         self.assert_no_outputs()
         self.assertFalse(self.manifest_path.exists())
+
+    def test_invalid_decimal_data_fails_before_any_output(self):
+        self.decimal_parser.side_effect = ValueError("incomplete decimal system")
+        with self.assertRaisesRegex(ValueError, "incomplete decimal system"):
+            generate.main()
+        self.assert_no_outputs()
 
     def test_incomplete_or_unexpected_sources_fail_before_downloads(self):
         for name in ("NormalizationTest.txt", "extra.txt"):

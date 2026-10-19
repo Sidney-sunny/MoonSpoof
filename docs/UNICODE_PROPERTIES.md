@@ -52,6 +52,6 @@ The [registration example](../examples/registration/README.md) shows an applicat
 
 ## Verification
 
-Run `pnpm --dir playground run verify:unicode` after regeneration. The verifier reads checksum-verified official files independently, expands the full 0..0x10FFFF code space, and compares Script, Script_Extensions, and the literal Identifier_Status property: 1,114,112 codepoints and 3,342,336 property assertions. This includes default values and surrogate codepoints and supplements the existing normalization/mapping checks.
+Run `pnpm --dir playground run verify:unicode` after regeneration. The verifier reads checksum-verified official files independently, expands the full 0..0x10FFFF code space, and compares Script, Script_Extensions, the literal Identifier_Status property, and [decimal zero representatives](NUMBER_SYSTEMS.md): 1,114,112 codepoints and 4,456,448 property assertions. This includes default values and surrogate codepoints and supplements the existing normalization/mapping checks.
 
 [Public regression tests](../moonspoof_scripts_test.mbt) cover Japanese, Korean, Han/Bopomofo, Devanagari, Thai, shared/inherited characters, Unknown, and unchanged legacy behavior. The browser ABI additionally exposes `spoof_unicode_script(cp)`, `spoof_script_extensions(cp)` (JSON array), and `spoof_identifier_status_allowed(cp)` (boolean) for reference verification.

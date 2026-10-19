@@ -2,6 +2,8 @@
 
 [English](API_SPECIFICATION.md)
 
+可选 `get_decimal_zero`、`get_decimal_systems`、`has_mixed_numbers` 和 `validate_number_systems` API、类型化标量证据及迁移要求见[十进制数字系统契约](NUMBER_SYSTEMS_zh.md)。
+
 新增完整字系 API `get_unicode_script`、`get_script_extensions`、`resolve_script_set`、`is_mixed_script_resolved` 及 `ScriptSet::All` 与空交集的区别，见 [Unicode 属性契约](UNICODE_PROPERTIES_zh.md)。旧 `ScriptAnalysis` 与限制等级估计保持原行为。
 
 同一文档定义 `get_identifier_status` 和显式启用的 `validate_identifier_status`，包含首个失败字符的类型化证据及原始码点/规范闭包边界。`IdentifierProfile` 字段与默认值不变。

@@ -10,6 +10,8 @@ pub fn case_fold(String) -> String
 
 pub fn combining_class(Int) -> Int
 
+pub fn decimal_zero(Int) -> Int?
+
 pub fn format_codepoint(Int) -> String
 
 pub fn get_general_category(Int) -> GeneralCategory

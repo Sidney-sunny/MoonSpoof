@@ -52,6 +52,6 @@
 
 ## 验证
 
-生成数据后运行 `pnpm --dir playground run verify:unicode`。验证器独立读取已校验的官方文件，展开完整 0..0x10FFFF 空间，对照 Script、Script_Extensions 和原始 Identifier_Status 属性：共 1,114,112 个码点、3,342,336 项属性断言。覆盖缺省值和代理码点，补充已有归一化/映射检查。
+生成数据后运行 `pnpm --dir playground run verify:unicode`。验证器独立读取已校验的官方文件，展开完整 0..0x10FFFF 空间，对照 Script、Script_Extensions、原始 Identifier_Status 属性及[十进制零字符代表](NUMBER_SYSTEMS_zh.md)：共 1,114,112 个码点、4,456,448 项属性断言。覆盖缺省值和代理码点，补充已有归一化/映射检查。
 
 [公开 API 回归测试](../moonspoof_scripts_test.mbt)覆盖日文、韩文、Han/Bopomofo、Devanagari、Thai、共享/继承字符、Unknown 及旧行为兼容性。浏览器 ABI 另提供用于参考验证的 `spoof_unicode_script(cp)`、`spoof_script_extensions(cp)`（JSON 数组）和 `spoof_identifier_status_allowed(cp)`（布尔值）。

@@ -22,6 +22,7 @@ options(
         "spoof_unicode_script",
         "spoof_script_extensions",
         "spoof_identifier_status_allowed",
+        "spoof_decimal_zero",
       ],
     },
     "wasm": {
@@ -38,6 +39,7 @@ options(
         "spoof_unicode_script",
         "spoof_script_extensions",
         "spoof_identifier_status_allowed",
+        "spoof_decimal_zero",
       ],
     },
   },

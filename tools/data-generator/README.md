@@ -16,11 +16,13 @@ The generator requires the reviewed `sources.json` manifest before downloading f
 
 The verifier reads normalization vectors directly from the checksum-verified `NormalizationTest.txt`. Empty suites, malformed columns, and invalid Unicode scalar values are rejected. The old `normalization-vectors.json` cache is no longer generated or consumed.
 
+UnicodeData field 6 supplies decimal values. Before writing any output, the generator rejects malformed rows, decimal values outside Nd, duplicate or invalid digits, and incomplete ten-digit families. It emits `src/unicode/numeric_tables.mbt` with 76 zero representatives. The verifier independently reads the same pinned official source and checks all codepoints through the public lookup; see [numeric API contracts](../../docs/NUMBER_SYSTEMS.md).
+
 | Official file | Purpose |
 | --- | --- |
 | confusables.txt | Single-codepoint confusable mappings |
 | Scripts.txt | Full Script ranges and the compatibility enum |
-| UnicodeData.txt | Canonical decomposition and combining classes |
+| UnicodeData.txt | Canonical decomposition, combining classes and complete Nd decimal systems |
 | CaseFolding.txt | Full default C/F folding |
 | DerivedCoreProperties.txt | Default_Ignorable_Code_Point ranges |
 | NormalizationTest.txt | Official NFD verification vectors |

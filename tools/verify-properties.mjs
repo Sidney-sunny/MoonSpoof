@@ -20,6 +20,16 @@ export function verifyUnicodeProperties(engine, directory) {
   const scripts = new Array(size).fill('Unknown');
   const extensions = new Array(size).fill(null);
   const allowed = new Uint8Array(size);
+  const decimalZeros = new Int32Array(size).fill(-1);
+  const families = new Set();
+  for (const line of read('UnicodeData.txt').trim().split(/\r?\n/)) {
+    const fields = line.split(';');
+    if (fields[2] !== 'Nd') continue;
+    const cp = Number.parseInt(fields[0], 16);
+    const zero = cp - Number(fields[6]);
+    decimalZeros[cp] = zero;
+    families.add(zero);
+  }
   for (const [range, script] of rows(read('Scripts.txt'))) scripts.fill(script, ...bounds(range));
   for (const [range, set] of rows(read('ScriptExtensions.txt'))) {
     const names = set.split(/\s+/).map(alias => {
@@ -36,6 +46,7 @@ export function verifyUnicodeProperties(engine, directory) {
     assert.equal(engine.spoof_unicode_script(cp), scripts[cp], `Script U+${cp.toString(16)}`);
     assert.equal(engine.spoof_script_extensions(cp), extensions[cp] ?? `["${scripts[cp]}"]`, `Script_Extensions U+${cp.toString(16)}`);
     assert.equal(Boolean(engine.spoof_identifier_status_allowed(cp)), Boolean(allowed[cp]), `Identifier_Status U+${cp.toString(16)}`);
+    assert.equal(engine.spoof_decimal_zero(cp), decimalZeros[cp], `Decimal zero U+${cp.toString(16)}`);
   }
-  return { propertyCodepoints: size, propertyAssertions: size * 3 };
+  return { propertyCodepoints: size, propertyAssertions: size * 4, decimalSystems: families.size };
 }

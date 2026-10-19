@@ -57,3 +57,23 @@ pub fn identifier_status_allowed(cp : Int) -> Bool {
   property_range_index(identifier_allowed_starts, identifier_allowed_ends, cp) >=
   0
 }
+
+///|
+/// Unique zero representative of an Nd family; no normalization is applied.
+pub fn decimal_zero(cp : Int) -> Int? {
+  let mut low = 0
+  let mut high = decimal_zeros.length()
+  while low < high {
+    let mid = low + (high - low) / 2
+    if decimal_zeros[mid] <= cp {
+      low = mid + 1
+    } else {
+      high = mid
+    }
+  }
+  if low > 0 && cp <= decimal_zeros[low - 1] + 9 {
+    Some(decimal_zeros[low - 1])
+  } else {
+    None
+  }
+}

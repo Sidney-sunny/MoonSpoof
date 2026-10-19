@@ -10,6 +10,8 @@ This document defines the public API contracts, input/output types, invariants, 
 
 All public APIs are exposed at the root package level under module `Sidney-sunny/moonspoof`.
 
+The opt-in `get_decimal_zero`, `get_decimal_systems`, `has_mixed_numbers`, and `validate_number_systems` APIs, including typed scalar evidence and migration requirements, are specified in [decimal number system contracts](NUMBER_SYSTEMS.md).
+
 ### 1.1 `skeleton`
 
 Computes the stable application skeleton using pinned Unicode 16.0 NFD, default-ignorable removal and confusable mappings. Fullwidth folding and stabilization are application extensions; see [implementation scope](SPECIFICATION.md).

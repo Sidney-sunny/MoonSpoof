@@ -18,6 +18,7 @@ The reference is [UTS #39 revision 30](https://www.unicode.org/reports/tr39/tr39
 | Resolved script sets | UTS #39 section 5.1 augmented-set intersection, CJK writing systems | All differs from an empty intersection; not an identifier policy |
 | Legacy identifier policy | Empty/length/control/ignorable/mixed-script checks | Unchanged defaults; not XID or syntax validation |
 | Optional identifier status | Literal Allowed/Restricted property filter with typed scalar evidence | No canonical-equivalence closure, Identifier_Type reasons, or syntax validation |
+| Decimal mixing | Complete Nd zero representatives, unique-system detection and typed conflict evidence | Opt-in raw-input check; non-decimal numeric characters are ignored |
 | Diagnostics | Codepoints, raw mapping targets, scripts, triggered rules, risk | A raw character target need not equal the final normalized key |
 | Bidi | Detect Unicode bidi controls and overrides | No UBA reordering or bidi skeleton; demo uses browser rendering |
 | Batch | Hash groups by the same key used in pair comparison | Duplicate identical entries also form collisions |
@@ -57,11 +58,11 @@ These estimates omit the full standard's Identifier_Status and Script_Extensions
 
 Controls, ignorables, and bidi controls yield Critical. A cross-script mapping or triad combined with mixed scripts yields High. A cross-script mapping alone or an unexpected mixed set yields Medium. Remaining changed keys yield Low; otherwise Safe. A HighlyRestrictive CJK mix is not escalated to Medium solely for mixing.
 
-Mixed-number detection, canonical-equivalence closure for the opt-in Identifier_Status filter, and bidi skeleton reordering remain unimplemented. The new filter checks literal codepoints and is not a full General Security Profile implementation. Complete Script_Extensions and resolved sets are available through [separate additive APIs](UNICODE_PROPERTIES.md). Legacy restriction estimates are intentionally unchanged: they omit Identifier_Status prerequisites and do not use resolved sets. Applications must not interpret them as a full standard classification. The low-level `get_general_category` helper is a coarse legacy classifier, not complete UCD General_Category data.
+Canonical-equivalence closure for the opt-in Identifier_Status filter and bidi skeleton reordering remain unimplemented. [Decimal mixing checks](NUMBER_SYSTEMS.md) are separate opt-in APIs and do not alter diagnostic risk scores. The new filter checks literal codepoints and is not a full General Security Profile implementation. Complete Script_Extensions and resolved sets are available through [separate additive APIs](UNICODE_PROPERTIES.md). Legacy restriction estimates are intentionally unchanged: they omit Identifier_Status prerequisites and do not use resolved sets. Applications must not interpret them as a full standard classification. The low-level `get_general_category` helper is a coarse legacy classifier, not complete UCD General_Category data.
 
 ## Verification evidence
 
-The property verifier independently expands checksum-verified official files across all 1,114,112 codepoints and checks Script, Script_Extensions, and the literal Identifier_Status property (3,342,336 assertions). Resolved-set regressions additionally cover the standard's CJK writing-system augmentation and shared-character constraints.
+The property verifier independently expands checksum-verified official files across all 1,114,112 codepoints and checks Script, Script_Extensions, the literal Identifier_Status property, and decimal zero representatives (4,456,448 assertions). Resolved-set regressions additionally cover the standard's CJK writing-system augmentation and shared-character constraints.
 
 
 Normalization vectors are parsed directly from the checksum-verified official `NormalizationTest.txt`; a derived JSON cache cannot reduce the checked suite. Empty input, malformed rows, and invalid scalar values fail verification.

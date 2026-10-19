@@ -18,6 +18,7 @@ MoonSpoof 使用固定的 Unicode 16.0.0 数据实现部分 Unicode 安全机制
 | 解析字系集合 | UTS #39 第 5.1 节增广集合求交，CJK 书写系统 | All 与空交集不同；不是标识符策略 |
 | 旧标识符策略 | 空值、长度、控制字符、默认忽略字符、混合字系检查 | 默认值不变，不提供 XID 或语法验证 |
 | 可选标识符状态 | 原始 Allowed/Restricted 属性过滤，提供类型化标量证据 | 不提供规范等价闭包、Identifier_Type 原因或语法验证 |
+| 十进制混用 | 完整 Nd 零字符代表、去重系统检测及类型化冲突证据 | 原始输入的可选检查；忽略非十进制数字字符 |
 | 诊断 | 码点、原始映射目标、字系、规则、风险 | 单字符原始目标不一定等于最终归一化键 |
 | 双向文本 | 控制字符及覆盖符检测 | 无 UBA 重排和双向骨架；演示使用浏览器排版 |
 | 批量扫描 | 与双字符串比较使用同一键进行哈希分组 | 重复的相同输入也计为冲突 |
@@ -57,11 +58,11 @@ MoonSpoof 使用固定的 Unicode 16.0.0 数据实现部分 Unicode 安全机制
 
 控制字符、默认忽略字符、双向控制符触发 Critical。跨字系映射或三字系规则伴随混合字系触发 High。单独跨字系映射或不在允许集合中的混合字系触发 Medium。其余骨架改变触发 Low，否则 Safe。HighlyRestrictive 的 CJK 组合不会仅因混合字系而升为 Medium。
 
-尚未实现混合数字系统、可选 Identifier_Status 过滤的规范等价闭包与双向骨架重排。新增过滤器只检查原始码点，不是完整 General Security Profile 实现。完整 Script_Extensions 与解析集合已通过[独立新增 API](UNICODE_PROPERTIES_zh.md)提供。旧限制等级估计有意保持不变，未包含 Identifier_Status 前置条件，也不使用解析集合，不能视为完整标准分类。低层 `get_general_category` 是遗留的粗略分类器，不是完整 UCD General_Category 查询。
+尚未实现可选 Identifier_Status 过滤的规范等价闭包与双向骨架重排。[十进制混用检查](NUMBER_SYSTEMS_zh.md)是独立可选 API，不改变诊断风险分数。新增过滤器只检查原始码点，不是完整 General Security Profile 实现。完整 Script_Extensions 与解析集合已通过[独立新增 API](UNICODE_PROPERTIES_zh.md)提供。旧限制等级估计有意保持不变，未包含 Identifier_Status 前置条件，也不使用解析集合，不能视为完整标准分类。低层 `get_general_category` 是遗留的粗略分类器，不是完整 UCD General_Category 查询。
 
 ## 验证证据
 
-属性验证器独立展开经过校验的官方文件，对全部 1,114,112 个码点检查 Script、Script_Extensions、原始 Identifier_Status 属性（3,342,336 项断言）；解析集合回归另行覆盖标准中的 CJK 书写系统增广与共享字符约束。
+属性验证器独立展开经过校验的官方文件，对全部 1,114,112 个码点检查 Script、Script_Extensions、原始 Identifier_Status 属性及十进制零字符代表（4,456,448 项断言）；解析集合回归另行覆盖标准中的 CJK 书写系统增广与共享字符约束。
 
 归一化向量直接从已通过校验值检查的官方 `NormalizationTest.txt` 解析；派生 JSON 缓存无法减少实际检查的测试集。空输入、行格式错误和无效标量值会导致验证失败。
 

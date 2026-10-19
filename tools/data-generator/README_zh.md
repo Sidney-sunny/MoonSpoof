@@ -20,7 +20,7 @@ pnpm --dir playground run verify:unicode
 | --- | --- |
 | confusables.txt | 单码点混淆映射 |
 | Scripts.txt | 完整字系范围及兼容枚举 |
-| UnicodeData.txt | 规范分解与组合类 |
+| UnicodeData.txt | 规范分解、组合类及完整 Nd 十进制系统 |
 | CaseFolding.txt | 默认完整 C/F 折叠 |
 | DerivedCoreProperties.txt | 默认忽略码点范围 |
 | NormalizationTest.txt | 官方 NFD 验证向量 |
@@ -29,5 +29,7 @@ pnpm --dir playground run verify:unicode
 | IdentifierStatus.txt | Allowed 范围；缺省为 Restricted |
 
 新下载必须先匹配固定的校验值，再通过同目录临时文件原子写入缓存；下载或写入失败不会留下不完整的缓存文件。已有缓存仍会在生成任何源码前进行校验。
+
+UnicodeData 字段 6 提供十进制值。写出任何产物前，生成器拒绝错误行格式、Nd 外十进制值、重复或无效数字及不足十个数字的系统；生成的 `src/unicode/numeric_tables.mbt` 包含 76 个零字符代表。验证器独立读取同一固定官方来源，通过公开查询核对全部码点；见[数字 API 契约](../../docs/NUMBER_SYSTEMS_zh.md)。
 
 准确 URL 与哈希在 `sources.json`，ScriptExtensions.txt 和 PropertyValueAliases.txt 提供完整扩展集合，IdentifierStatus.txt 提供 Allowed 范围，默认值为 Restricted。更新版本需要明确审核清单，不能通过换哈希接受来源不明的差异。重新生成并格式化应复现已提交表。详见[实现范围](../../docs/SPECIFICATION_zh.md)。

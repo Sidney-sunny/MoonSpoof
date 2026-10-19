@@ -9,6 +9,10 @@ import {
 // Values
 pub fn analyze_identifier(String) -> DiagnosticReport
 
+pub fn get_decimal_systems(String) -> Array[Int]
+
+pub fn get_decimal_zero(Int) -> Int?
+
 pub fn get_identifier_status(Int) -> IdentifierStatus
 
 pub fn has_bidi_controls(String) -> Bool
@@ -17,11 +21,15 @@ pub fn has_bidi_override(String) -> Bool
 
 pub fn has_invisible_characters(String) -> Bool
 
+pub fn has_mixed_numbers(String) -> Bool
+
 pub fn is_allowed_identifier(String, profile? : IdentifierProfile) -> Bool
 
 pub fn validate_identifier(String, profile? : IdentifierProfile) -> Result[Unit, String]
 
 pub fn validate_identifier_status(String) -> Result[Unit, IdentifierStatusError]
+
+pub fn validate_number_systems(String) -> Result[Unit, MixedNumberIssue]
 
 // Errors
 
@@ -68,6 +76,14 @@ pub(all) struct IdentifierStatusIssue {
   codepoint_index : Int
   codepoint : Int
   codepoint_hex : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct MixedNumberIssue {
+  codepoint_index : Int
+  codepoint : Int
+  codepoint_hex : String
+  first_decimal_zero : Int
+  decimal_zero : Int
 } derive(Eq, @debug.Debug)
 
 pub(all) enum SecurityRiskLevel {

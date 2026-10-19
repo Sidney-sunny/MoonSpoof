@@ -62,3 +62,7 @@ moon test -p Sidney-sunny/moonspoof/examples/registration
 对已有账号启用时，使用新的 `application_policy_version`。恢复会拒绝旧快照，重建列出需复核账号并保留原索引。[接入测试](status_test.mbt)验证这一迁移。
 
 里程碑证据及后续标准工作见[路线图](../../docs/ROADMAP_zh.md)。
+
+## 选择启用十进制混用检查
+
+演示中的 `number_checked_syntax` 将 `validate_number_systems` 与状态过滤、应用语法组合。`account12` 通过；`user1١` 在 U+0661、标量位置 5 失败。启用时使用新的应用策略版本。[迁移回归](numbers_test.mbt)保留原索引，并报告需复核的拒绝账号。[十进制系统契约与边界](../../docs/NUMBER_SYSTEMS_zh.md)明确此检查不处理非十进制数字字符。

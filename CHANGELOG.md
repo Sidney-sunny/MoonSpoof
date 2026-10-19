@@ -6,16 +6,17 @@
 
 ### Added
 
+- Opt-in decimal mixing APIs using all 76 Unicode 16.0.0 Nd families, with typed first-conflict evidence and versioned registration migration. Full-code-space source verification now checks 4,456,448 property assertions; existing profiles and keys remain unchanged.
 - Explicit Identifier_Status lookup and optional literal-codepoint filtering with typed first-failure evidence. Registration examples demonstrate opting in with a new application policy version and reviewing newly rejected accounts during migration. Canonical-equivalence closure and full General Security Profile conformance are not claimed.
 - Additive full-script lookups and UTS #39 augmented/resolved script sets, including shared-character constraints and Japanese/Korean/Han-Bopomofo writing systems; exhaustive official-property verification across all 1,114,112 codepoints.
 - Pinned ScriptExtensions, PropertyValueAliases, and IdentifierStatus sources, strict property parsing, and complete low-level Unicode property tables. Existing script categories and default identifier policies are unchanged.
 - Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
 - Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.
-- A runnable `moon run cmd/registration` walkthrough, 17 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The integration imports the public library API.
+- A runnable `moon run cmd/registration` walkthrough, 19 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The integration imports the public library API.
 
 ### Documentation
 
-- Added a bilingual post-review roadmap with incomplete milestones, executable acceptance criteria, and proposed v0.2.0 release gates. The next implementation priority is a public-API account-registration reference integration.
+- Added a bilingual post-review roadmap with executable acceptance criteria and proposed v0.2.0 release gates. M1/M2 are implemented within their stated scope; M3 decimal checks are implemented while reference comparisons remain pending.
 - Updated product positioning and README navigation for library integrators, distinguishing planned work and reference examples from actual application adoption.
 
 ### Fixed

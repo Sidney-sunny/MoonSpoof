@@ -22,6 +22,17 @@ fn status_checked_syntax(name : String) -> Result[Unit, String] {
 }
 
 ///|
+fn number_checked_syntax(name : String) -> Result[Unit, String] {
+  match @moonspoof.validate_number_systems(name) {
+    Ok(_) => status_checked_syntax(name)
+    Err(issue) =>
+      Err(
+        "Mixed decimal system at \{issue.codepoint_hex}, scalar \{issue.codepoint_index}",
+      )
+  }
+}
+
+///|
 fn print_decision(name : String, decision : @registration.Decision) -> Unit {
   let quoted = name.to_json().stringify()
   match decision {
@@ -52,6 +63,15 @@ fn print_decision(name : String, decision : @registration.Decision) -> Unit {
 
 ///|
 fn main {
+  println("Opt-in decimal-system check")
+  let number_index = @registration.Registry::new(
+    Folded,
+    validate_syntax=number_checked_syntax,
+    application_policy_version="demo-syntax-status-numbers-v1",
+  )
+  for name in ["account12", "user1١"] {
+    print_decision(name, number_index.register(name))
+  }
   println("Opt-in Identifier_Status filter")
   let status_index = @registration.Registry::new(
     Folded,

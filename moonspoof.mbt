@@ -57,6 +57,31 @@ pub type IdentifierStatusIssue = @security.IdentifierStatusIssue
 pub type IdentifierStatusError = @security.IdentifierStatusError
 
 ///|
+pub type MixedNumberIssue = @security.MixedNumberIssue
+
+///|
+pub fn get_decimal_zero(cp : Int) -> Int? {
+  @security.get_decimal_zero(cp)
+}
+
+///|
+pub fn get_decimal_systems(input : String) -> Array[Int] {
+  @security.get_decimal_systems(input)
+}
+
+///|
+pub fn validate_number_systems(
+  input : String,
+) -> Result[Unit, @security.MixedNumberIssue] {
+  @security.validate_number_systems(input)
+}
+
+///|
+pub fn has_mixed_numbers(input : String) -> Bool {
+  @security.has_mixed_numbers(input)
+}
+
+///|
 pub fn get_identifier_status(cp : Int) -> @security.IdentifierStatus {
   @security.get_identifier_status(cp)
 }
