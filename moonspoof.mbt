@@ -48,6 +48,27 @@ pub type UnicodeVersion = @unicode.UnicodeVersion
 pub type IdentifierProfile = @security.IdentifierProfile
 
 ///|
+pub type IdentifierStatus = @security.IdentifierStatus
+
+///|
+pub type IdentifierStatusIssue = @security.IdentifierStatusIssue
+
+///|
+pub type IdentifierStatusError = @security.IdentifierStatusError
+
+///|
+pub fn get_identifier_status(cp : Int) -> @security.IdentifierStatus {
+  @security.get_identifier_status(cp)
+}
+
+///|
+pub fn validate_identifier_status(
+  input : String,
+) -> Result[Unit, @security.IdentifierStatusError] {
+  @security.validate_identifier_status(input)
+}
+
+///|
 pub type RestrictionLevel = @script.RestrictionLevel
 
 ///|

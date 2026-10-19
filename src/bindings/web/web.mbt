@@ -124,5 +124,5 @@ pub fn spoof_script_extensions(cp : Int) -> String {
 
 ///|
 pub fn spoof_identifier_status_allowed(cp : Int) -> Bool {
-  @unicode.identifier_status_allowed(cp)
+  @moonspoof.get_identifier_status(cp) == @moonspoof.IdentifierStatus::Allowed
 }

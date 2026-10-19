@@ -9,6 +9,19 @@ fn account_syntax(name : String) -> Result[Unit, String] {
 }
 
 ///|
+fn status_checked_syntax(name : String) -> Result[Unit, String] {
+  match @moonspoof.validate_identifier_status(name) {
+    Ok(_) => account_syntax(name)
+    Err(@moonspoof.IdentifierStatusError::Empty) =>
+      Err("Account cannot be empty")
+    Err(@moonspoof.IdentifierStatusError::RestrictedCharacter(issue)) =>
+      Err(
+        "Restricted identifier character \{issue.codepoint_hex} at scalar \{issue.codepoint_index}",
+      )
+  }
+}
+
+///|
 fn print_decision(name : String, decision : @registration.Decision) -> Unit {
   let quoted = name.to_json().stringify()
   match decision {
@@ -39,6 +52,15 @@ fn print_decision(name : String, decision : @registration.Decision) -> Unit {
 
 ///|
 fn main {
+  println("Opt-in Identifier_Status filter")
+  let status_index = @registration.Registry::new(
+    Folded,
+    validate_syntax=status_checked_syntax,
+    application_policy_version="demo-syntax-status-v1",
+  )
+  for name in ["alice中文", "hello😀"] {
+    print_decision(name, status_index.register(name))
+  }
   let index = @registration.Registry::new(
     Folded,
     validate_syntax=account_syntax,

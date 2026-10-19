@@ -1,4 +1,5 @@
 import {
+  "Sidney-sunny/moonspoof",
   "Sidney-sunny/moonspoof/examples/registration",
 }
 

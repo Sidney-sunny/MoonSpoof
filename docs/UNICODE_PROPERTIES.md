@@ -40,6 +40,16 @@ The legacy APIs remain unchanged. They expose eleven named categories plus Unkno
 
 Resolved sets alone do not validate identifier syntax, restrict Identifier_Status, detect mixed-number systems, establish a restriction level, or prove an identifier safe. Unassigned characters can have the singleton set Unknown. Empty strings resolve to All but still fail ordinary identifier validation. No input normalization or bidi reordering is applied by these property APIs.
 
+## Optional Identifier_Status filter
+
+`get_identifier_status(Int) -> IdentifierStatus` returns `Allowed` or `Restricted` directly from the official property. Missing and invalid codepoints are Restricted. `validate_identifier_status(String) -> Result[Unit, IdentifierStatusError]` rejects empty input (`Empty`) or the first Restricted character (`RestrictedCharacter(issue)`). An issue contains `codepoint_index` (zero-based Unicode scalar index), `codepoint`, and `codepoint_hex`.
+
+This is an opt-in literal-codepoint filter, separate from `validate_identifier` and its unchanged profiles. It does not enforce XID syntax, first-character rules, script restrictions, collision policy, or Identifier_Type reasons. Allowed punctuation and digit-only strings can pass. Combine it with application syntax and collision checks; do not replace either.
+
+The filter does not implement canonical-equivalence closure required by the general security profile. For example, U+01EE passes the literal property, while its canonical decomposition U+01B7 U+030C fails. This behavior is explicit and tested; it must not be advertised as complete UTS #39 General Security Profile validation. [Status regressions](../moonspoof_status_test.mbt) cover the distinction.
+
+The [registration example](../examples/registration/README.md) shows an application opting in through its syntax callback and a new application policy version. Existing accounts rejected by the new filter require review during rebuilding; they are not silently deleted.
+
 ## Verification
 
 Run `pnpm --dir playground run verify:unicode` after regeneration. The verifier reads checksum-verified official files independently, expands the full 0..0x10FFFF code space, and compares Script, Script_Extensions, and the literal Identifier_Status property: 1,114,112 codepoints and 3,342,336 property assertions. This includes default values and surrogate codepoints and supplements the existing normalization/mapping checks.

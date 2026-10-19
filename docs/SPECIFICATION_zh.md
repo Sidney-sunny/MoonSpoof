@@ -16,7 +16,8 @@ MoonSpoof 使用固定的 Unicode 16.0.0 数据实现部分 Unicode 安全机制
 | 旧字系分析 | Scripts.txt 查询，十一类具名字系及 Unknown | 兼容 API 保持不变；很多字系归入 Unknown |
 | 完整字系属性 | 完整 Script/Script_Extensions 查询，规范长名称 | 独立 API，不改变旧诊断 |
 | 解析字系集合 | UTS #39 第 5.1 节增广集合求交，CJK 书写系统 | All 与空交集不同；不是标识符策略 |
-| 标识符策略 | 空值、长度、控制字符、默认忽略字符、混合字系检查 | 自定义策略，不提供 Identifier_Status、XID 或语法验证 |
+| 旧标识符策略 | 空值、长度、控制字符、默认忽略字符、混合字系检查 | 默认值不变，不提供 XID 或语法验证 |
+| 可选标识符状态 | 原始 Allowed/Restricted 属性过滤，提供类型化标量证据 | 不提供规范等价闭包、Identifier_Type 原因或语法验证 |
 | 诊断 | 码点、原始映射目标、字系、规则、风险 | 单字符原始目标不一定等于最终归一化键 |
 | 双向文本 | 控制字符及覆盖符检测 | 无 UBA 重排和双向骨架；演示使用浏览器排版 |
 | 批量扫描 | 与双字符串比较使用同一键进行哈希分组 | 重复的相同输入也计为冲突 |
@@ -56,7 +57,7 @@ MoonSpoof 使用固定的 Unicode 16.0.0 数据实现部分 Unicode 安全机制
 
 控制字符、默认忽略字符、双向控制符触发 Critical。跨字系映射或三字系规则伴随混合字系触发 High。单独跨字系映射或不在允许集合中的混合字系触发 Medium。其余骨架改变触发 Low，否则 Safe。HighlyRestrictive 的 CJK 组合不会仅因混合字系而升为 Medium。
 
-尚未实现混合数字系统、Identifier_Status 强制检查与双向骨架重排。完整 Script_Extensions 与解析集合已通过[独立新增 API](UNICODE_PROPERTIES_zh.md)提供。旧限制等级估计有意保持不变，未包含 Identifier_Status 前置条件，也不使用解析集合，不能视为完整标准分类。低层 `get_general_category` 是遗留的粗略分类器，不是完整 UCD General_Category 查询。
+尚未实现混合数字系统、可选 Identifier_Status 过滤的规范等价闭包与双向骨架重排。新增过滤器只检查原始码点，不是完整 General Security Profile 实现。完整 Script_Extensions 与解析集合已通过[独立新增 API](UNICODE_PROPERTIES_zh.md)提供。旧限制等级估计有意保持不变，未包含 Identifier_Status 前置条件，也不使用解析集合，不能视为完整标准分类。低层 `get_general_category` 是遗留的粗略分类器，不是完整 UCD General_Category 查询。
 
 ## 验证证据
 

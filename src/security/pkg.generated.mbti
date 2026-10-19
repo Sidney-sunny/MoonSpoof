@@ -9,6 +9,8 @@ import {
 // Values
 pub fn analyze_identifier(String) -> DiagnosticReport
 
+pub fn get_identifier_status(Int) -> IdentifierStatus
+
 pub fn has_bidi_controls(String) -> Bool
 
 pub fn has_bidi_override(String) -> Bool
@@ -18,6 +20,8 @@ pub fn has_invisible_characters(String) -> Bool
 pub fn is_allowed_identifier(String, profile? : IdentifierProfile) -> Bool
 
 pub fn validate_identifier(String, profile? : IdentifierProfile) -> Result[Unit, String]
+
+pub fn validate_identifier_status(String) -> Result[Unit, IdentifierStatusError]
 
 // Errors
 
@@ -49,6 +53,22 @@ pub(all) struct IdentifierProfile {
 } derive(Eq, @debug.Debug)
 pub fn IdentifierProfile::default() -> Self
 pub fn IdentifierProfile::permissive() -> Self
+
+pub(all) enum IdentifierStatus {
+  Allowed
+  Restricted
+} derive(Eq, @debug.Debug)
+
+pub(all) enum IdentifierStatusError {
+  Empty
+  RestrictedCharacter(IdentifierStatusIssue)
+} derive(Eq, @debug.Debug)
+
+pub(all) struct IdentifierStatusIssue {
+  codepoint_index : Int
+  codepoint : Int
+  codepoint_hex : String
+} derive(Eq, @debug.Debug)
 
 pub(all) enum SecurityRiskLevel {
   Safe

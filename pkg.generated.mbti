@@ -21,6 +21,8 @@ pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
 
 pub fn find_confusable_groups_ignore_case(Array[String]) -> Array[@batch.ConfusableGroup]
 
+pub fn get_identifier_status(Int) -> @security.IdentifierStatus
+
 pub fn get_restriction_level(String) -> @script.RestrictionLevel
 
 pub fn get_script_extensions(Int) -> Array[String]
@@ -51,6 +53,8 @@ pub fn skeleton_case_folded(String) -> String
 
 pub fn validate_identifier(String, profile? : @security.IdentifierProfile) -> Result[Unit, String]
 
+pub fn validate_identifier_status(String) -> Result[Unit, @security.IdentifierStatusError]
+
 // Errors
 
 // Types and methods
@@ -63,6 +67,12 @@ pub using @batch {type ConfusableGroup}
 pub using @security {type DiagnosticReport}
 
 pub using @security {type IdentifierProfile}
+
+pub using @security {type IdentifierStatus}
+
+pub using @security {type IdentifierStatusError}
+
+pub using @security {type IdentifierStatusIssue}
 
 pub using @script {type RestrictionLevel}
 

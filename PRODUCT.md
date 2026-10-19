@@ -26,7 +26,7 @@ The [registration integration](examples/registration/README.md) loads existing i
 
 ## Development Priorities
 
-The owner reports that preliminary review has passed. The [roadmap](ROADMAP.md) records M1 reference-integration evidence and remaining acceptance criteria: script and identifier-status support, numeric mixing and reference comparisons, then integration review and release. Preliminary review does not establish final acceptance or production readiness.
+The owner reports that preliminary review has passed. The [roadmap](ROADMAP.md) records M1/M2 implementation evidence and remaining acceptance criteria: complete script/resolved-set APIs and an opt-in literal identifier-status filter are implemented; numeric mixing, reference comparisons, integration review and release remain. Preliminary review does not establish final acceptance or production readiness.
 
 ## Capabilities and Constraints
 

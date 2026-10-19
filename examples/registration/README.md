@@ -55,4 +55,10 @@ Mixed scripts are allowed by default in this example so the application can dist
 
 The callback is not persisted; your application must restore the implementation matching its policy version. Snapshot metadata is a compatibility check, not authentication. Authenticate persisted data separately and coordinate migrations with concurrent writers before switching indexes. A successful in-memory rebuild is not a database transaction.
 
+## Opt into Identifier_Status
+
+The walkthrough also defines `status_checked_syntax`: it calls `@moonspoof.validate_identifier_status` before application syntax and converts typed failures into a codepoint/index reason. It accepts `alice中文` and rejects `hello😀` at U+1F600, scalar index 5. This literal property filter is optional; [its canonical-equivalence and grammar limits](../../docs/UNICODE_PROPERTIES.md) remain explicit.
+
+When enabling it for existing accounts, use a new `application_policy_version`. Restore then rejects the old snapshot; rebuild reports accounts needing review and keeps the original index unchanged. [Integration tests](status_test.mbt) verify this migration.
+
 See the [roadmap](../../ROADMAP.md) for milestone evidence and remaining standard work.

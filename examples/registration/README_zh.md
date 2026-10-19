@@ -55,4 +55,10 @@ moon test -p Sidney-sunny/moonspoof/examples/registration
 
 回调函数不会被持久化，应用需要恢复与策略版本相符的实现。快照元数据用于检查兼容性，不用于认证；持久化数据应另行认证。切换索引前，需要协调迁移与并发写入；内存重建成功不等于数据库事务完成。
 
+## 选择启用 Identifier_Status
+
+演示另定义 `status_checked_syntax`，先调用 `@moonspoof.validate_identifier_status`，再执行应用语法检查，并将类型化失败转换为码点/序号原因。它接受 `alice中文`，在标量序号 5 的 U+1F600 处拒绝 `hello😀`。这是可选的原始属性过滤，[规范等价与语法边界](../../docs/UNICODE_PROPERTIES_zh.md)保持明确。
+
+对已有账号启用时，使用新的 `application_policy_version`。恢复会拒绝旧快照，重建列出需复核账号并保留原索引。[接入测试](status_test.mbt)验证这一迁移。
+
 里程碑证据及后续标准工作见[路线图](../../docs/ROADMAP_zh.md)。

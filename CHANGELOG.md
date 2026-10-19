@@ -6,11 +6,12 @@
 
 ### Added
 
+- Explicit Identifier_Status lookup and optional literal-codepoint filtering with typed first-failure evidence. Registration examples demonstrate opting in with a new application policy version and reviewing newly rejected accounts during migration. Canonical-equivalence closure and full General Security Profile conformance are not claimed.
 - Additive full-script lookups and UTS #39 augmented/resolved script sets, including shared-character constraints and Japanese/Korean/Han-Bopomofo writing systems; exhaustive official-property verification across all 1,114,112 codepoints.
 - Pinned ScriptExtensions, PropertyValueAliases, and IdentifierStatus sources, strict property parsing, and complete low-level Unicode property tables. Existing script categories and default identifier policies are unchanged.
 - Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
 - Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.
-- A runnable `moon run cmd/registration` walkthrough, 15 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The core library API is unchanged.
+- A runnable `moon run cmd/registration` walkthrough, 17 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The integration imports the public library API.
 
 ### Documentation
 

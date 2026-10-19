@@ -150,6 +150,8 @@ pub fn find_confusable_groups_ignore_case(names : Array[String]) -> Array[Confus
 
 The additive full-script APIs `get_unicode_script`, `get_script_extensions`, `resolve_script_set`, and `is_mixed_script_resolved`, including `ScriptSet::All` versus an empty intersection, are specified in [Unicode property contracts](UNICODE_PROPERTIES.md). Legacy `ScriptAnalysis` and restriction estimates retain their existing behavior.
 
+The same document specifies `get_identifier_status` and the opt-in `validate_identifier_status`, with typed first-failure evidence and the explicit literal-codepoint/canonical-closure boundary. Existing `IdentifierProfile` fields and defaults are unchanged.
+
 ### 2.1 `SecurityRiskLevel`
 
 ```moonbit

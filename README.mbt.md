@@ -6,6 +6,7 @@ Unicode Spoof and Homoglyph Detection for MoonBit, implementing selected Unicode
 
 - Unicode 16.0 NFD, full default folding, default-ignorable removal and stable confusable keys.
 - Complete Unicode Script/Script_Extensions properties and resolved script sets, alongside legacy script diagnostics and restriction estimates.
+- Optional literal Identifier_Status filtering with typed codepoint/index evidence, separate from existing profile defaults and application syntax.
 - Multi-script restriction level classification (Single Script, Highly Restrictive, Moderately Restrictive).
 - Detection of invisible zero-width formatting characters and bidirectional control codes.
 - Stable hash-indexed batch collision grouping using the same keys as pair matching.

@@ -12,18 +12,18 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 - Released: [v0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0), with MoonBit APIs, a JavaScript engine artifact, and a bilingual showcase.
 - Implemented: Unicode 16.0.0 NFD, full default case folding, application skeletons, character diagnostics, configurable policies, and batch collision grouping.
-- Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, and key-stability checks. See [scope and evidence](docs/SPECIFICATION.md).
+- Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, key-stability checks, and 3,342,336 script/status property assertions across the full code space. See [scope and evidence](docs/SPECIFICATION.md).
 - Reproducibility: nine checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
-- Open gaps: legacy diagnostics retain eleven named script categories; separate full-script and resolved-set APIs now exist. Identifier_Status enforcement, mixed-number detection and bidi skeleton reordering remain pending. A real application integration has not yet been documented.
+- Open gaps: legacy diagnostics retain eleven named script categories; separate full-script, resolved-set and opt-in literal Identifier_Status APIs now exist. Canonical-equivalence closure, mixed-number detection and bidi skeleton reordering remain pending. A real application integration has not yet been documented.
 
 ## Milestone order
 
-M1 is implemented as a reference integration; M2–M4 remain planned and incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
+M1 is implemented as a reference integration; M2 is complete within the explicit API scope below. M3–M4 remain incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
 
 | Order | Deliverable | Completion evidence | Estimate |
 | --- | --- | --- | --- |
 | M1 — complete | Runnable account-registration example | [Guide](examples/registration/README.md), executable and acceptance tests | Delivered 2026-10-18 |
-| M2 | Script sets and an explicit identifier-status policy | Pinned data, reviewed API changes, multilingual regressions | 4–7 days |
+| M2 — complete within stated scope | Script sets and an explicit identifier-status filter | [API contracts](docs/UNICODE_PROPERTIES.md), [status regressions](moonspoof_status_test.mbt), [migration tests](examples/registration/status_test.mbt) | Delivered 2026-10-19 |
 | M3 | Mixed-number checks and reference comparisons | Reproducible results with explained differences | 3–5 days |
 | M4 | Integration review and proposed v0.2.0 release | Completed gates, migration notes, verified release artifacts | 2–3 days |
 
@@ -37,19 +37,21 @@ Acceptance criteria:
 - [x] Accepted names, exact duplicates, collisions, and policy failures return explicit decisions and evidence: [store](examples/registration/registry.mbt).
 - [x] Public-API cases cover `paypal` / `p\u0430ypal`, multilingual names, default ignorables, the `I` / `l` policy difference, and independent syntax/profile decisions: [registration tests](examples/registration/registry_test.mbt).
 - [x] Stored keys carry versions and policy metadata; restore validates keys and rebuild rechecks original names without publishing a partial index: [migration implementation](examples/registration/snapshot.mbt) and [tests](examples/registration/snapshot_test.mbt). The guide documents production atomicity requirements.
-- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Fifteen acceptance tests exercise the public API integration.
+- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Seventeen acceptance tests exercise the public API integration, including optional status filtering and migration.
 
 ## M2 — Improve script and identifier decisions
 
 Address the script-analysis limits before adding more heuristic risk scores. Keep current application behavior documented while introducing more precise Unicode-backed checks.
 
+Completed within this scope: complete properties, resolved script sets, and an opt-in literal-codepoint status filter. The filter is not the full UTS #39 General Security Profile: canonical-equivalence closure remains deferred. Legacy restriction estimates retain their documented gaps and behavior.
+
 Acceptance criteria:
 
 - [x] Pinned ScriptExtensions, PropertyValueAliases and IdentifierStatus in the [reviewed manifest](tools/data-generator/sources.json), with strict parsing, offline tests and reproducible generation.
 - [x] Added full property names and explicit All/intersection sets; [API and compatibility contracts](docs/UNICODE_PROPERTIES.md) preserve the legacy enum, estimates and default policies. [Regression tests](moonspoof_scripts_test.mbt) cover resolved sets.
-- [ ] Add an explicit opt-in Identifier_Status policy with actionable rejection evidence. Keep it separate from application syntax validation and the existing default policy unless a breaking change is documented.
-- [ ] Add multilingual regression cases for shared/inherited characters, CJK combinations, previously Unknown scripts, and restricted identifiers. Revisit restriction estimates against the pinned specification and record remaining gaps.
-- [ ] Update API contracts, scope, migration notes, and tests together. Existing stored-key behavior must remain stable or carry an explicit migration requirement.
+- [x] Added an explicit opt-in Identifier_Status filter with typed first-failure evidence: [implementation](src/security/identifier_status.mbt) and [tests](moonspoof_status_test.mbt). It remains independent of application syntax and existing default profiles.
+- [x] Added [script regressions](moonspoof_scripts_test.mbt) for shared/inherited characters, CJK combinations and previously Unknown scripts, plus [restricted-name regressions](moonspoof_status_test.mbt). The [scope review](docs/SPECIFICATION.md) records why legacy restriction estimates remain unchanged and incomplete.
+- [x] Updated [API contracts](docs/UNICODE_PROPERTIES.md), scope and bilingual integration instructions together. Existing keys remain unchanged; [migration tests](examples/registration/status_test.mbt) require an explicit application policy version and review when enabling the filter.
 
 ## M3 — Check numeric mixing and reference behavior
 
@@ -77,15 +79,15 @@ Acceptance criteria:
 
 ## Next two implementation rounds
 
-1. **Script foundation:** start M2 with reviewed source metadata, reproducible tables, and the script-set API decision. Preserve the existing facade and document compatibility before changing behavior.
-2. **Identifier decisions:** continue M2 with opt-in Identifier_Status checks, multilingual regressions, and updated restriction estimates and contracts. Do not mark M2 done when only tables exist.
+1. **Numeric mixing:** start M3 with complete pinned numeric-property data, an explicit opt-in API and multilingual decimal-system regressions. Preserve existing default behavior and stored keys.
+2. **Reference comparisons:** pin a Unicode-compatible ICU build, commit the comparison corpus and command, and explain application-extension differences. Keep the reference dependency outside the library runtime.
 
-These describe future implementation work. M1's reference integration does not complete M2 or establish external application adoption.
+These describe future implementation work. M1/M2 evidence does not complete M3/M4 or establish external application adoption.
 
 ## Scope control
 
 - Keep the core a reusable MoonBit library. No account server, database framework, or new UI platform is required to demonstrate integration.
 - Keep Unicode 16.0.0 pinned through this sequence. Plan a later Unicode upgrade as a separate data and compatibility review.
-- Defer full bidi skeleton reordering, NFKC/NFKD, IDNA/domain validation, locale-specific casing, and any full-conformance claim. Revisit them only with an explicit use case and acceptance corpus.
+- Defer canonical-equivalence closure for identifier status, full bidi skeleton reordering, NFKC/NFKD, IDNA/domain validation, locale-specific casing, and any full-conformance claim. Revisit them only with an explicit use case and acceptance corpus.
 - Fix correctness and integration blockers first. CI hardening and visual polish alone do not satisfy a product milestone.
 - Update milestone checkboxes only with links to executable evidence; record external adoption only when it actually happens.

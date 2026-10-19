@@ -40,6 +40,16 @@
 
 解析集合本身不验证标识符语法，不限制 Identifier_Status，不检查混合数字系统，不给出限制等级，也不保证名称安全。未分配字符可能得到单元素 Unknown 集合；空串解析为 All，但仍无法通过普通标识符校验。属性 API 不进行输入规范化或双向重排。
 
+## 可选 Identifier_Status 过滤
+
+`get_identifier_status(Int) -> IdentifierStatus` 按官方属性返回 `Allowed` 或 `Restricted`，缺省及无效码点均为 Restricted。`validate_identifier_status(String) -> Result[Unit, IdentifierStatusError]` 拒绝空输入（`Empty`）或首个 Restricted 字符（`RestrictedCharacter(issue)`）。issue 包含 `codepoint_index`（从零开始的 Unicode 标量序号）、`codepoint`、`codepoint_hex`。
+
+这是显式启用的原始码点过滤器，与 `validate_identifier` 及其不变的策略分开。它不检查 XID 语法、首字符、字系限制、碰撞策略或 Identifier_Type 原因。属性允许的标点及纯数字串可能通过，应用仍需组合自己的语法和碰撞检查。
+
+过滤器未实现通用安全配置要求的规范等价闭包。例如 U+01EE 通过原始属性检查，其规范分解 U+01B7 U+030C 却无法通过。该行为已明确记录并测试，不得宣传为完整 UTS #39 General Security Profile 验证。[状态回归测试](../moonspoof_status_test.mbt)覆盖这一差异。
+
+[注册示例](../examples/registration/README_zh.md)展示通过语法回调及新的应用策略版本选择启用过滤；已有账号若被新过滤器拒绝，重建时需要复核，不会被静默删除。
+
 ## 验证
 
 生成数据后运行 `pnpm --dir playground run verify:unicode`。验证器独立读取已校验的官方文件，展开完整 0..0x10FFFF 空间，对照 Script、Script_Extensions 和原始 Identifier_Status 属性：共 1,114,112 个码点、3,342,336 项属性断言。覆盖缺省值和代理码点，补充已有归一化/映射检查。

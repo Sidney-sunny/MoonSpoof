@@ -40,7 +40,7 @@ MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk sig
 
 ## Development direction
 
-The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Better script/identifier checks and reference comparisons remain planned. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
+The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Complete script properties, resolved script sets, and an opt-in Identifier_Status filter are now available; mixed-number checks and reference comparisons remain planned. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
 
 ## Run the registration integration
 
@@ -140,7 +140,7 @@ let level = @moonspoof.get_restriction_level("p\u0430ypal") // MinimallyRestrict
 
 ## Security boundary
 
-The legacy diagnostics expose eleven script categories plus Unknown. Additive [complete script and Script_Extensions APIs](docs/UNICODE_PROPERTIES.md) provide Unicode-backed lookups and resolved sets. Default policies do not enforce Identifier_Status; mixed-number checks and bidi skeleton reordering remain unimplemented. Identifier policies are configurable application checks, not full Unicode identifier syntax validation. Fullwidth folding and repeated normalization to stable keys are application extensions.
+The legacy diagnostics expose eleven script categories plus Unknown. Additive [complete script and Script_Extensions APIs](docs/UNICODE_PROPERTIES.md) provide Unicode-backed lookups and resolved sets. An opt-in literal Identifier_Status filter is available; default policies remain unchanged. Mixed-number checks, canonical-equivalence closure for the status filter, and bidi skeleton reordering remain unimplemented. Identifier policies are configurable application checks, not full Unicode identifier syntax validation. Fullwidth folding and repeated normalization to stable keys are application extensions.
 
 Sensitive and folded keys are separate policies: `I` / `l` can match in the sensitive mode while differing in folded mode. Stored keys should carry a library/data version and be recomputed after changing versions. [API contracts](docs/API_SPECIFICATION.md) describe the corrected behavior.
 
