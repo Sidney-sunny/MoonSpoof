@@ -67,7 +67,7 @@ let candidate = "p\u0430ypal"
 
 ## 安全边界与兼容性
 
-引擎公开十一类字系及 Unknown，尚未实现完整 Script_Extensions、Identifier_Status、混合数字系统与双向骨架重排。标识符策略是可配置应用检查，不是完整 Unicode 标识符语法验证。全角折叠与重复归一化至稳定键属于应用扩展。
+旧诊断接口公开十一类字系及 Unknown。新增[完整 Script 和 Script_Extensions API](UNICODE_PROPERTIES_zh.md)提供属性查询与解析集合；默认策略不检查 Identifier_Status，混合数字系统与双向骨架重排仍未实现。标识符策略是可配置应用检查，不是完整 Unicode 标识符语法验证。全角折叠与重复归一化至稳定键属于应用扩展。
 
 敏感键与折叠键是独立策略：`I` / `l` 在敏感模式下可能匹配，而在折叠模式下不同。持久化键应记录库与数据版本，升级后重新计算。[API 规范](API_SPECIFICATION_zh.md)说明修正后的行为。
 
@@ -77,6 +77,7 @@ let candidate = "p\u0430ypal"
 | --- | --- |
 | 架构 | [ARCHITECTURE_zh.md](ARCHITECTURE_zh.md) |
 | API | [API_SPECIFICATION_zh.md](API_SPECIFICATION_zh.md) |
+| Unicode 字系属性 | [UNICODE_PROPERTIES_zh.md](UNICODE_PROPERTIES_zh.md) |
 | 标准范围 | [SPECIFICATION_zh.md](SPECIFICATION_zh.md) |
 | 性能 | [BENCHMARKS_zh.md](BENCHMARKS_zh.md) |
 | 路线图 | [ROADMAP_zh.md](ROADMAP_zh.md) |

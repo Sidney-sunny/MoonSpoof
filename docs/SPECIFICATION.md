@@ -13,7 +13,9 @@ The reference is [UTS #39 revision 30](https://www.unicode.org/reports/tr39/tr39
 | NFD | Recursive canonical decomposition, algorithmic Hangul, stable combining-class ordering | NFKC and NFKD are not provided |
 | Confusable key | NFD, remove Default_Ignorable_Code_Point, map, NFD; repeat to stability | Application key, not the full bidiSkeleton procedure |
 | Case-insensitive key | Full default C/F case folding, then skeleton; repeat to stability | No Turkic T or locale-specific casing; a separate equivalence policy |
-| Script analysis | Scripts.txt lookup, eleven named categories plus Unknown | No Script_Extensions resolution; many scripts become Unknown |
+| Legacy script analysis | Scripts.txt lookup, eleven named categories plus Unknown | Unchanged compatibility API; many scripts become Unknown |
+| Complete script properties | Full Script and Script_Extensions lookups, canonical long names | Separate APIs; no change to legacy diagnostics |
+| Resolved script sets | UTS #39 section 5.1 augmented-set intersection, CJK writing systems | All differs from an empty intersection; not an identifier policy |
 | Identifier policy | Empty/length/control/ignorable/mixed-script checks | Custom policy, not Identifier_Status, XID, or syntax validation |
 | Diagnostics | Codepoints, raw mapping targets, scripts, triggered rules, risk | A raw character target need not equal the final normalized key |
 | Bidi | Detect Unicode bidi controls and overrides | No UBA reordering or bidi skeleton; demo uses browser rendering |
@@ -54,9 +56,12 @@ These estimates omit the full standard's Identifier_Status and Script_Extensions
 
 Controls, ignorables, and bidi controls yield Critical. A cross-script mapping or triad combined with mixed scripts yields High. A cross-script mapping alone or an unexpected mixed set yields Medium. Remaining changed keys yield Low; otherwise Safe. A HighlyRestrictive CJK mix is not escalated to Medium solely for mixing.
 
-Mixed-number detection, Identifier_Status, full Script_Extensions, and bidi skeleton reordering remain unimplemented. The low-level `get_general_category` helper is a coarse legacy classifier, not complete UCD General_Category data.
+Mixed-number detection, Identifier_Status enforcement, and bidi skeleton reordering remain unimplemented. Complete Script_Extensions and resolved sets are available through [separate additive APIs](UNICODE_PROPERTIES.md). Legacy restriction estimates are intentionally unchanged: they omit Identifier_Status prerequisites and do not use resolved sets. Applications must not interpret them as a full standard classification. The low-level `get_general_category` helper is a coarse legacy classifier, not complete UCD General_Category data.
 
 ## Verification evidence
+
+The property verifier independently expands checksum-verified official files across all 1,114,112 codepoints and checks Script, Script_Extensions, and the literal Identifier_Status property (3,342,336 assertions). Resolved-set regressions additionally cover the standard's CJK writing-system augmentation and shared-character constraints.
+
 
 Normalization vectors are parsed directly from the checksum-verified official `NormalizationTest.txt`; a derived JSON cache cannot reduce the checked suite. Empty input, malformed rows, and invalid scalar values fail verification.
 

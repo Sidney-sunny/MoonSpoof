@@ -16,6 +16,29 @@ pub type ScriptAnalysis = @script.ScriptAnalysis
 pub type Script = @script.Script
 
 ///|
+pub type ScriptSet = @script.ScriptSet
+
+///|
+pub fn get_unicode_script(cp : Int) -> String {
+  @script.get_unicode_script(cp)
+}
+
+///|
+pub fn get_script_extensions(cp : Int) -> Array[String] {
+  @script.get_script_extensions(cp)
+}
+
+///|
+pub fn resolve_script_set(input : String) -> @script.ScriptSet {
+  @script.resolve_script_set(input)
+}
+
+///|
+pub fn is_mixed_script_resolved(input : String) -> Bool {
+  @script.is_mixed_script_resolved(input)
+}
+
+///|
 pub type ConfusableGroup = @batch.ConfusableGroup
 
 ///|

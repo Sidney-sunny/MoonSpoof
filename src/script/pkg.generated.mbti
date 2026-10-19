@@ -16,13 +16,21 @@ pub fn get_restriction_level(String) -> RestrictionLevel
 
 pub fn get_script(Int) -> Script
 
+pub fn get_script_extensions(Int) -> Array[String]
+
+pub fn get_unicode_script(Int) -> String
+
 pub fn has_mixed_triad_scripts(Array[Script]) -> Bool
 
 pub fn is_mixed_script(String) -> Bool
 
+pub fn is_mixed_script_resolved(String) -> Bool
+
 pub fn is_recommended_script(Script) -> Bool
 
 pub fn is_single_script(String) -> Bool
+
+pub fn resolve_script_set(String) -> ScriptSet
 
 // Errors
 
@@ -58,6 +66,11 @@ pub(all) struct ScriptAnalysis {
   is_mixed : Bool
   level : RestrictionLevel
 } derive(@debug.Debug)
+
+pub(all) enum ScriptSet {
+  All
+  Scripts(Array[String])
+} derive(Eq, @debug.Debug)
 
 // Type aliases
 

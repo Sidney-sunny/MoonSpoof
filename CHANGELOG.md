@@ -6,6 +6,7 @@
 
 ### Added
 
+- Additive full-script lookups and UTS #39 augmented/resolved script sets, including shared-character constraints and Japanese/Korean/Han-Bopomofo writing systems; exhaustive official-property verification across all 1,114,112 codepoints.
 - Pinned ScriptExtensions, PropertyValueAliases, and IdentifierStatus sources, strict property parsing, and complete low-level Unicode property tables. Existing script categories and default identifier policies are unchanged.
 - Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
 - Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.

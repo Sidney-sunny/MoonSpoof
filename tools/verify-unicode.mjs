@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { parseNormalizationVectors } from './normalization-vectors.mjs';
+import { verifyUnicodeProperties } from './verify-properties.mjs';
 import * as engine from '../playground/src/generated/moonspoof.js';
 
 const directory = fileURLToPath(new URL('./data-generator/', import.meta.url));
@@ -76,4 +77,5 @@ for (const cp of codepoints) {
   const skeleton = engine.spoof_skeleton(text);
   assert.equal(engine.spoof_skeleton(skeleton), skeleton, `Skeleton stability U+${cp.toString(16)}`);
 }
-console.log(JSON.stringify({ unicode: manifest.unicode_version, normalizationVectors: vectors.length, normalizationAssertions: vectors.length * 5, confusableMappings: mappings, caseFoldMappings: folds, stableCodepoints: codepoints.size, sourceChecksums: Object.keys(manifest.sources).length }, null, 2));
+const properties = verifyUnicodeProperties(engine, directory);
+console.log(JSON.stringify({ unicode: manifest.unicode_version, normalizationVectors: vectors.length, normalizationAssertions: vectors.length * 5, confusableMappings: mappings, caseFoldMappings: folds, stableCodepoints: codepoints.size, sourceChecksums: Object.keys(manifest.sources).length, ...properties }, null, 2));

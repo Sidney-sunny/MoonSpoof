@@ -111,3 +111,18 @@ pub fn spoof_get_restriction_info(input : String) -> String {
 pub fn spoof_normalize_nfd(input : String) -> String {
   @unicode.normalize_nfd(input)
 }
+
+///|
+pub fn spoof_unicode_script(cp : Int) -> String {
+  @moonspoof.get_unicode_script(cp)
+}
+
+///|
+pub fn spoof_script_extensions(cp : Int) -> String {
+  @moonspoof.get_script_extensions(cp).to_json().stringify()
+}
+
+///|
+pub fn spoof_identifier_status_allowed(cp : Int) -> Bool {
+  @unicode.identifier_status_allowed(cp)
+}

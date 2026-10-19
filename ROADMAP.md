@@ -2,7 +2,7 @@
 
 [Chinese](docs/ROADMAP_zh.md)
 
-Planning updated: 2026-10-18. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption.
+Planning updated: 2026-10-19. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption.
 
 ## Goal
 
@@ -14,7 +14,7 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 - Implemented: Unicode 16.0.0 NFD, full default case folding, application skeletons, character diagnostics, configurable policies, and batch collision grouping.
 - Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, and key-stability checks. See [scope and evidence](docs/SPECIFICATION.md).
 - Reproducibility: nine checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
-- Open gaps: eleven named script categories, no full Script_Extensions or Identifier_Status, no mixed-number detection or bidi skeleton reordering. A real application integration has not yet been documented.
+- Open gaps: legacy diagnostics retain eleven named script categories; separate full-script and resolved-set APIs now exist. Identifier_Status enforcement, mixed-number detection and bidi skeleton reordering remain pending. A real application integration has not yet been documented.
 
 ## Milestone order
 
@@ -45,8 +45,8 @@ Address the script-analysis limits before adding more heuristic risk scores. Kee
 
 Acceptance criteria:
 
-- [ ] Pin the Unicode 16.0.0 Script_Extensions and Identifier_Status sources in the reviewed manifest, with official URLs, checksums, offline validation tests, and reproducible generation.
-- [ ] Design and review a representation for complete script sets and Script_Extensions resolution. Record compatibility with the existing public script categories before updating generated interfaces.
+- [x] Pinned ScriptExtensions, PropertyValueAliases and IdentifierStatus in the [reviewed manifest](tools/data-generator/sources.json), with strict parsing, offline tests and reproducible generation.
+- [x] Added full property names and explicit All/intersection sets; [API and compatibility contracts](docs/UNICODE_PROPERTIES.md) preserve the legacy enum, estimates and default policies. [Regression tests](moonspoof_scripts_test.mbt) cover resolved sets.
 - [ ] Add an explicit opt-in Identifier_Status policy with actionable rejection evidence. Keep it separate from application syntax validation and the existing default policy unless a breaking change is documented.
 - [ ] Add multilingual regression cases for shared/inherited characters, CJK combinations, previously Unknown scripts, and restricted identifiers. Revisit restriction estimates against the pinned specification and record remaining gaps.
 - [ ] Update API contracts, scope, migration notes, and tests together. Existing stored-key behavior must remain stable or carry an explicit migration requirement.

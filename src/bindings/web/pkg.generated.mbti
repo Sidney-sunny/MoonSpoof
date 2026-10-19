@@ -12,11 +12,17 @@ pub fn spoof_compare(String, String) -> String
 
 pub fn spoof_get_restriction_info(String) -> String
 
+pub fn spoof_identifier_status_allowed(Int) -> Bool
+
 pub fn spoof_normalize_nfd(String) -> String
+
+pub fn spoof_script_extensions(Int) -> String
 
 pub fn spoof_skeleton(String) -> String
 
 pub fn spoof_skeleton_case_folded(String) -> String
+
+pub fn spoof_unicode_script(Int) -> String
 
 pub fn spoof_validate_profile(String, Bool) -> String
 

@@ -2,6 +2,8 @@
 
 [English](API_SPECIFICATION.md)
 
+新增完整字系 API `get_unicode_script`、`get_script_extensions`、`resolve_script_set`、`is_mixed_script_resolved` 及 `ScriptSet::All` 与空交集的区别，见 [Unicode 属性契约](UNICODE_PROPERTIES_zh.md)。旧 `ScriptAnalysis` 与限制等级估计保持原行为。
+
 本文档明确 MoonSpoof 导出的公共接口、数据类型定义、前置条件与行为保证。
 
 ---

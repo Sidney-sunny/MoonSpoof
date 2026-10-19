@@ -1,1 +1,4 @@
 // Package script: Unicode Script & Script_Extensions classification and analysis
+import {
+  "Sidney-sunny/moonspoof/src/unicode",
+}

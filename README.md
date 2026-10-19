@@ -140,7 +140,7 @@ let level = @moonspoof.get_restriction_level("p\u0430ypal") // MinimallyRestrict
 
 ## Security boundary
 
-The engine exposes eleven script categories plus Unknown and does not implement Script_Extensions, Identifier_Status, mixed-number checks or bidi skeleton reordering. Identifier policies are configurable application checks, not full Unicode identifier syntax validation. Fullwidth folding and repeated normalization to stable keys are application extensions.
+The legacy diagnostics expose eleven script categories plus Unknown. Additive [complete script and Script_Extensions APIs](docs/UNICODE_PROPERTIES.md) provide Unicode-backed lookups and resolved sets. Default policies do not enforce Identifier_Status; mixed-number checks and bidi skeleton reordering remain unimplemented. Identifier policies are configurable application checks, not full Unicode identifier syntax validation. Fullwidth folding and repeated normalization to stable keys are application extensions.
 
 Sensitive and folded keys are separate policies: `I` / `l` can match in the sensitive mode while differing in folded mode. Stored keys should carry a library/data version and be recomputed after changing versions. [API contracts](docs/API_SPECIFICATION.md) describe the corrected behavior.
 
@@ -154,6 +154,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 | System Architecture & Pipeline | [ARCHITECTURE.md](docs/ARCHITECTURE.md) / [中文版](docs/ARCHITECTURE_zh.md) |
 | API Contracts & Data Types | [API_SPECIFICATION.md](docs/API_SPECIFICATION.md) / [中文版](docs/API_SPECIFICATION_zh.md) |
 | Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
+| Unicode Script Property APIs | [UNICODE_PROPERTIES.md](docs/UNICODE_PROPERTIES.md) / [中文版](docs/UNICODE_PROPERTIES_zh.md) |
 | Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Release History | [CHANGELOG.md](CHANGELOG.md) / [中文版](docs/CHANGELOG_zh.md) |
 | Development Roadmap | [ROADMAP.md](ROADMAP.md) / [中文版](docs/ROADMAP_zh.md) |

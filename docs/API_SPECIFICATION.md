@@ -148,6 +148,8 @@ pub fn find_confusable_groups_ignore_case(names : Array[String]) -> Array[Confus
 
 ## 2. Type Definitions
 
+The additive full-script APIs `get_unicode_script`, `get_script_extensions`, `resolve_script_set`, and `is_mixed_script_resolved`, including `ScriptSet::All` versus an empty intersection, are specified in [Unicode property contracts](UNICODE_PROPERTIES.md). Legacy `ScriptAnalysis` and restriction estimates retain their existing behavior.
+
 ### 2.1 `SecurityRiskLevel`
 
 ```moonbit
