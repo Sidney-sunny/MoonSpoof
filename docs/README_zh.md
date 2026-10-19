@@ -99,7 +99,7 @@ moon fmt
 pnpm --dir playground run verify:unicode
 ```
 
-Unicode 表来自六个记录哈希的官方数据文件。Node 检查会先重建引擎。纯库没有第三方运行时依赖。
+Unicode 表来自九个记录哈希的官方数据文件。Node 检查会先重建引擎。纯库没有第三方运行时依赖。
 
 </details>
 

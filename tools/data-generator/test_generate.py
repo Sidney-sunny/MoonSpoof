@@ -61,6 +61,55 @@ class DownloadTests(unittest.TestCase):
         self.assertEqual(self.destination.read_bytes(), self.content)
 
 
+class SecurityPropertyTests(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.directory = Path(temporary.name)
+        self.files = {
+            "PropertyValueAliases.txt": "sc ; Latn ; Latin\nsc ; Zyyy ; Common\nsc ; Hira ; Hiragana\nsc ; Kana ; Katakana\n",
+            "Scripts.txt": "0041..005A ; Latin\n0030..0039 ; Common\n",
+            "ScriptExtensions.txt": "30FC ; Kana Hira\n",
+            "IdentifierStatus.txt": "0041..005A ; Allowed\n0030..0039 ; Allowed\n",
+        }
+        for name, text in self.files.items():
+            (self.directory / name).write_text(text, encoding="utf-8")
+
+    def parse(self):
+        return generate.parse_security_properties(self.directory)
+
+    def test_sorted_ranges_and_canonical_extension_names(self):
+        scripts, extensions, allowed = self.parse()
+        self.assertEqual(scripts[0], (0x30, 0x39, "Common"))
+        self.assertEqual(extensions, [(0x30FC, 0x30FC, "Hiragana Katakana")])
+        self.assertEqual(allowed[1], (0x41, 0x5A, "Allowed"))
+
+    def test_empty_malformed_reversed_out_of_range_and_overlapping_rows_fail(self):
+        for text in ("# empty\n", "0041 Latin\n", "005A..0041 ; Latin\n",
+                     "110000 ; Latin\n", "0041..005A ; Latin\n005A ; Common\n"):
+            with self.subTest(text=text):
+                (self.directory / "Scripts.txt").write_text(text, encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    self.parse()
+
+    def test_unknown_script_and_extension_aliases_fail(self):
+        for name, text in (("Scripts.txt", "0041 ; Missing\n"),
+                           ("ScriptExtensions.txt", "30FC ; Nope\n")):
+            with self.subTest(name=name):
+                (self.directory / name).write_text(text, encoding="utf-8")
+                with self.assertRaisesRegex(ValueError, "Unknown"):
+                    self.parse()
+                (self.directory / name).write_text(self.files[name], encoding="utf-8")
+
+    def test_unexpected_status_and_empty_aliases_fail(self):
+        (self.directory / "IdentifierStatus.txt").write_text("0041 ; Typo\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Identifier_Status"):
+            self.parse()
+        (self.directory / "PropertyValueAliases.txt").write_text("# empty\n", encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "Empty script aliases"):
+            self.parse()
+
+
 class PinnedSourcesTests(unittest.TestCase):
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
@@ -80,12 +129,14 @@ class PinnedSourcesTests(unittest.TestCase):
         self.fetch = self.enterContext(patch.object(generate, "fetch_file"))
         self.enterContext(patch.object(generate, "parse_confusables", return_value=[]))
         self.enterContext(patch.object(generate, "parse_scripts", return_value=[]))
+        self.enterContext(patch.object(generate, "parse_security_properties", return_value=([], [], [])))
         self.writers = [
             self.enterContext(patch.object(generate, name))
             for name in (
                 "generate_confusable_tables",
                 "generate_script_tables",
                 "generate_unicode_tables",
+                "generate_security_properties",
             )
         ]
 
@@ -103,7 +154,7 @@ class PinnedSourcesTests(unittest.TestCase):
         before = self.manifest_path.read_bytes()
         generate.main()
         self.assertEqual(self.manifest_path.read_bytes(), before)
-        self.assertEqual(self.fetch.call_count, 6)
+        self.assertEqual(self.fetch.call_count, len(generate.SOURCE_URLS))
         for writer in self.writers:
             writer.assert_called_once()
 

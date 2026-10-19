@@ -6,6 +6,7 @@
 
 ### 新增
 
+- 固定 ScriptExtensions、PropertyValueAliases、IdentifierStatus 三份来源，新增严格属性解析和完整底层 Unicode 属性表；现有字系分类与默认标识符策略保持不变。
 - 使用公开 API 的账号注册参考存储，明确选择语法/Unicode 策略、敏感或折叠键，区分允许、重复、碰撞和拒绝，并提供字符证据。
 - 版本化快照、经过校验的恢复，以及根据原始名称全量重建索引；旧元数据、篡改键、重复账号和迁移新增碰撞都会明确失败，不返回部分索引。
 - 可运行的 `moon run cmd/registration` 演示、15 项接入验收测试、双语接入说明，以及 WASM、JavaScript、native 三目标 CI 执行；核心库 API 保持不变。

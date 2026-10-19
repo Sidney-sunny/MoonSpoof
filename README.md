@@ -181,7 +181,7 @@ pnpm --dir playground run check
 moon run cmd/main
 ```
 
-Unicode tables are generated from six checksum-recorded sources. To reproduce official NFD and mapping checks, run `python tools/data-generator/generate.py`, `moon info`, `moon fmt`, then `pnpm --dir playground run verify:unicode`. Node checks always rebuild the engine first. The library has no third-party runtime dependencies.
+Unicode tables are generated from nine checksum-recorded sources. To reproduce official NFD and mapping checks, run `python tools/data-generator/generate.py`, `moon info`, `moon fmt`, then `pnpm --dir playground run verify:unicode`. Node checks always rebuild the engine first. The library has no third-party runtime dependencies.
 
 </details>
 

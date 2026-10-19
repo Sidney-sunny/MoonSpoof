@@ -22,6 +22,8 @@ pub fn has_invisible_characters(String) -> Bool
 
 pub fn hex_char(Int) -> Char
 
+pub fn identifier_status_allowed(Int) -> Bool
+
 pub fn is_ascii(Int) -> Bool
 
 pub fn is_bidi_control_codepoint(Int) -> Bool
@@ -33,6 +35,10 @@ pub fn is_default_ignorable(Int) -> Bool
 pub fn is_invisible_codepoint(Int) -> Bool
 
 pub fn normalize_nfd(String) -> String
+
+pub fn script_extensions(Int) -> Array[String]
+
+pub fn unicode_script(Int) -> String
 
 pub let unicode_version : UnicodeVersion
 

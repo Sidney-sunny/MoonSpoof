@@ -13,7 +13,7 @@
 - 已发布 [v0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0)，包含 MoonBit API、JavaScript 引擎产物与双语演示站。
 - 已实现 Unicode 16.0.0 NFD、完整默认大小写折叠、应用骨架键、字符诊断、自定义策略和批量碰撞分组。
 - 已有验证覆盖 19,965 条官方 NFD 向量、99,825 项断言，以及混淆映射、大小写折叠与键稳定性检查。参见[实现范围与证据](SPECIFICATION_zh.md)。
-- 已固定六份 Unicode 来源及其校验值，支持校验后原子下载、直接读取官方规范化测试源，并固定 MoonBit 编译器版本。
+- 已固定九份 Unicode 来源及其校验值，支持校验后原子下载、直接读取官方规范化测试源，并固定 MoonBit 编译器版本。
 - 尚存缺口：仅十一类命名字系，没有完整 Script_Extensions、Identifier_Status、混合数字检测或双向骨架重排；尚未记录真实应用接入。
 
 ## 里程碑顺序

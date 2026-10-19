@@ -6,6 +6,7 @@
 
 ### Added
 
+- Pinned ScriptExtensions, PropertyValueAliases, and IdentifierStatus sources, strict property parsing, and complete low-level Unicode property tables. Existing script categories and default identifier policies are unchanged.
 - Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
 - Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.
 - A runnable `moon run cmd/registration` walkthrough, 15 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The core library API is unchanged.

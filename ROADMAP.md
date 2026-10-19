@@ -13,7 +13,7 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 - Released: [v0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0), with MoonBit APIs, a JavaScript engine artifact, and a bilingual showcase.
 - Implemented: Unicode 16.0.0 NFD, full default case folding, application skeletons, character diagnostics, configurable policies, and batch collision grouping.
 - Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, and key-stability checks. See [scope and evidence](docs/SPECIFICATION.md).
-- Reproducibility: six checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
+- Reproducibility: nine checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
 - Open gaps: eleven named script categories, no full Script_Extensions or Identifier_Status, no mixed-number detection or bidi skeleton reordering. A real application integration has not yet been documented.
 
 ## Milestone order

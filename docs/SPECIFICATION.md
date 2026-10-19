@@ -6,7 +6,7 @@ MoonSpoof implements selected Unicode security mechanisms using pinned Unicode 1
 
 ## Data and reproducibility
 
-The reference is [UTS #39 revision 30](https://www.unicode.org/reports/tr39/tr39-30.html). `tools/data-generator/sources.json` records official URLs and SHA-256 hashes for six files: confusables, Scripts, UnicodeData, CaseFolding, DerivedCoreProperties, and NormalizationTest. Regenerate with `python tools/data-generator/generate.py`, then run `moon info`, `moon fmt`, and `pnpm --dir playground run verify:unicode`.
+The reference is [UTS #39 revision 30](https://www.unicode.org/reports/tr39/tr39-30.html). `tools/data-generator/sources.json` records official URLs and SHA-256 hashes for nine files: confusables, Scripts, UnicodeData, CaseFolding, DerivedCoreProperties, NormalizationTest, ScriptExtensions, PropertyValueAliases, and IdentifierStatus. Regenerate with `python tools/data-generator/generate.py`, then run `moon info`, `moon fmt`, and `pnpm --dir playground run verify:unicode`.
 
 | Mechanism | Implemented behavior | Boundary |
 | --- | --- | --- |

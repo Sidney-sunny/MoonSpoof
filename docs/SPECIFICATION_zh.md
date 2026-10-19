@@ -6,7 +6,7 @@ MoonSpoof 使用固定的 Unicode 16.0.0 数据实现部分 Unicode 安全机制
 
 ## 数据与复现
 
-参考 [UTS #39 修订版 30](https://www.unicode.org/reports/tr39/tr39-30.html)。`tools/data-generator/sources.json` 保存六个官方数据文件的 URL 与 SHA-256：confusables、Scripts、UnicodeData、CaseFolding、DerivedCoreProperties、NormalizationTest。运行 `python tools/data-generator/generate.py`，随后执行 `moon info`、`moon fmt` 与 `pnpm --dir playground run verify:unicode`。
+参考 [UTS #39 修订版 30](https://www.unicode.org/reports/tr39/tr39-30.html)。`tools/data-generator/sources.json` 保存九个官方数据文件的 URL 与 SHA-256：confusables、Scripts、UnicodeData、CaseFolding、DerivedCoreProperties、NormalizationTest、ScriptExtensions、PropertyValueAliases、IdentifierStatus。运行 `python tools/data-generator/generate.py`，随后执行 `moon info`、`moon fmt` 与 `pnpm --dir playground run verify:unicode`。
 
 | 机制 | 已实现 | 边界 |
 | --- | --- | --- |
