@@ -1,0 +1,8 @@
+{
+  "icu_version": "76.1.0.0",
+  "unicode_version": "16.0.0.0",
+  "artifact": {
+    "url": "https://repo.maven.apache.org/maven2/com/ibm/icu/icu4j/76.1/icu4j-76.1.jar",
+    "sha256": "732cdf18121b1642899da1f5e37e52cc7f48e3ec07fa737105d4603976781b33"
+  }
+}

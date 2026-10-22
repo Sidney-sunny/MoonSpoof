@@ -62,6 +62,8 @@ Canonical-equivalence closure for the opt-in Identifier_Status filter and bidi s
 
 ## Verification evidence
 
+The [pinned ICU comparison and coverage matrix](REFERENCE_COMPARISON.md) add independent library-reference evidence: 42 corpus cases, 210 exact string/numeric assertions, 500 sampled property assertions, and 126 raw comparisons with 12 exact reviewed differences. This is separate from full-space official-source verification and does not imply complete standard conformance.
+
 The property verifier independently expands checksum-verified official files across all 1,114,112 codepoints and checks Script, Script_Extensions, the literal Identifier_Status property, and decimal zero representatives (4,456,448 assertions). Resolved-set regressions additionally cover the standard's CJK writing-system augmentation and shared-character constraints.
 
 

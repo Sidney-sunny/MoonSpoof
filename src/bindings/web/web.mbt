@@ -134,3 +134,13 @@ pub fn spoof_decimal_zero(cp : Int) -> Int {
     None => -1
   }
 }
+
+///|
+pub fn spoof_decimal_systems(input : String) -> String {
+  @moonspoof.get_decimal_systems(input).to_json().stringify()
+}
+
+///|
+pub fn spoof_has_mixed_numbers(input : String) -> Bool {
+  @moonspoof.has_mixed_numbers(input)
+}

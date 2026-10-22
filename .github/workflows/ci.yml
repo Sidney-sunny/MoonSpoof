@@ -9,6 +9,29 @@ permissions:
   contents: read
 
 jobs:
+  icu-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22.22.1'
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install pinned MoonBit compiler
+        run: |
+          export MOONBIT_INSTALL_VERSION="$(cat .moon-version)"
+          curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
+          echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
+      - name: Test reference pinning and difference gates
+        run: node --test tools/icu-reference/reference.test.mjs
+      - name: Build engine and compare pinned ICU corpus
+        run: |
+          node tools/build-engine.mjs
+          node tools/icu-reference/compare.mjs
+
   engine:
     runs-on: ubuntu-latest
     strategy:

@@ -41,4 +41,4 @@
 
 运行 `moon test` 和 `moon test --target js` 验证[公开 API 回归](../moonspoof_numbers_test.mbt)，覆盖单一/混用系统、相同字系的不同系统、非 BMP 字符、Unicode 16 新增数字、检查范围外数字类型、标量位置、排序去重和默认行为兼容。
 
-`pnpm --dir playground run verify:unicode` 独立读取已校验的 UnicodeData 来源，通过 `spoof_decimal_zero` 对全部 1,114,112 个码点验证 `get_decimal_zero`，包含缺省值和代理码点；ABI 以 -1 表示 None。连同 Script、Script_Extensions、Identifier_Status，属性套件运行 4,456,448 项断言。这是直接来源验证，计划中的固定 ICU 对照仍未完成。
+`pnpm --dir playground run verify:unicode` 独立读取已校验的 UnicodeData 来源，通过 `spoof_decimal_zero` 对全部 1,114,112 个码点验证 `get_decimal_zero`，包含缺省值和代理码点；ABI 以 -1 表示 None。连同 Script、Script_Extensions、Identifier_Status，属性套件运行 4,456,448 项断言。这是直接来源验证，[固定 ICU 对照](REFERENCE_COMPARISON_zh.md)另行验证已提交语料中的数字代表及混用。

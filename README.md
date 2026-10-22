@@ -40,7 +40,7 @@ MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk sig
 
 ## Development direction
 
-The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Complete script properties, resolved script sets, and an opt-in Identifier_Status filter are now available; opt-in [decimal mixing checks](docs/NUMBER_SYSTEMS.md) are implemented; reference comparisons remain planned. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
+The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Complete script properties, resolved script sets, and an opt-in Identifier_Status filter are now available; opt-in [decimal mixing checks](docs/NUMBER_SYSTEMS.md) are implemented; [pinned ICU comparisons](docs/REFERENCE_COMPARISON.md) now document exact differences and mechanism coverage. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
 
 ## Run the registration integration
 
@@ -156,6 +156,7 @@ Sensitive and folded keys are separate policies: `I` / `l` can match in the sens
 | Performance & Benchmarks | [BENCHMARKS.md](docs/BENCHMARKS.md) / [中文版](docs/BENCHMARKS_zh.md) |
 | Decimal Number System APIs | [NUMBER_SYSTEMS.md](docs/NUMBER_SYSTEMS.md) / [中文版](docs/NUMBER_SYSTEMS_zh.md) |
 | Unicode Script Property APIs | [UNICODE_PROPERTIES.md](docs/UNICODE_PROPERTIES.md) / [中文版](docs/UNICODE_PROPERTIES_zh.md) |
+| ICU Reference and Coverage | [REFERENCE_COMPARISON.md](docs/REFERENCE_COMPARISON.md) / [中文版](docs/REFERENCE_COMPARISON_zh.md) |
 | Unicode Security Scope | [SPECIFICATION.md](docs/SPECIFICATION.md) / [中文版](docs/SPECIFICATION_zh.md) |
 | Release History | [CHANGELOG.md](CHANGELOG.md) / [中文版](docs/CHANGELOG_zh.md) |
 | Development Roadmap | [ROADMAP.md](ROADMAP.md) / [中文版](docs/ROADMAP_zh.md) |

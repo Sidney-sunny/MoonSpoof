@@ -6,6 +6,7 @@
 
 ### Added
 
+- Optional checksum-pinned ICU4J 76.1 / Unicode 16 reference harness, a 42-case corpus with exact baselines for all 12 observed field differences, a bilingual mechanism coverage matrix and a dedicated CI job. Added long combining, supplementary/control, stable-key and pair/batch regressions; reference tests reject unreviewed or stale differences and corrupt artifacts.
 - Opt-in decimal mixing APIs using all 76 Unicode 16.0.0 Nd families, with typed first-conflict evidence and versioned registration migration. Full-code-space source verification now checks 4,456,448 property assertions; existing profiles and keys remain unchanged.
 - Explicit Identifier_Status lookup and optional literal-codepoint filtering with typed first-failure evidence. Registration examples demonstrate opting in with a new application policy version and reviewing newly rejected accounts during migration. Canonical-equivalence closure and full General Security Profile conformance are not claimed.
 - Additive full-script lookups and UTS #39 augmented/resolved script sets, including shared-character constraints and Japanese/Korean/Han-Bopomofo writing systems; exhaustive official-property verification across all 1,114,112 codepoints.
@@ -16,7 +17,7 @@
 
 ### Documentation
 
-- Added a bilingual post-review roadmap with executable acceptance criteria and proposed v0.2.0 release gates. M1/M2 are implemented within their stated scope; M3 decimal checks are implemented while reference comparisons remain pending.
+- Added a bilingual post-review roadmap with executable acceptance criteria and proposed v0.2.0 release gates. M1–M3 are implemented within their stated scopes; M4 integration, measurement and release gates remain pending.
 - Updated product positioning and README navigation for library integrators, distinguishing planned work and reference examples from actual application adoption.
 
 ### Fixed

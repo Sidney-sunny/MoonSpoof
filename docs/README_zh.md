@@ -18,7 +18,7 @@
 
 ## 开发方向
 
-根据负责人反馈，项目已通过初审。可运行的账号注册参考接入已经通过 MoonBit 公开 API 展示注册决策、版本化快照和索引迁移；完整字系属性、解析字系集合及可选 Identifier_Status 过滤已提供；可选[十进制混用检查](NUMBER_SYSTEMS_zh.md)已实现，参考对照仍在计划中。[路线图](ROADMAP_zh.md)记录里程碑证据与拟议 v0.2.0 发布门槛，仓库示例不代表已有外部应用采用。
+根据负责人反馈，项目已通过初审。可运行的账号注册参考接入已经通过 MoonBit 公开 API 展示注册决策、版本化快照和索引迁移；完整字系属性、解析字系集合及可选 Identifier_Status 过滤已提供；可选[十进制混用检查](NUMBER_SYSTEMS_zh.md)已实现，[固定 ICU 对照](REFERENCE_COMPARISON_zh.md)已记录精确差异及机制覆盖。[路线图](ROADMAP_zh.md)记录里程碑证据与拟议 v0.2.0 发布门槛，仓库示例不代表已有外部应用采用。
 
 ## 运行注册接入
 
@@ -78,6 +78,7 @@ let candidate = "p\u0430ypal"
 | 架构 | [ARCHITECTURE_zh.md](ARCHITECTURE_zh.md) |
 | API | [API_SPECIFICATION_zh.md](API_SPECIFICATION_zh.md) |
 | 十进制数字系统 | [NUMBER_SYSTEMS_zh.md](NUMBER_SYSTEMS_zh.md) |
+| ICU 参考对照与覆盖 | [REFERENCE_COMPARISON_zh.md](REFERENCE_COMPARISON_zh.md) |
 | Unicode 字系属性 | [UNICODE_PROPERTIES_zh.md](UNICODE_PROPERTIES_zh.md) |
 | 标准范围 | [SPECIFICATION_zh.md](SPECIFICATION_zh.md) |
 | 性能 | [BENCHMARKS_zh.md](BENCHMARKS_zh.md) |

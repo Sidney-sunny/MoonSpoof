@@ -12,6 +12,7 @@
     "check": "pnpm run test && pnpm run build",
     "test": "pnpm run engine && node --test tests/*.test.mjs",
     "verify:unicode": "pnpm run engine && node ../tools/verify-unicode.mjs",
+    "verify:icu": "pnpm run engine && node ../tools/icu-reference/compare.mjs",
     "bench": "pnpm run engine && node ../tools/bench.mjs"
   },
   "dependencies": {

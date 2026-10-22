@@ -1,0 +1,65 @@
+{
+  "schema": 1,
+  "cases": [
+    {"id":"empty","input":"","differences":{}},
+    {"id":"ascii","input":"paypal","differences":{}},
+    {"id":"cyrillic-confusable","input":"p\u0430ypal","differences":{}},
+    {"id":"composed-accent","input":"\u00e9","differences":{}},
+    {"id":"decomposed-accent","input":"e\u0301","differences":{}},
+    {"id":"combining-order","input":"a\u0315\u0300","differences":{}},
+    {"id":"sharp-s","input":"Stra\u00dfe","differences":{}},
+    {"id":"greek-sigma","input":"\u03a3\u03c2\u03c3","differences":{}},
+    {"id":"turkish-i","input":"I\u0130\u0131i","differences":{}},
+    {"id":"case-policy","input":"I","differences":{}},
+    {"id":"lowercase-l","input":"l","differences":{}},
+    {"id":"kelvin","input":"\u212a","differences":{}},
+    {"id":"fullwidth","input":"\uff21\uff22\uff23\uff11","differences":{
+      "skeleton":{"icu":"ABC\uff11","moonspoof":"ABCl","reason":"fullwidth"},
+      "foldedSkeleton":{"icu":"a\uff42c\uff11","moonspoof":"abcl","reason":"fullwidth"},
+      "bidiLtrSkeleton":{"icu":"ABC\uff11","moonspoof":"ABCl","reason":"fullwidth"}
+    }},
+    {"id":"ideographic-space","input":"a\u3000b","differences":{
+      "skeleton":{"icu":"a\u3000b","moonspoof":"a b","reason":"fullwidth"},
+      "foldedSkeleton":{"icu":"a\u3000b","moonspoof":"a b","reason":"fullwidth"},
+      "bidiLtrSkeleton":{"icu":"a\u3000b","moonspoof":"a b","reason":"fullwidth"}
+    }},
+    {"id":"default-ignorable","input":"ad\u200bmin","differences":{}},
+    {"id":"variation-selector","input":"a\ufe0f","differences":{}},
+    {"id":"control","input":"a\u0000b","differences":{}},
+    {"id":"bidi-control","input":"abc\u202e.txt","differences":{
+      "bidiLtrSkeleton":{"icu":"abctxt.","moonspoof":"abc.txt","reason":"bidi-deferred"}
+    }},
+    {"id":"hebrew-order","input":"A1\u05d0","differences":{}},
+    {"id":"arabic-order","input":"\u0627\u062812","differences":{
+      "bidiLtrSkeleton":{"icu":"l2\u0628l","moonspoof":"l\u0628l2","reason":"bidi-deferred"}
+    }},
+    {"id":"japanese","input":"\u4e2d\u6587\u3042\u30a2","differences":{}},
+    {"id":"shared-script","input":"a\u30fc","differences":{}},
+    {"id":"korean","input":"\u4e2d\u6587\uac00","differences":{}},
+    {"id":"hangul-prototype","input":"\u321d","differences":{
+      "skeleton":{"icu":"(\u110b\u1169\u110c\u1165\u11ab)","moonspoof":"(\u110b\u1169\u110c\u1165\u1102)","reason":"stable-key"},
+      "foldedSkeleton":{"icu":"(\u110b\u1169\u110c\u1165\u11ab)","moonspoof":"(\u110b\u1169\u110c\u1165\u1102)","reason":"stable-key"},
+      "bidiLtrSkeleton":{"icu":"(\u110b\u1169\u110c\u1165\u11ab)","moonspoof":"(\u110b\u1169\u110c\u1165\u1102)","reason":"stable-key"}
+    }},
+    {"id":"han-bopomofo","input":"\u4e2d\u6587\u3105","differences":{}},
+    {"id":"devanagari","input":"\u0928\u092e\u0938\u094d\u0924\u0947","differences":{}},
+    {"id":"thai","input":"\u0e44\u0e17\u0e22","differences":{}},
+    {"id":"adlam","input":"\ud83a\udd00","differences":{}},
+    {"id":"supplementary-han","input":"\ud840\udc00","differences":{}},
+    {"id":"unassigned","input":"a\u0378","differences":{}},
+    {"id":"private-use","input":"a\ue000","differences":{}},
+    {"id":"status-composed","input":"\u01ee","differences":{}},
+    {"id":"status-decomposed","input":"\u01b7\u030c","differences":{}},
+    {"id":"single-digits","input":"user123","differences":{}},
+    {"id":"mixed-digits","input":"user1\u0661","differences":{}},
+    {"id":"same-script-digits","input":"\u0661\u06f2","differences":{}},
+    {"id":"mathematical-digits","input":"\ud835\udfce\ud835\udfd8","differences":{
+      "foldedSkeleton":{"icu":"OO","moonspoof":"oo","reason":"fold-policy"}
+    }},
+    {"id":"sunuwar-digits","input":"\ud806\udff0\ud806\udff9","differences":{}},
+    {"id":"garay-digits","input":"\ud803\udd40\ud803\udd49","differences":{}},
+    {"id":"non-decimal-numbers","input":"\u00b2\u2163\u00bd\u56db1","differences":{}},
+    {"id":"long-combining","input":"a\u0315\u0300","repeat":512,"differences":{}},
+    {"id":"long-supplementary","input":"\ud840\udc00\ud83a\udd00","repeat":512,"differences":{}}
+  ]
+}

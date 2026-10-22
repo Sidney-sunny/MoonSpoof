@@ -23,6 +23,8 @@ options(
         "spoof_script_extensions",
         "spoof_identifier_status_allowed",
         "spoof_decimal_zero",
+        "spoof_decimal_systems",
+        "spoof_has_mixed_numbers",
       ],
     },
     "wasm": {
@@ -40,6 +42,8 @@ options(
         "spoof_script_extensions",
         "spoof_identifier_status_allowed",
         "spoof_decimal_zero",
+        "spoof_decimal_systems",
+        "spoof_has_mixed_numbers",
       ],
     },
   },

@@ -2,7 +2,7 @@
 
 [Chinese](docs/ROADMAP_zh.md)
 
-Planning updated: 2026-10-19. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption.
+Planning updated: 2026-10-22. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption.
 
 ## Goal
 
@@ -18,13 +18,13 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 ## Milestone order
 
-M1 is implemented as a reference integration; M2 is complete within the explicit API scope below. M3–M4 remain incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
+M1 is implemented as a reference integration; M2/M3 are complete within the explicit scopes below. M4 remains incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
 
 | Order | Deliverable | Completion evidence | Estimate |
 | --- | --- | --- | --- |
 | M1 — complete | Runnable account-registration example | [Guide](examples/registration/README.md), executable and acceptance tests | Delivered 2026-10-18 |
 | M2 — complete within stated scope | Script sets and an explicit identifier-status filter | [API contracts](docs/UNICODE_PROPERTIES.md), [status regressions](moonspoof_status_test.mbt), [migration tests](examples/registration/status_test.mbt) | Delivered 2026-10-19 |
-| M3 — in progress | Mixed-number checks and reference comparisons | Reproducible results with explained differences | 3–5 days |
+| M3 — complete within stated scope | Mixed-number checks and reference comparisons | [Pinned ICU comparison and coverage matrix](docs/REFERENCE_COMPARISON.md), adversarial regressions | Delivered 2026-10-22 |
 | M4 | Integration review and proposed v0.2.0 release | Completed gates, migration notes, verified release artifacts | 2–3 days |
 
 ## M1 — Complete one integration
@@ -57,13 +57,15 @@ Acceptance criteria:
 
 Use the same pinned Unicode version for reference comparisons. Differences caused by MoonSpoof's application extensions must remain visible rather than being counted as unexplained passes or failures.
 
+Completed with a 42-case ICU4J 76.1 / Unicode 16 corpus, exact per-field difference baselines and the coverage matrix below. This is scoped comparison evidence; canonical closure, bidi skeleton implementation, full conformance and external adoption remain outside this milestone.
+
 Acceptance criteria:
 
 - [x] Implemented [decimal mixing APIs](docs/NUMBER_SYSTEMS.md) from the pinned UnicodeData source, with [public regressions](moonspoof_numbers_test.mbt) for single/mixed systems and excluded numeric types, full-code-space property verification, and [registration migration tests](examples/registration/numbers_test.mbt).
-- [ ] Add a reproducible comparison harness against a pinned ICU build with compatible Unicode data. Record the ICU/data versions, compared APIs, corpus, and command; keep this optional reference dependency outside the library runtime.
-- [ ] Separate standard mechanisms from fullwidth folding, default-ignorable handling, stable application keys, and case-fold policy. Explain every observed difference in the committed comparison corpus.
-- [ ] Expand adversarial and multilingual regressions around combining marks, supplementary characters, controls, and long inputs. Retain pair/batch equivalence and key-stability checks.
-- [ ] Publish a coverage matrix of implemented mechanisms, tested behavior, and deferred work. Passing comparisons must not be presented as full UTS #39 conformance.
+- [x] Added a checksum-pinned ICU4J 76.1 oracle with runtime Unicode-version checks, [corpus](tools/icu-reference/corpus.json), [command and API scope](docs/REFERENCE_COMPARISON.md), and a dedicated CI job. Java/ICU remain optional verification dependencies outside the library runtime.
+- [x] Recorded all 12 field differences with exact outputs and reasons in the corpus; [review](docs/REFERENCE_COMPARISON.md) distinguishes fullwidth folding, stable keys, folded policy and deferred bidi behavior. Default-ignorable removal agrees with ICU. [Harness tests](tools/icu-reference/reference.test.mjs) reject new, changed or stale differences.
+- [x] Added [public adversarial regressions](moonspoof_adversarial_test.mbt) for long combining inputs, supplementary/control evidence, stable keys and pair/batch equivalence under both policies; multilingual cases also run through the ICU corpus.
+- [x] Published a bilingual [coverage matrix](docs/REFERENCE_COMPARISON.md) separating implementation, official-source tests, sampled ICU comparisons and deferred work, without a full-conformance claim.
 
 ## M4 — Review integration and release
 
@@ -79,10 +81,10 @@ Acceptance criteria:
 
 ## Next two implementation rounds
 
-1. **Reference comparisons:** continue M3 by pinning a Unicode-compatible ICU build, committing the comparison corpus and command, and explaining application-extension differences. Keep the reference dependency outside the library runtime.
-2. **Coverage review:** expand adversarial and multilingual regressions and publish the mechanism coverage matrix. Retain key stability and document deferred work before starting M4 release gates.
+1. **Integration review:** start M4 from a fresh checkout, run the registration integration and review API/data compatibility, index rebuilding and bilingual installation guidance. Keep adoption status explicit.
+2. **Measurements and release review:** publish reproducible key/batch measurements and verify package-registry state, release notes and artifact gates before assigning v0.2.0.
 
-These describe future implementation work. M1/M2 evidence does not complete M3/M4 or establish external application adoption.
+These describe future implementation work. M1–M3 evidence does not complete M4 or establish external application adoption.
 
 ## Scope control
 
