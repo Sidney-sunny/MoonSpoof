@@ -1,5 +1,11 @@
 # MoonSpoof
 
+<p align="left">
+  <a href="https://mooncakes.io/modules/Sidney-sunny/moonspoof"><img alt="Mooncakes" src="https://img.shields.io/badge/mooncakes.io-Sidney--sunny%2Fmoonspoof-ff813f?style=flat-square" /></a>
+  <a href="https://github.com/Sidney-sunny/MoonSpoof"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-Sidney--sunny%2FMoonSpoof-181717?style=flat-square&logo=github" /></a>
+  <img alt="Version 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-334155?style=flat-square" />
+</p>
+
 Unicode Spoof and Homoglyph Detection for MoonBit, implementing selected Unicode Technical Standard #39 mechanisms.
 
 ## Key Features

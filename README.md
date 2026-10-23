@@ -3,6 +3,8 @@
 </p>
 
 <p align="center">
+  <a href="https://mooncakes.io/modules/Sidney-sunny/moonspoof"><img alt="Mooncakes" src="https://img.shields.io/badge/mooncakes.io-Sidney--sunny%2Fmoonspoof-ff813f?style=flat-square" /></a>
+  <a href="https://github.com/Sidney-sunny/MoonSpoof"><img alt="GitHub" src="https://img.shields.io/badge/GitHub-Sidney--sunny%2FMoonSpoof-181717?style=flat-square&logo=github" /></a>
   <img alt="Version 0.1.0" src="https://img.shields.io/badge/Version-0.1.0-334155?style=flat-square" />
   <img alt="Unicode 16.0" src="https://img.shields.io/badge/Unicode-16.0.0-334155?style=flat-square" />
   <img alt="UTS #39" src="https://img.shields.io/badge/Standard-UTS_%2339-334155?style=flat-square" />
