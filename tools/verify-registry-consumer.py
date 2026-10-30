@@ -29,14 +29,19 @@ fn main raise {
   println("Public registry consumer passed")
 }
 ''', encoding="utf-8")
-    for target in ("wasm", "js"):
+    def run(command, label):
         result = subprocess.run(
-            ["moon", "run", ".", "--target", target], cwd=consumer,
+            command, cwd=consumer,
             capture_output=True, text=True, encoding="utf-8", errors="replace",
         )
-        (work / f"public-consumer-{target}.log").write_text(
-            result.stdout + result.stderr, encoding="utf-8"
-        )
+        details = result.stdout + result.stderr
+        (work / f"public-consumer-{label}.log").write_text(details, encoding="utf-8")
         if result.returncode:
-            raise SystemExit(f"Registry consumer failed ({target}); see {work}")
+            tail = "\n".join(details.splitlines()[-40:])
+            raise SystemExit(f"Registry consumer failed ({label}):\n{tail}")
+
+    # A clean CI runner has no registry index; do not depend on the user's cache.
+    run(["moon", "update"], "update")
+    for target in ("wasm", "js"):
+        run(["moon", "run", ".", "--target", target], target)
         print(f"Sidney-sunny/moonspoof@0.1.0: public registry consumer passed ({target})")
