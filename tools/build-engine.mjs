@@ -17,8 +17,9 @@ const notice = '// Unicode data: Copyright © 2024 Unicode, Inc. (Unicode-3.0).\
   + '// Keep licenses/UNICODE-3.0.txt and THIRD_PARTY_NOTICES.md with this artifact.\n';
 const engineFile = path.join(destination, 'moonspoof.js');
 writeFileSync(engineFile, notice + readFileSync(engineFile, 'utf8'));
-const command = (name, args) => {
+const command = (name, args, optional = false) => {
   const result = spawnSync(name, args, { cwd: root, encoding: 'utf8' });
+  if (optional && (result.error || result.status !== 0)) return null;
   if (result.error) throw result.error;
   if (result.status !== 0) throw new Error(`${name} failed: ${result.stderr}`);
   return result.stdout.trim();
@@ -27,14 +28,34 @@ const moduleText = readFileSync(path.join(root, 'moon.mod'), 'utf8');
 const compilerPin = readFileSync(path.join(root, '.moon-version'), 'utf8').trim();
 const compiler = command('moonc', ['-v']);
 if (!compiler.includes(`v${compilerPin} `)) throw new Error('Engine compiler differs from .moon-version');
+const moduleName = /^name\s*=\s*"([^"]+)"/m.exec(moduleText)[1];
+const moduleVersion = /^version\s*=\s*"([^"]+)"/m.exec(moduleText)[1];
+const gitRoot = command('git', ['rev-parse', '--show-toplevel'], true);
+let commit;
+let dirty;
+if (gitRoot && path.resolve(gitRoot) === path.resolve(root)) {
+  commit = command('git', ['rev-parse', 'HEAD']);
+  dirty = command('git', ['status', '--porcelain']).length > 0;
+} else {
+  // Release source ZIPs have no .git. They can be built for use, but their
+  // modified/unversioned trees must not qualify as clean release inputs.
+  const sourceInfo = JSON.parse(readFileSync(path.join(root, 'build-info.json'), 'utf8'));
+  if (sourceInfo.schema !== 1 || sourceInfo.module !== moduleName
+      || sourceInfo.version !== moduleVersion || sourceInfo.compiler_pin !== compilerPin
+      || !/^[a-f0-9]{40,64}$/.test(sourceInfo.commit)) {
+    throw new Error('Source archive metadata does not match this project');
+  }
+  commit = sourceInfo.commit;
+  dirty = true;
+}
 const buildInfo = {
   schema: 1,
-  module: /^name\s*=\s*"([^"]+)"/m.exec(moduleText)[1],
-  version: /^version\s*=\s*"([^"]+)"/m.exec(moduleText)[1],
+  module: moduleName,
+  version: moduleVersion,
   compiler_pin: compilerPin,
   compiler,
-  commit: command('git', ['rev-parse', 'HEAD']),
-  dirty: command('git', ['status', '--porcelain']).length > 0,
+  commit,
+  dirty,
   engine_sha256: createHash('sha256').update(readFileSync(engineFile)).digest('hex'),
 };
 const metadata = JSON.stringify(buildInfo, null, 2) + '\n';

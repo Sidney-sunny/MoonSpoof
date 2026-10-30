@@ -30,6 +30,8 @@ The release requires WASM, JavaScript and native checks/builds/tests in CI, 19 g
 
 Release archives are built from a clean committed tree, include source/engine/site payloads and retained license texts, and carry a release manifest plus SHA-256 checksums. Engine and site build metadata must match the release commit, compiler and version. Apache-2.0 covers original source; Unicode, Manrope, React and Vite retain [their upstream notices](../THIRD_PARTY_NOTICES.md).
 
+The source ZIP also builds without `.git`, using its archived metadata. Such unversioned builds are marked dirty and cannot be repackaged as verified clean release inputs.
+
 ## Limits
 
 No full UTS #39 conformance, canonical-equivalence closure for the literal status filter, bidi skeleton reordering, NFKC/NFKD, IDNA or locale-specific casing is claimed. Legacy restriction estimates remain scoped. The integration is a repository reference, not evidence of external production adoption.
