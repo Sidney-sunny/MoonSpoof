@@ -2,9 +2,9 @@
 
 ///|
 pub(all) struct UnicodeVersion {
-  major : Int
-  minor : Int
-  update : Int
+  major : Int32
+  minor : Int32
+  update : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -22,7 +22,7 @@ pub(all) enum GeneralCategory {
 } derive(Eq, Debug)
 
 ///|
-pub fn get_general_category(cp : Int) -> GeneralCategory {
+pub fn get_general_category(cp : Int32) -> GeneralCategory {
   if (cp >= 0x0041 && cp <= 0x005A) ||
     (cp >= 0x0061 && cp <= 0x007A) ||
     (cp >= 0x4E00 && cp <= 0x9FFF) {
@@ -51,7 +51,7 @@ pub fn get_general_category(cp : Int) -> GeneralCategory {
 
 ///|
 pub(all) struct CharInfo {
-  codepoint : Int
+  codepoint : Int32
   char : Char
   name : String
   category : GeneralCategory
@@ -60,17 +60,17 @@ pub(all) struct CharInfo {
 } derive(Debug)
 
 ///|
-pub fn is_ascii(cp : Int) -> Bool {
+pub fn is_ascii(cp : Int32) -> Bool {
   cp >= 0 && cp <= 0x7F
 }
 
 ///|
-pub fn is_invisible_codepoint(cp : Int) -> Bool {
+pub fn is_invisible_codepoint(cp : Int32) -> Bool {
   is_default_ignorable(cp)
 }
 
 ///|
-pub fn is_bidi_control_codepoint(cp : Int) -> Bool {
+pub fn is_bidi_control_codepoint(cp : Int32) -> Bool {
   match cp {
     0x200E => true // LEFT-TO-RIGHT MARK
     0x200F => true // RIGHT-TO-LEFT MARK
@@ -89,7 +89,7 @@ pub fn is_bidi_control_codepoint(cp : Int) -> Bool {
 }
 
 ///|
-pub fn is_bidi_override_codepoint(cp : Int) -> Bool {
+pub fn is_bidi_override_codepoint(cp : Int32) -> Bool {
   cp == 0x202D || cp == 0x202E // LRO, RLO
 }
 
@@ -124,7 +124,7 @@ pub fn has_invisible_characters(input : String) -> Bool {
 }
 
 ///|
-pub fn hex_char(digit : Int) -> Char {
+pub fn hex_char(digit : Int32) -> Char {
   if digit < 10 {
     (48 + digit).unsafe_to_char()
   } else {
@@ -133,7 +133,7 @@ pub fn hex_char(digit : Int) -> Char {
 }
 
 ///|
-pub fn format_codepoint(cp : Int) -> String {
+pub fn format_codepoint(cp : Int32) -> String {
   let buf = StringBuilder()
   buf.write_string("U+")
   let mut temp = cp

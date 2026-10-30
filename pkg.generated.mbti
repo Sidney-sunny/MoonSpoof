@@ -21,17 +21,17 @@ pub fn find_confusable_groups(Array[String]) -> Array[@batch.ConfusableGroup]
 
 pub fn find_confusable_groups_ignore_case(Array[String]) -> Array[@batch.ConfusableGroup]
 
-pub fn get_decimal_systems(String) -> Array[Int]
+pub fn get_decimal_systems(String) -> Array[Int32]
 
-pub fn get_decimal_zero(Int) -> Int?
+pub fn get_decimal_zero(Int32) -> Int32?
 
-pub fn get_identifier_status(Int) -> @security.IdentifierStatus
+pub fn get_identifier_status(Int32) -> @security.IdentifierStatus
 
 pub fn get_restriction_level(String) -> @script.RestrictionLevel
 
-pub fn get_script_extensions(Int) -> Array[String]
+pub fn get_script_extensions(Int32) -> Array[String]
 
-pub fn get_unicode_script(Int) -> String
+pub fn get_unicode_script(Int32) -> String
 
 pub fn get_unicode_version() -> @unicode.UnicodeVersion
 

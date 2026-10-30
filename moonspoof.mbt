@@ -19,12 +19,12 @@ pub type Script = @script.Script
 pub type ScriptSet = @script.ScriptSet
 
 ///|
-pub fn get_unicode_script(cp : Int) -> String {
+pub fn get_unicode_script(cp : Int32) -> String {
   @script.get_unicode_script(cp)
 }
 
 ///|
-pub fn get_script_extensions(cp : Int) -> Array[String] {
+pub fn get_script_extensions(cp : Int32) -> Array[String] {
   @script.get_script_extensions(cp)
 }
 
@@ -60,12 +60,12 @@ pub type IdentifierStatusError = @security.IdentifierStatusError
 pub type MixedNumberIssue = @security.MixedNumberIssue
 
 ///|
-pub fn get_decimal_zero(cp : Int) -> Int? {
+pub fn get_decimal_zero(cp : Int32) -> Int32? {
   @security.get_decimal_zero(cp)
 }
 
 ///|
-pub fn get_decimal_systems(input : String) -> Array[Int] {
+pub fn get_decimal_systems(input : String) -> Array[Int32] {
   @security.get_decimal_systems(input)
 }
 
@@ -82,7 +82,7 @@ pub fn has_mixed_numbers(input : String) -> Bool {
 }
 
 ///|
-pub fn get_identifier_status(cp : Int) -> @security.IdentifierStatus {
+pub fn get_identifier_status(cp : Int32) -> @security.IdentifierStatus {
   @security.get_identifier_status(cp)
 }
 
@@ -144,7 +144,7 @@ pub fn analyze_identifier(input : String) -> @security.DiagnosticReport {
 ///|
 pub fn validate_identifier(
   input : String,
-  profile? : @security.IdentifierProfile = @security.IdentifierProfile::default(),
+  profile~ : @security.IdentifierProfile = @security.IdentifierProfile::default(),
 ) -> Result[Unit, String] {
   @security.validate_identifier(input, profile~)
 }
@@ -152,7 +152,7 @@ pub fn validate_identifier(
 ///|
 pub fn is_allowed_identifier(
   input : String,
-  profile? : @security.IdentifierProfile = @security.IdentifierProfile::default(),
+  profile~ : @security.IdentifierProfile = @security.IdentifierProfile::default(),
 ) -> Bool {
   @security.is_allowed_identifier(input, profile~)
 }

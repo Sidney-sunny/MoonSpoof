@@ -63,7 +63,7 @@ pub(all) struct ScriptAnalysis {
 } derive(Debug)
 
 ///|
-pub fn get_script(cp : Int) -> Script {
+pub fn get_script(cp : Int32) -> Script {
   binary_search_script(cp)
 }
 

@@ -17,7 +17,7 @@ pub fn Registry::restore(
   key_policy : KeyPolicy,
   validate_syntax~ : (String) -> Result[Unit, String],
   application_policy_version~ : String,
-  profile? : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
+  profile~ : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
 ) -> Result[Registry, String] {
   let index = Registry::new(
     key_policy,
@@ -54,7 +54,7 @@ pub fn Registry::rebuild(
   key_policy : KeyPolicy,
   validate_syntax~ : (String) -> Result[Unit, String],
   application_policy_version~ : String,
-  profile? : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
+  profile~ : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
 ) -> Result[Registry, Array[Decision]] {
   let index = Registry::new(
     key_policy,

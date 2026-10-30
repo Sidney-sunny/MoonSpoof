@@ -113,22 +113,22 @@ pub fn spoof_normalize_nfd(input : String) -> String {
 }
 
 ///|
-pub fn spoof_unicode_script(cp : Int) -> String {
+pub fn spoof_unicode_script(cp : Int32) -> String {
   @moonspoof.get_unicode_script(cp)
 }
 
 ///|
-pub fn spoof_script_extensions(cp : Int) -> String {
+pub fn spoof_script_extensions(cp : Int32) -> String {
   @moonspoof.get_script_extensions(cp).to_json().stringify()
 }
 
 ///|
-pub fn spoof_identifier_status_allowed(cp : Int) -> Bool {
+pub fn spoof_identifier_status_allowed(cp : Int32) -> Bool {
   @moonspoof.get_identifier_status(cp) == @moonspoof.IdentifierStatus::Allowed
 }
 
 ///|
-pub fn spoof_decimal_zero(cp : Int) -> Int {
+pub fn spoof_decimal_zero(cp : Int32) -> Int32 {
   match @moonspoof.get_decimal_zero(cp) {
     Some(zero) => zero
     None => -1

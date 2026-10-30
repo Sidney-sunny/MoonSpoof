@@ -44,7 +44,7 @@ pub fn Registry::new(
   key_policy : KeyPolicy,
   validate_syntax~ : (String) -> Result[Unit, String],
   application_policy_version~ : String,
-  profile? : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
+  profile~ : @moonspoof.IdentifierProfile = @moonspoof.IdentifierProfile::permissive(),
 ) -> Registry {
   let unicode = @moonspoof.get_unicode_version()
   {

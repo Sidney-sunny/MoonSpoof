@@ -10,7 +10,7 @@ pub fn benchmark_single_comparison() -> Unit {
 }
 
 ///|
-pub fn generate_benchmark_dataset(count : Int) -> Array[String] {
+pub fn generate_benchmark_dataset(count : Int32) -> Array[String] {
   let list : Array[String] = []
   for i = 0; i < count; i = i + 1 {
     let key = i % 50
@@ -24,14 +24,14 @@ pub fn generate_benchmark_dataset(count : Int) -> Array[String] {
 }
 
 ///|
-pub fn benchmark_batch_1000() -> Int {
+pub fn benchmark_batch_1000() -> Int32 {
   let dataset = generate_benchmark_dataset(1000)
   let collisions = @moonspoof.find_confusable_groups(dataset)
   collisions.length()
 }
 
 ///|
-pub fn benchmark_batch_10000() -> Int {
+pub fn benchmark_batch_10000() -> Int32 {
   let dataset = generate_benchmark_dataset(10000)
   let collisions = @moonspoof.find_confusable_groups(dataset)
   collisions.length()

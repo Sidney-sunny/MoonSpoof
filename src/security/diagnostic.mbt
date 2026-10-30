@@ -23,7 +23,7 @@ pub impl Show for SecurityRiskLevel with fn output(self, logger) {
 ///|
 pub(all) struct CharDiagnostic {
   char : Char
-  codepoint : Int
+  codepoint : Int32
   codepoint_hex : String
   script : @script.Script
   is_invisible : Bool

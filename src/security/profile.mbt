@@ -4,7 +4,7 @@
 pub(all) struct IdentifierProfile {
   allow_mixed_script : Bool
   allow_invisible : Bool
-  max_length : Int
+  max_length : Int32
 } derive(Eq, Debug)
 
 ///|
@@ -20,7 +20,7 @@ pub fn IdentifierProfile::permissive() -> IdentifierProfile {
 ///|
 pub fn validate_identifier(
   input : String,
-  profile? : IdentifierProfile = IdentifierProfile::default(),
+  profile~ : IdentifierProfile = IdentifierProfile::default(),
 ) -> Result[Unit, String] {
   if input.length() == 0 {
     return Err("Identifier cannot be empty")
@@ -60,7 +60,7 @@ pub fn validate_identifier(
 ///|
 pub fn is_allowed_identifier(
   input : String,
-  profile? : IdentifierProfile = IdentifierProfile::default(),
+  profile~ : IdentifierProfile = IdentifierProfile::default(),
 ) -> Bool {
   match validate_identifier(input, profile~) {
     Ok(_) => true

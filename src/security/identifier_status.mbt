@@ -6,8 +6,8 @@ pub(all) enum IdentifierStatus {
 
 ///|
 pub(all) struct IdentifierStatusIssue {
-  codepoint_index : Int
-  codepoint : Int
+  codepoint_index : Int32
+  codepoint : Int32
   codepoint_hex : String
 } derive(Eq, Debug)
 
@@ -19,7 +19,7 @@ pub(all) enum IdentifierStatusError {
 
 ///|
 /// Exact Unicode property; this does not validate identifier grammar.
-pub fn get_identifier_status(cp : Int) -> IdentifierStatus {
+pub fn get_identifier_status(cp : Int32) -> IdentifierStatus {
   if @unicode.identifier_status_allowed(cp) {
     Allowed
   } else {

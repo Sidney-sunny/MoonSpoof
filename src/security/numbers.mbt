@@ -1,21 +1,21 @@
 ///|
 pub(all) struct MixedNumberIssue {
-  codepoint_index : Int
-  codepoint : Int
+  codepoint_index : Int32
+  codepoint : Int32
   codepoint_hex : String
-  first_decimal_zero : Int
-  decimal_zero : Int
+  first_decimal_zero : Int32
+  decimal_zero : Int32
 } derive(Eq, Debug)
 
 ///|
-pub fn get_decimal_zero(cp : Int) -> Int? {
+pub fn get_decimal_zero(cp : Int32) -> Int32? {
   @unicode.decimal_zero(cp)
 }
 
 ///|
 /// Sorted unique zero representatives of decimal systems in the raw input.
-pub fn get_decimal_systems(input : String) -> Array[Int] {
-  let zeros : Array[Int] = []
+pub fn get_decimal_systems(input : String) -> Array[Int32] {
+  let zeros : Array[Int32] = []
   for ch in input {
     if @unicode.decimal_zero(ch.to_int()) is Some(zero) {
       if !zeros.contains(zero) {
@@ -32,7 +32,7 @@ pub fn get_decimal_systems(input : String) -> Array[Int] {
 pub fn validate_number_systems(
   input : String,
 ) -> Result[Unit, MixedNumberIssue] {
-  let mut first : Int? = None
+  let mut first : Int32? = None
   let mut index = 0
   for ch in input {
     let cp = ch.to_int()

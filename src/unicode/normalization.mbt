@@ -1,7 +1,7 @@
 // Version-pinned canonical normalization shared by all compilation targets.
 
 ///|
-fn lookup_index(keys : FixedArray[Int], cp : Int) -> Int {
+fn lookup_index(keys : FixedArray[Int32], cp : Int32) -> Int32 {
   let mut low = 0
   let mut high = keys.length()
   while low < high {
@@ -20,7 +20,7 @@ fn lookup_index(keys : FixedArray[Int], cp : Int) -> Int {
 }
 
 ///|
-pub fn combining_class(cp : Int) -> Int {
+pub fn combining_class(cp : Int32) -> Int32 {
   let index = lookup_index(combining_keys, cp)
   if index < 0 {
     0
@@ -30,7 +30,7 @@ pub fn combining_class(cp : Int) -> Int {
 }
 
 ///|
-pub fn is_default_ignorable(cp : Int) -> Bool {
+pub fn is_default_ignorable(cp : Int32) -> Bool {
   let mut low = 0
   let mut high = ignorable_starts.length()
   while low < high {
@@ -45,7 +45,7 @@ pub fn is_default_ignorable(cp : Int) -> Bool {
 }
 
 ///|
-fn write_decomposed(buf : StringBuilder, cp : Int) -> Unit {
+fn write_decomposed(buf : StringBuilder, cp : Int32) -> Unit {
   if cp >= 0xAC00 && cp <= 0xD7A3 {
     let index = cp - 0xAC00
     buf.write_char((0x1100 + index / 588).unsafe_to_char())
@@ -65,9 +65,9 @@ fn write_decomposed(buf : StringBuilder, cp : Int) -> Unit {
 
 ///|
 // Stable counting buckets bound reordering cost even for long combining runs.
-fn flush_marks(buf : StringBuilder, marks : Array[(Int, Char)]) -> Unit {
+fn flush_marks(buf : StringBuilder, marks : Array[(Int32, Char)]) -> Unit {
   if marks.length() > 0 {
-    let buckets : Map[Int, Array[Char]] = Map([])
+    let buckets : Map[Int32, Array[Char]] = Map([])
     let mut minimum = 255
     let mut maximum = 1
     for pair in marks {
@@ -97,7 +97,7 @@ pub fn normalize_nfd(input : String) -> String {
     write_decomposed(decomposed, ch.to_int())
   }
   let buf = StringBuilder()
-  let marks : Array[(Int, Char)] = []
+  let marks : Array[(Int32, Char)] = []
   for ch in decomposed.to_string() {
     let cls = combining_class(ch.to_int())
     if cls == 0 {

@@ -1,7 +1,7 @@
 // Package confusable: UTS #39 Confusable Skeleton Generation & Comparison
 
 ///|
-pub fn map_confusable_codepoint(cp : Int) -> String {
+pub fn map_confusable_codepoint(cp : Int32) -> String {
   // Unicode Default_Ignorable_Code_Point, including bidi controls.
   if @unicode.is_default_ignorable(cp) {
     return ""

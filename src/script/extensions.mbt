@@ -6,12 +6,12 @@ pub(all) enum ScriptSet {
 } derive(Eq, Debug)
 
 ///|
-pub fn get_unicode_script(cp : Int) -> String {
+pub fn get_unicode_script(cp : Int32) -> String {
   @unicode.unicode_script(cp)
 }
 
 ///|
-pub fn get_script_extensions(cp : Int) -> Array[String] {
+pub fn get_script_extensions(cp : Int32) -> Array[String] {
   @unicode.script_extensions(cp)
 }
 

@@ -6,9 +6,9 @@ pub fn are_confusable(String, String) -> Bool
 
 pub fn are_confusable_ignore_case(String, String) -> Bool
 
-pub fn binary_search_confusable(Int) -> String?
+pub fn binary_search_confusable(Int32) -> String?
 
-pub fn map_confusable_codepoint(Int) -> String
+pub fn map_confusable_codepoint(Int32) -> String
 
 pub fn skeleton(String) -> String
 

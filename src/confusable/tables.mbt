@@ -2,7 +2,7 @@
 // Source: Unicode Technical Standard #39 (Version 16.0.0)
 
 ///|
-let confusable_keys : FixedArray[Int] = [
+let confusable_keys : FixedArray[Int32] = [
   0x0022, 0x0025, 0x0030, 0x0031, 0x0049, 0x0060, 0x006D, 0x007C, 0x00A0, 0x00A2,
   0x00A5, 0x00AF, 0x00B4, 0x00B5, 0x00B8, 0x00C6, 0x00C7, 0x00D0, 0x00D7, 0x00D8,
   0x00E6, 0x00E7, 0x00F0, 0x00F6, 0x00F8, 0x0110, 0x0111, 0x011A, 0x011B, 0x0126,
@@ -1462,7 +1462,7 @@ let confusable_values : FixedArray[String] = [
 ]
 
 ///|
-pub fn binary_search_confusable(cp : Int) -> String? {
+pub fn binary_search_confusable(cp : Int32) -> String? {
   let len = confusable_keys.length()
   let mut low = 0
   let mut high = len - 1

@@ -3,7 +3,7 @@
 ///|
 fn report_json(
   rep : @moonspoof.DiagnosticReport,
-  detailed? : Bool = false,
+  detailed~ : Bool = false,
 ) -> Json {
   let fields : Map[String, Json] = {
     "original": rep.original.to_json(),

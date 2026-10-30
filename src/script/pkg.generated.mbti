@@ -8,17 +8,17 @@ import {
 // Values
 pub fn analyze_scripts(String) -> ScriptAnalysis
 
-pub fn binary_search_script(Int) -> Script
+pub fn binary_search_script(Int32) -> Script
 
 pub fn contains_script(Array[Script], Script) -> Bool
 
 pub fn get_restriction_level(String) -> RestrictionLevel
 
-pub fn get_script(Int) -> Script
+pub fn get_script(Int32) -> Script
 
-pub fn get_script_extensions(Int) -> Array[String]
+pub fn get_script_extensions(Int32) -> Array[String]
 
-pub fn get_unicode_script(Int) -> String
+pub fn get_unicode_script(Int32) -> String
 
 pub fn has_mixed_triad_scripts(Array[Script]) -> Bool
 
