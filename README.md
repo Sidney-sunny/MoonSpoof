@@ -42,7 +42,7 @@ MoonSpoof implements selected UTS #39 mechanisms, not full conformance. Risk sig
 
 ## Development direction
 
-The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration now demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Complete script properties, resolved script sets, and an opt-in Identifier_Status filter are now available; opt-in [decimal mixing checks](docs/NUMBER_SYSTEMS.md) are implemented; [pinned ICU comparisons](docs/REFERENCE_COMPARISON.md) now document exact differences and mechanism coverage. The [roadmap](ROADMAP.md) records milestone evidence and the proposed v0.2.0 release gates; a repository example does not establish external application adoption.
+The project has passed preliminary review, as reported by the owner. A runnable account-registration reference integration demonstrates decisions, versioned snapshots, and index migration through the public MoonBit API. Complete script properties, resolved script sets, an opt-in Identifier_Status filter and [decimal mixing checks](docs/NUMBER_SYSTEMS.md) are available; [pinned ICU comparisons](docs/REFERENCE_COMPARISON.md) document exact differences and mechanism coverage. The [roadmap](ROADMAP.md) records completed 0.2.0 release gates; a repository example does not establish external application adoption.
 
 ## Run the registration integration
 
@@ -71,7 +71,7 @@ moon run cmd/main
 
 ## Quickstart
 
-Acceptance audit: [English](docs/ACCEPTANCE.md) / [中文](docs/ACCEPTANCE_zh.md). Development and CI use `moonc 0.10.18+6c83a7f62`; the registry currently provides 0.1.0. New source/notice changes require a new registry version. See [third-party notices](THIRD_PARTY_NOTICES.md).
+Acceptance audit: [English](docs/ACCEPTANCE.md) / [中文](docs/ACCEPTANCE_zh.md). Development and CI use `moonc 0.10.18+6c83a7f62`; the registry provides [0.2.0](https://mooncakes.io/modules/Sidney-sunny/moonspoof). [GitHub Release](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0) includes verified source, engine and site archives. See [third-party notices](THIRD_PARTY_NOTICES.md).
 
 ### 1. Add Dependency
 

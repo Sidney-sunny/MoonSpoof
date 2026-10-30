@@ -11,7 +11,7 @@
 
 ## 引擎能力
 
-[验收检查](ACCEPTANCE_zh.md)记录九项证据及剩余分发动作；开发与 CI 使用 `moonc 0.10.18+6c83a7f62`，注册表当前为 0.1.0。新增源码/声明需要发布新版本。参见[第三方声明](THIRD_PARTY_NOTICES_zh.md)。
+[验收检查](ACCEPTANCE_zh.md)记录九项证据；开发与 CI 使用 `moonc 0.10.18+6c83a7f62`，注册表已发布 [0.2.0](https://mooncakes.io/modules/Sidney-sunny/moonspoof)，[GitHub Release](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0)提供已验证的源码、引擎及站点归档。参见[第三方声明](THIRD_PARTY_NOTICES_zh.md)。
 
 | 混淆键 | 字符证据 | 批量分组 |
 | --- | --- | --- |
@@ -23,7 +23,7 @@
 
 ## 开发方向
 
-根据负责人反馈，项目已通过初审。可运行的账号注册参考接入已经通过 MoonBit 公开 API 展示注册决策、版本化快照和索引迁移；完整字系属性、解析字系集合及可选 Identifier_Status 过滤已提供；可选[十进制混用检查](NUMBER_SYSTEMS_zh.md)已实现，[固定 ICU 对照](REFERENCE_COMPARISON_zh.md)已记录精确差异及机制覆盖。[路线图](ROADMAP_zh.md)记录里程碑证据与拟议 v0.2.0 发布门槛，仓库示例不代表已有外部应用采用。
+根据负责人反馈，项目已通过初审。可运行的账号注册参考接入通过 MoonBit 公开 API 展示注册决策、版本化快照和索引迁移；完整字系属性、解析字系集合、可选 Identifier_Status 过滤及[十进制混用检查](NUMBER_SYSTEMS_zh.md)已提供；[固定 ICU 对照](REFERENCE_COMPARISON_zh.md)记录精确差异及机制覆盖。[路线图](ROADMAP_zh.md)记录已完成的 0.2.0 发布门槛，仓库示例不代表已有外部应用采用。
 
 ## 运行注册接入
 

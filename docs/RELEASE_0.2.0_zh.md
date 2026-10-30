@@ -2,7 +2,7 @@
 
 [English](RELEASE_0.2.0.md)
 
-发布目标日期：2026-10-30。工具链：`moonc 0.10.18+6c83a7f62`。数据：Unicode 16.0.0，固定校验值的九份官方文件。发布状态见[验收报告](ACCEPTANCE_zh.md)；本文描述已复核的 0.2.0 内容。
+发布于 2026-10-30。工具链：`moonc 0.10.18+6c83a7f62`。数据：Unicode 16.0.0，固定校验值的九份官方文件。Mooncakes 与 GitHub 发布验证见[验收报告](ACCEPTANCE_zh.md)。
 
 ## 本版交付
 

@@ -2,7 +2,7 @@
 
 [Chinese](RELEASE_0.2.0_zh.md)
 
-Release target: 2026-10-30. Toolchain: `moonc 0.10.18+6c83a7f62`. Data: Unicode 16.0.0, nine checksum-pinned official files. Publication status is recorded in the [acceptance report](ACCEPTANCE.md); these notes describe the reviewed 0.2.0 payload.
+Released 2026-10-30. Toolchain: `moonc 0.10.18+6c83a7f62`. Data: Unicode 16.0.0, nine checksum-pinned official files. Mooncakes and GitHub release verification is recorded in the [acceptance report](ACCEPTANCE.md).
 
 ## What this release delivers
 

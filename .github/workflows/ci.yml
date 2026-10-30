@@ -93,4 +93,6 @@ jobs:
       - name: Verify official Unicode vectors and mappings
         run: pnpm --dir playground run verify:unicode
       - name: Verify public Mooncakes installation with a clean consumer
-        run: python3 tools/verify-registry-consumer.py
+        run: |
+          python3 tools/verify-registry-consumer.py --version 0.1.0
+          python3 tools/verify-registry-consumer.py --version 0.2.0

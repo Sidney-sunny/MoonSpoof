@@ -2,7 +2,7 @@
 
 [Chinese](docs/ROADMAP_zh.md)
 
-Planning updated: 2026-10-30. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption. The [nine-requirement acceptance audit](docs/ACCEPTANCE.md) records the 0.10.18 checks and remaining registry-notice update.
+Planning updated: 2026-10-30. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption. The [acceptance audit](docs/ACCEPTANCE.md) records the completed 0.10.18 and 0.2.0 distribution checks.
 
 ## Goal
 
@@ -10,7 +10,7 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 ## Current baseline
 
-- Released: [v0.1.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.1.0), with MoonBit APIs, a JavaScript engine artifact, and a bilingual showcase.
+- Released: [v0.2.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0), published to Mooncakes with verified source/engine/site artifacts and complete notices.
 - Implemented: Unicode 16.0.0 NFD, full default case folding, application skeletons, character diagnostics, configurable policies, and batch collision grouping.
 - Existing verification: 19,965 official NFD vectors / 99,825 assertions, confusable and case-fold mappings, key-stability checks, and 4,456,448 script/status/decimal property assertions across the full code space. See [scope and evidence](docs/SPECIFICATION.md).
 - Reproducibility: nine checksum-pinned Unicode sources, validated atomic downloads, direct verification against the official normalization source, and a pinned MoonBit compiler.
@@ -18,14 +18,14 @@ Make MoonSpoof a usable MoonBit library for detecting confusable account and pac
 
 ## Milestone order
 
-M1 is implemented as a reference integration; M2/M3 are complete within the explicit scopes below. M4 remains incomplete. Estimates for remaining work are focused developer days, not calendar deadlines, and have not yet been revised from the initial plan. No competition deadline has been supplied. Version numbers are proposals until their release gates pass.
+M1–M4 are complete within the explicit scopes below for 0.2.0. No external application adoption is claimed. The original estimates are retained as planning history, not calendar deadlines. No competition deadline has been supplied.
 
 | Order | Deliverable | Completion evidence | Estimate |
 | --- | --- | --- | --- |
 | M1 — complete | Runnable account-registration example | [Guide](examples/registration/README.md), executable and acceptance tests | Delivered 2026-10-18 |
 | M2 — complete within stated scope | Script sets and an explicit identifier-status filter | [API contracts](docs/UNICODE_PROPERTIES.md), [status regressions](moonspoof_status_test.mbt), [migration tests](examples/registration/status_test.mbt) | Delivered 2026-10-19 |
 | M3 — complete within stated scope | Mixed-number checks and reference comparisons | [Pinned ICU comparison and coverage matrix](docs/REFERENCE_COMPARISON.md), adversarial regressions | Delivered 2026-10-22 |
-| M4 | Integration review and proposed v0.2.0 release | Completed gates, migration notes, verified release artifacts | 2–3 days |
+| M4 — complete | Integration review and v0.2.0 release | [Release](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0), [acceptance evidence](docs/ACCEPTANCE.md), registry and artifact verification | Delivered 2026-10-30 |
 
 ## M1 — Complete one integration
 
@@ -37,7 +37,7 @@ Acceptance criteria:
 - [x] Accepted names, exact duplicates, collisions, and policy failures return explicit decisions and evidence: [store](examples/registration/registry.mbt).
 - [x] Public-API cases cover `paypal` / `p\u0430ypal`, multilingual names, default ignorables, the `I` / `l` policy difference, and independent syntax/profile decisions: [registration tests](examples/registration/registry_test.mbt).
 - [x] Stored keys carry versions and policy metadata; restore validates keys and rebuild rechecks original names without publishing a partial index: [migration implementation](examples/registration/snapshot.mbt) and [tests](examples/registration/snapshot_test.mbt). The guide documents production atomicity requirements.
-- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Nineteen acceptance tests exercise the public API integration, including optional status/numeric filtering and migration.
+- [x] [English](examples/registration/README.md) and [Chinese](examples/registration/README_zh.md) instructions identify imports, call sites, expected decisions, and limitations. Twenty acceptance tests exercise the public API integration, including optional status/numeric filtering and migration.
 
 ## M2 — Improve script and identifier decisions
 
@@ -69,22 +69,19 @@ Acceptance criteria:
 
 ## M4 — Review integration and release
 
-The proposed v0.2.0 release requires M1–M3 and the gates below. If scope changes, revise this plan and release notes before assigning the version.
+The 0.2.0 release completed M1–M3 and the gates below. Future releases must review their scope and compatibility separately.
 
 Acceptance criteria:
 
 - [x] Ran the M1 integration and 97 tests from a clean tracked-source export of `3051c64` under 0.10.18; the [acceptance audit](docs/ACCEPTANCE.md) records the result and registry-consumer reproduction. Adoption remains reference integration only; no external application call site has been documented.
-- [ ] Pass MoonBit tests for WASM, JavaScript, and native in CI; pass generator tests, official Unicode verification, browser ABI/worker checks, and the production build. Run `moon info` and `moon fmt`, reviewing interface and generated-data changes.
+- [x] [Release-commit CI](https://github.com/Sidney-sunny/MoonSpoof/actions/runs/41044994373) passed WASM/JS/native check/build/test, generator, official Unicode, ABI/worker, production build and ICU gates. Info/fmt and regeneration reproduce the tables; the reviewed public interface adds library version identity.
 - [x] Published [0.2.0 key/batch measurements](docs/BENCHMARKS.md) with fixed multilingual/unique-name corpora, hashes, all 40 timed rounds, compiler/runtime and hardware. Measurements cover both key policies and make no competitor performance claim.
-- [ ] Review API/data compatibility, index rebuilding, bilingual installation instructions, changelogs, and scope. Verify the MoonBit package registry publication state separately from GitHub release assets before advertising either installation path.
-- [ ] Verify commit, tag, and authenticated push identities as `Sidney-sunny`; publish the reviewed tag, release notes, artifacts, and checksums after all gates pass.
+- [x] Reviewed [compatibility and rebuilding](docs/RELEASE_0.2.0.md), bilingual installation, logs and scope. Public Mooncakes 0.2.0 consumers passed WASM/JS and license checks; downloaded GitHub assets independently passed manifest/checksum verification.
+- [x] Published [v0.2.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0) from `a30e36f969c221efc443bc9f1788f021dd7f6891`, with verified Sidney commit/tag/push/release identities, notes, three archives, manifest and SHA256SUMS.
 
-## Next two implementation rounds
+## After 0.2.0
 
-1. **Integration review:** start M4 from a fresh checkout, run the registration integration and review API/data compatibility, index rebuilding and bilingual installation guidance. Keep adoption status explicit.
-2. **Measurements and release review:** publish reproducible key/batch measurements and verify package-registry state, release notes and artifact gates before assigning v0.2.0.
-
-These describe future implementation work. M1–M3 evidence does not complete M4 or establish external application adoption.
+M1–M4 are complete within their stated scope. Future work should begin with an actual integration use case and its regression corpus. Canonical closure and bidi skeletons remain deferred; this release does not establish external adoption or full standard conformance.
 
 ## Scope control
 
