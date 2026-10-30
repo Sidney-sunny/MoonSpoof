@@ -2,7 +2,7 @@
 
 [Chinese](docs/ROADMAP_zh.md)
 
-Planning updated: 2026-10-22. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption.
+Planning updated: 2026-10-30. The project has passed preliminary review, as reported by the owner. This is a development plan, not evidence of final acceptance or production adoption. The [nine-requirement acceptance audit](docs/ACCEPTANCE.md) records the 0.10.18 checks and remaining registry-notice update.
 
 ## Goal
 
@@ -73,7 +73,7 @@ The proposed v0.2.0 release requires M1–M3 and the gates below. If scope chang
 
 Acceptance criteria:
 
-- [ ] Run the M1 integration from a fresh checkout and document the result. If an external or owner-operated application is available, record its actual call site and feedback with permission; otherwise explicitly retain “reference integration only” as the adoption status.
+- [x] Ran the M1 integration and 97 tests from a clean tracked-source export of `3051c64` under 0.10.18; the [acceptance audit](docs/ACCEPTANCE.md) records the result and registry-consumer reproduction. Adoption remains reference integration only; no external application call site has been documented.
 - [ ] Pass MoonBit tests for WASM, JavaScript, and native in CI; pass generator tests, official Unicode verification, browser ABI/worker checks, and the production build. Run `moon info` and `moon fmt`, reviewing interface and generated-data changes.
 - [ ] Publish reproducible measurements for key generation and batch grouping with corpus, input size, runtime, toolchain, and hardware details. Make competitor performance claims only when equivalent controlled measurements exist.
 - [ ] Review API/data compatibility, index rebuilding, bilingual installation instructions, changelogs, and scope. Verify the MoonBit package registry publication state separately from GitHub release assets before advertising either installation path.

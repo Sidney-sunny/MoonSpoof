@@ -26,7 +26,9 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
       - name: Test reference pinning and difference gates
-        run: node --test tools/icu-reference/reference.test.mjs
+        run: |
+          python3 tools/verify-toolchain.py
+          node --test tools/icu-reference/reference.test.mjs
       - name: Build engine and compare pinned ICU corpus
         run: |
           node tools/build-engine.mjs
@@ -46,8 +48,12 @@ jobs:
           curl -fsSL https://cli.moonbitlang.com/install/unix.sh | bash
           echo "$HOME/.moon/bin" >> "$GITHUB_PATH"
           "$HOME/.moon/bin/moon" version --all
-      - name: Test compiler target
-        run: moon test --target ${{ matrix.target }}
+      - name: Verify compiler, check, build and test target
+        run: |
+          python3 tools/verify-toolchain.py
+          moon check --target ${{ matrix.target }}
+          moon build --target ${{ matrix.target }}
+          moon test --target ${{ matrix.target }}
       - name: Run registration reference integration
         run: moon run cmd/registration --target ${{ matrix.target }}
 
@@ -71,7 +77,9 @@ jobs:
       - name: Install locked frontend dependencies
         run: pnpm --dir playground install --frozen-lockfile
       - name: Test Unicode source manifest validation
-        run: python3 -m unittest discover -s tools/data-generator -p 'test_*.py'
+        run: |
+          python3 tools/verify-toolchain.py
+          python3 -m unittest discover -s tools/data-generator -p 'test_*.py'
       - name: Regenerate pinned Unicode tables
         run: python3 tools/data-generator/generate.py
       - name: Check generated interfaces and formatting
@@ -83,3 +91,5 @@ jobs:
         run: pnpm --dir playground run check
       - name: Verify official Unicode vectors and mappings
         run: pnpm --dir playground run verify:unicode
+      - name: Verify public Mooncakes installation with a clean consumer
+        run: python3 tools/verify-registry-consumer.py

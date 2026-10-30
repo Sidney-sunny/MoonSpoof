@@ -20,6 +20,8 @@ Unicode Spoof and Homoglyph Detection for MoonBit, implementing selected Unicode
 
 ## Usage
 
+Install with `moon add Sidney-sunny/moonspoof` and import `"Sidney-sunny/moonspoof" @moonspoof` in your package. Source development uses the compiler pinned in `.moon-version` (0.10.18). See [third-party notices](THIRD_PARTY_NOTICES.md) when redistributing generated data or engine artifacts.
+
 ```moonbit nocheck
 ///|
 let authentic = "paypal"

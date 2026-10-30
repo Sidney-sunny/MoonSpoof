@@ -71,6 +71,8 @@ moon run cmd/main
 
 ## Quickstart
 
+Acceptance audit: [English](docs/ACCEPTANCE.md) / [中文](docs/ACCEPTANCE_zh.md). Development and CI use `moonc 0.10.18+6c83a7f62`; the registry currently provides 0.1.0. New source/notice changes require a new registry version. See [third-party notices](THIRD_PARTY_NOTICES.md).
+
 ### 1. Add Dependency
 
 Add the module with `moon add Sidney-sunny/moonspoof`, then import it in your package's `moon.pkg`:

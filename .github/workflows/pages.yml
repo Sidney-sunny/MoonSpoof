@@ -35,6 +35,7 @@ jobs:
         run: pnpm --dir playground install --frozen-lockfile
       - name: Verify engine and build showcase
         run: |
+          python3 tools/verify-toolchain.py
           moon test --target wasm
           moon test --target js
           pnpm --dir playground run check

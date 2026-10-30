@@ -6,6 +6,7 @@
 
 ### Added
 
+- Acceptance audit on MoonBit 0.10.18, exact compiler checks in CI, explicit per-target check/build/test steps, and clean public-registry consumer verification. Retained Unicode/Manrope licenses, generated data attribution and distributed showcase license copies; existing registry 0.1.0 still requires a new release to carry these notices.
 - Optional checksum-pinned ICU4J 76.1 / Unicode 16 reference harness, a 42-case corpus with exact baselines for all 12 observed field differences, a bilingual mechanism coverage matrix and a dedicated CI job. Added long combining, supplementary/control, stable-key and pair/batch regressions; reference tests reject unreviewed or stale differences and corrupt artifacts.
 - Opt-in decimal mixing APIs using all 76 Unicode 16.0.0 Nd families, with typed first-conflict evidence and versioned registration migration. Full-code-space source verification now checks 4,456,448 property assertions; existing profiles and keys remain unchanged.
 - Explicit Identifier_Status lookup and optional literal-codepoint filtering with typed first-failure evidence. Registration examples demonstrate opting in with a new application policy version and reviewing newly rejected accounts during migration. Canonical-equivalence closure and full General Security Profile conformance are not claimed.
