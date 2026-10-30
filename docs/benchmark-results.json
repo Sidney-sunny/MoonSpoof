@@ -1,66 +1,445 @@
 {
-  "date": "2026-10-11T05:15:20.070Z",
+  "schemaVersion": 2,
+  "date": "2026-10-30T10:54:35.894Z",
   "environment": {
-    "compiler": "moon 0.1.20260904 (94521db 2026-09-04)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "moonc": "v0.10.18+6c83a7f62 (2026-10-28)",
+    "moon": "moon 0.1.20261028 (e1e1f15 2026-10-28)\n\nFeature flags enabled: rr_moon_mod,rr_moon_pkg",
+    "pinnedCompiler": "0.10.18+6c83a7f62",
     "node": "v22.22.1",
+    "nodeOptions": "",
+    "nodeArguments": [],
     "os": "win32",
+    "osRelease": "10.0.26340",
     "architecture": "x64",
-    "cpu": "Intel(R) Core(TM) i7-14650HX"
+    "cpu": "Intel(R) Core(TM) i7-14650HX",
+    "logicalCpus": 24,
+    "availableParallelism": 24,
+    "totalMemoryBytes": 16790925312
   },
-  "target": "MoonBit release JavaScript JSON ABI; worker transport and DOM excluded",
-  "results": [
-    {
-      "name": "spoof_compare(paypal, pаypal)",
-      "iterations": 10000,
-      "unitsPerOperation": 1,
-      "rounds": 5,
-      "medianMilliseconds": 256.18,
-      "microsecondsPerOperation": 25.62,
-      "unitsPerSecond": 39035,
-      "rangeMilliseconds": [
-        236.35,
-        270.45
+  "provenance": {
+    "sourceRevision": "c9e43b44709b0e6083eb8fa25cd21e4b711df066",
+    "sourceDiffersFromRevision": true,
+    "moduleVersion": "0.2.0",
+    "sourceFileCount": 56,
+    "untrackedSourceFiles": [
+      "moonspoof_version_test.mbt",
+      "version.mbt"
+    ],
+    "sourceSha256": "bea33b4f6c1d23e0218094080cfd0a9e3d094fbcea1da20e887955ac6049b72d",
+    "sourceHashFormat": "SHA256 of sorted tracked and untracked non-ignored MoonBit/package paths: path + NUL + SHA256(file bytes) + LF",
+    "engineSha256": "fd049c89674d87856bd81a0e63a342a601ea4136cac9dd593699b709949aaf69",
+    "benchmarkScriptSha256": "2b0f9a10788cdd199d658bb65fbe261e67f3190ec2d12e064bcaffb9c166df27",
+    "fixtureScriptSha256": "402df043b6225bffb1c41db218af64d812c92440f254778cd8ecd7ff7d4afe2b",
+    "unicodeVersion": "16.0.0",
+    "unicodeManifestSha256": "e394094dbf79f148dead4a31df5bcb4dabac9d0c359dd30009156303b53e5b01"
+  },
+  "method": {
+    "target": "MoonBit release JavaScript; direct string key API and JSON batch/report ABI",
+    "timing": "Monotonic performance.now; five sequential rounds per case; median round duration",
+    "keyGeneration": "32 fixed multilingual identifiers per iteration; direct key output length consumed; no report or JSON creation",
+    "batch": "Unique deterministic input names; line parsing, key generation, hash grouping, JSON serialization and JSON.parse included",
+    "reports": "Comparison and diagnostics include report construction and JSON serialization; JSON.parse excluded",
+    "excluded": [
+      "engine build",
+      "fixture construction",
+      "correctness preflight",
+      "worker transport",
+      "DOM/rendering",
+      "network/disk I/O"
+    ],
+    "limitations": "Single host and process; GC and scheduling included; no cross-runtime ranking, latency guarantee or confidence interval"
+  },
+  "corpora": {
+    "keys": {
+      "identifiers": 32,
+      "utf8Bytes": 339,
+      "utf16Units": 183,
+      "codepoints": 179,
+      "codepointsPerIdentifier": {
+        "minimum": 2,
+        "maximum": 17
+      },
+      "serialization": "UTF-8 names joined by LF with no trailing LF",
+      "sha256": "58ad4bbbe31d45bd32a744f6c3dcb7dabaf57fe1592da4e851a013029497f8d9",
+      "names": [
+        "alice",
+        "PAYPAL",
+        "paypal",
+        "pаypal",
+        "aα",
+        "admin​",
+        "user_name_123",
+        "Straße",
+        "STRASSE",
+        "équipe",
+        "équipe",
+        "Ångstrom",
+        "Ångstrom",
+        "Σίγμα",
+        "σς",
+        "Москва",
+        "中文",
+        "日本語ユーザー",
+        "한글",
+        "नमस्ते",
+        "ภาษาไทย",
+        "שלום",
+        "مرحبا",
+        "𞤀𞤢",
+        "𝐀dmin",
+        "ＡＢＣ１２３",
+        "user1١",
+        "𠀀中",
+        "ạ́",
+        "ạ́",
+        "ﬃle",
+        "ạ̣̣̣̣̣̣̣́́́́́́́́"
       ]
     },
+    "comparison": {
+      "identifiers": 2,
+      "utf8Bytes": 14,
+      "utf16Units": 12,
+      "codepoints": 12,
+      "codepointsPerIdentifier": {
+        "minimum": 6,
+        "maximum": 6
+      },
+      "serialization": "UTF-8 names joined by LF with no trailing LF",
+      "sha256": "07515fc0ff4d05c7f6519fd4b70befbd12cd5b5b700c17ff495869c2daf1d7b1",
+      "names": [
+        "paypal",
+        "pаypal"
+      ]
+    },
+    "diagnostics": {
+      "identifiers": 1,
+      "utf8Bytes": 18,
+      "utf16Units": 15,
+      "codepoints": 15,
+      "codepointsPerIdentifier": {
+        "minimum": 15,
+        "maximum": 15
+      },
+      "serialization": "UTF-8 names joined by LF with no trailing LF",
+      "sha256": "0936b47f63c32b99e6217196ca8ff78d933acd6ff17c6233ba7b7b15683554f0",
+      "names": [
+        "pаypal_service​"
+      ]
+    },
+    "batches": [
+      {
+        "identifiers": 1000,
+        "utf8Bytes": 9498,
+        "utf16Units": 8199,
+        "codepoints": 8199,
+        "codepointsPerIdentifier": {
+          "minimum": 6,
+          "maximum": 9
+        },
+        "serialization": "UTF-8 names joined by LF with no trailing LF",
+        "sha256": "bb5f4d417cf99a5e1d08933528ee39e1a4f5a17b5f4ae23b534fba3b86c0dd67",
+        "exactDuplicates": 0,
+        "policies": {
+          "sensitive": {
+            "collisionGroups": 200,
+            "collidingNames": 400,
+            "outputSha256": "e074f530ab2ccad39eaf07b512b21a7792e83014c27e972f824307b8bcf62517"
+          },
+          "folded": {
+            "collisionGroups": 300,
+            "collidingNames": 900,
+            "outputSha256": "dc4e08afe34949d5f937b9e9ce3777c07b14de7201925c0503b222eb01ab7269"
+          }
+        }
+      },
+      {
+        "identifiers": 10000,
+        "utf8Bytes": 104898,
+        "utf16Units": 91899,
+        "codepoints": 91899,
+        "codepointsPerIdentifier": {
+          "minimum": 6,
+          "maximum": 10
+        },
+        "serialization": "UTF-8 names joined by LF with no trailing LF",
+        "sha256": "77780123a220686894984fd8103cb95413a56e0cb916123d4d1d71316f95c005",
+        "exactDuplicates": 0,
+        "policies": {
+          "sensitive": {
+            "collisionGroups": 2000,
+            "collidingNames": 4000,
+            "outputSha256": "b6a04327760579f0a5b85a30de8514b94b15c8967ec8c4eb320add8f96aa2e19"
+          },
+          "folded": {
+            "collisionGroups": 3000,
+            "collidingNames": 9000,
+            "outputSha256": "85c0c7ed827634bb117373b75f61ac642104a4cc5927b8af6a3127deacb62080"
+          }
+        }
+      }
+    ],
+    "batchGenerator": "tools/benchmark-fixtures.mjs: ten templates per numbered cluster; no exact duplicate names"
+  },
+  "results": [
     {
-      "name": "spoof_batch_scan(1000)",
-      "iterations": 20,
-      "unitsPerOperation": 1000,
+      "name": "key_generation_sensitive",
+      "iterations": 1000,
+      "unitsPerOperation": 32,
+      "unit": "identifier",
+      "warmupIterations": 1000,
       "rounds": 5,
-      "medianMilliseconds": 61.76,
-      "microsecondsPerOperation": 3088.11,
-      "unitsPerSecond": 323823,
-      "rangeMilliseconds": [
-        60.67,
-        65.03
+      "unitsPerRound": 32000,
+      "roundMilliseconds": [
+        71.5603,
+        68.5589,
+        72.9498,
+        67.3269,
+        67.4891
       ],
-      "collisionGroups": 40
+      "medianMilliseconds": 68.5589,
+      "microsecondsPerOperation": 68.5589,
+      "microsecondsPerUnit": 2.1425,
+      "unitsPerSecond": 466752,
+      "rangeMilliseconds": [
+        67.3269,
+        72.9498
+      ],
+      "consumedResults": [
+        197000,
+        197000,
+        197000,
+        197000,
+        197000
+      ],
+      "keyPolicy": "sensitive",
+      "outputSha256": "46b80f025171f10faff01aaff124e808fde8bdcdb48937ea0e6767d86b9ab225"
     },
     {
-      "name": "spoof_batch_scan(10000)",
-      "iterations": 20,
-      "unitsPerOperation": 10000,
+      "name": "key_generation_folded",
+      "iterations": 1000,
+      "unitsPerOperation": 32,
+      "unit": "identifier",
+      "warmupIterations": 1000,
       "rounds": 5,
-      "medianMilliseconds": 701.29,
-      "microsecondsPerOperation": 35064.28,
-      "unitsPerSecond": 285191,
-      "rangeMilliseconds": [
-        674.92,
-        753.55
+      "unitsPerRound": 32000,
+      "roundMilliseconds": [
+        117.8736,
+        116.4327,
+        122.4928,
+        127.2532,
+        125.7931
       ],
+      "medianMilliseconds": 122.4928,
+      "microsecondsPerOperation": 122.4928,
+      "microsecondsPerUnit": 3.8279,
+      "unitsPerSecond": 261240,
+      "rangeMilliseconds": [
+        116.4327,
+        127.2532
+      ],
+      "consumedResults": [
+        198000,
+        198000,
+        198000,
+        198000,
+        198000
+      ],
+      "keyPolicy": "folded",
+      "outputSha256": "3fe51762e00f3ee9effcc800bfed9f9a8d58048a216fcb9794d41aa17a4b60af"
+    },
+    {
+      "name": "batch_sensitive_1000",
+      "iterations": 20,
+      "unitsPerOperation": 1000,
+      "unit": "identifier",
+      "warmupIterations": 20,
+      "rounds": 5,
+      "unitsPerRound": 20000,
+      "roundMilliseconds": [
+        55.9564,
+        59.6042,
+        56.7753,
+        55.9823,
+        58.2977
+      ],
+      "medianMilliseconds": 56.7753,
+      "microsecondsPerOperation": 2838.765,
+      "microsecondsPerUnit": 2.8388,
+      "unitsPerSecond": 352266,
+      "rangeMilliseconds": [
+        55.9564,
+        59.6042
+      ],
+      "consumedResults": [
+        24000,
+        24000,
+        24000,
+        24000,
+        24000
+      ],
+      "keyPolicy": "sensitive",
       "collisionGroups": 200
     },
     {
-      "name": "spoof_analyze(pаypal_service+ZWSP)",
+      "name": "batch_folded_1000",
+      "iterations": 20,
+      "unitsPerOperation": 1000,
+      "unit": "identifier",
+      "warmupIterations": 20,
+      "rounds": 5,
+      "unitsPerRound": 20000,
+      "roundMilliseconds": [
+        96.1546,
+        106.6786,
+        92.5064,
+        92.2703,
+        93.553
+      ],
+      "medianMilliseconds": 93.553,
+      "microsecondsPerOperation": 4677.65,
+      "microsecondsPerUnit": 4.6776,
+      "unitsPerSecond": 213783,
+      "rangeMilliseconds": [
+        92.2703,
+        106.6786
+      ],
+      "consumedResults": [
+        26000,
+        26000,
+        26000,
+        26000,
+        26000
+      ],
+      "keyPolicy": "folded",
+      "collisionGroups": 300
+    },
+    {
+      "name": "batch_sensitive_10000",
+      "iterations": 20,
+      "unitsPerOperation": 10000,
+      "unit": "identifier",
+      "warmupIterations": 20,
+      "rounds": 5,
+      "unitsPerRound": 200000,
+      "roundMilliseconds": [
+        702.953,
+        726.6645,
+        700.1596,
+        708.1302,
+        701.1552
+      ],
+      "medianMilliseconds": 702.953,
+      "microsecondsPerOperation": 35147.65,
+      "microsecondsPerUnit": 3.5148,
+      "unitsPerSecond": 284514,
+      "rangeMilliseconds": [
+        700.1596,
+        726.6645
+      ],
+      "consumedResults": [
+        240000,
+        240000,
+        240000,
+        240000,
+        240000
+      ],
+      "keyPolicy": "sensitive",
+      "collisionGroups": 2000
+    },
+    {
+      "name": "batch_folded_10000",
+      "iterations": 20,
+      "unitsPerOperation": 10000,
+      "unit": "identifier",
+      "warmupIterations": 20,
+      "rounds": 5,
+      "unitsPerRound": 200000,
+      "roundMilliseconds": [
+        1157.8069,
+        1186.6791,
+        1148.8396,
+        1142.3565,
+        1131.9794
+      ],
+      "medianMilliseconds": 1148.8396,
+      "microsecondsPerOperation": 57441.98,
+      "microsecondsPerUnit": 5.7442,
+      "unitsPerSecond": 174089,
+      "rangeMilliseconds": [
+        1131.9794,
+        1186.6791
+      ],
+      "consumedResults": [
+        260000,
+        260000,
+        260000,
+        260000,
+        260000
+      ],
+      "keyPolicy": "folded",
+      "collisionGroups": 3000
+    },
+    {
+      "name": "compare_paypal_confusable",
       "iterations": 10000,
       "unitsPerOperation": 1,
+      "unit": "call",
+      "warmupIterations": 1000,
       "rounds": 5,
-      "medianMilliseconds": 526.76,
-      "microsecondsPerOperation": 52.68,
-      "unitsPerSecond": 18984,
+      "unitsPerRound": 10000,
+      "roundMilliseconds": [
+        214.62,
+        203.2152,
+        204.5253,
+        202.0451,
+        204.5403
+      ],
+      "medianMilliseconds": 204.5253,
+      "microsecondsPerOperation": 20.4525,
+      "microsecondsPerUnit": 20.4525,
+      "unitsPerSecond": 48894,
       "rangeMilliseconds": [
-        472.82,
-        569.66
+        202.0451,
+        214.62
+      ],
+      "consumedResults": [
+        5600000,
+        5600000,
+        5600000,
+        5600000,
+        5600000
+      ]
+    },
+    {
+      "name": "analyze_cyrillic_zwsp",
+      "iterations": 10000,
+      "unitsPerOperation": 1,
+      "unit": "call",
+      "warmupIterations": 1000,
+      "rounds": 5,
+      "unitsPerRound": 10000,
+      "roundMilliseconds": [
+        442.4327,
+        432.057,
+        412.3105,
+        414.0122,
+        414.3281
+      ],
+      "medianMilliseconds": 414.3281,
+      "microsecondsPerOperation": 41.4328,
+      "microsecondsPerUnit": 41.4328,
+      "unitsPerSecond": 24135,
+      "rangeMilliseconds": [
+        412.3105,
+        442.4327
+      ],
+      "consumedResults": [
+        25380000,
+        25380000,
+        25380000,
+        25380000,
+        25380000
       ]
     }
   ]

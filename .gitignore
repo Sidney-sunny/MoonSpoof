@@ -25,6 +25,7 @@ node_modules/
 playground/node_modules/
 playground/dist/
 playground/src/generated/
+playground/public/build-info.json
 # Legacy derived vector cache; verification now reads the official text directly.
 tools/data-generator/normalization-vectors.json
 .impeccable/review/

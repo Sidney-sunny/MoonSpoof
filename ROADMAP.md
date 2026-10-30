@@ -75,7 +75,7 @@ Acceptance criteria:
 
 - [x] Ran the M1 integration and 97 tests from a clean tracked-source export of `3051c64` under 0.10.18; the [acceptance audit](docs/ACCEPTANCE.md) records the result and registry-consumer reproduction. Adoption remains reference integration only; no external application call site has been documented.
 - [ ] Pass MoonBit tests for WASM, JavaScript, and native in CI; pass generator tests, official Unicode verification, browser ABI/worker checks, and the production build. Run `moon info` and `moon fmt`, reviewing interface and generated-data changes.
-- [ ] Publish reproducible measurements for key generation and batch grouping with corpus, input size, runtime, toolchain, and hardware details. Make competitor performance claims only when equivalent controlled measurements exist.
+- [x] Published [0.2.0 key/batch measurements](docs/BENCHMARKS.md) with fixed multilingual/unique-name corpora, hashes, all 40 timed rounds, compiler/runtime and hardware. Measurements cover both key policies and make no competitor performance claim.
 - [ ] Review API/data compatibility, index rebuilding, bilingual installation instructions, changelogs, and scope. Verify the MoonBit package registry publication state separately from GitHub release assets before advertising either installation path.
 - [ ] Verify commit, tag, and authenticated push identities as `Sidney-sunny`; publish the reviewed tag, release notes, artifacts, and checksums after all gates pass.
 

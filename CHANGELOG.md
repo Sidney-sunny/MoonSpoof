@@ -4,9 +4,14 @@
 
 ## Unreleased
 
+## [0.2.0](https://github.com/Sidney-sunny/MoonSpoof/releases/tag/v0.2.0) - 2026-10-30
+
+Baseline: changes below are relative to the GitHub v0.1.0 tag. The later Mooncakes 0.1.0 already includes many script/status/number APIs; see [release and migration notes](docs/RELEASE_0.2.0.md).
+
 ### Added
 
-- Acceptance audit on MoonBit 0.10.18, exact compiler checks in CI, explicit per-target check/build/test steps, and clean public-registry consumer verification. Retained Unicode/Manrope licenses, generated data attribution and distributed showcase license copies; existing registry 0.1.0 still requires a new release to carry these notices.
+- Added public `get_library_version()` and registry metadata derived from it, with an explicit 0.1.0-to-0.2.0 rebuild regression. Release archives now verify clean-commit build metadata, engine/site hashes, complete notices and independent checksums; benchmarks cover both key and batch policies.
+- Acceptance audit on MoonBit 0.10.18, exact compiler checks in CI, explicit per-target check/build/test steps, and clean public-registry consumer verification. Retained Unicode/Manrope licenses, generated data attribution and distributed showcase license copies; the 0.2.0 distribution carries these notices without overwriting registry 0.1.0.
 - Optional checksum-pinned ICU4J 76.1 / Unicode 16 reference harness, a 42-case corpus with exact baselines for all 12 observed field differences, a bilingual mechanism coverage matrix and a dedicated CI job. Added long combining, supplementary/control, stable-key and pair/batch regressions; reference tests reject unreviewed or stale differences and corrupt artifacts.
 - Opt-in decimal mixing APIs using all 76 Unicode 16.0.0 Nd families, with typed first-conflict evidence and versioned registration migration. Full-code-space source verification now checks 4,456,448 property assertions; existing profiles and keys remain unchanged.
 - Explicit Identifier_Status lookup and optional literal-codepoint filtering with typed first-failure evidence. Registration examples demonstrate opting in with a new application policy version and reviewing newly rejected accounts during migration. Canonical-equivalence closure and full General Security Profile conformance are not claimed.
@@ -14,11 +19,11 @@
 - Pinned ScriptExtensions, PropertyValueAliases, and IdentifierStatus sources, strict property parsing, and complete low-level Unicode property tables. Existing script categories and default identifier policies are unchanged.
 - Public-API account-registration reference store with explicit syntax/profile choices, sensitive or folded keys, and separate accepted, duplicate, collision, and rejected decisions with character evidence.
 - Versioned snapshots with validated restoration and all-or-nothing index rebuilding from original names. Stale metadata, forged keys, duplicate accounts, and newly introduced migration conflicts fail explicitly.
-- A runnable `moon run cmd/registration` walkthrough, 19 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The integration imports the public library API.
+- A runnable `moon run cmd/registration` walkthrough, 20 integration acceptance tests, bilingual integration instructions, and CI execution for WASM, JavaScript, and native. The integration imports the public library API.
 
 ### Documentation
 
-- Added a bilingual post-review roadmap with executable acceptance criteria and proposed v0.2.0 release gates. M1–M3 are implemented within their stated scopes; M4 integration, measurement and release gates remain pending.
+- Added a bilingual post-review roadmap with executable acceptance criteria and proposed v0.2.0 release gates. M1–M3 are implemented within their stated scopes; M4 completion is recorded in the roadmap and release evidence.
 - Updated product positioning and README navigation for library integrators, distinguishing planned work and reference examples from actual application adoption.
 
 ### Fixed

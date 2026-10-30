@@ -25,6 +25,33 @@ fn rebuild(
 }
 
 ///|
+test "0.1.0 index metadata needs an explicit 0.2.0 rebuild with unchanged keys" {
+  let original = registry(Folded)
+  assert_true(original.register("paypal") is Accepted(_))
+  assert_true(original.register("用户") is Accepted(_))
+  let current = original.snapshot()
+  let old_version = { ..current.version, library_version: "0.1.0", }
+  let old : @registration.Snapshot = {
+    version: old_version,
+    records: current.records.map(fn(record) {
+      { ..record, version: old_version, }
+    }),
+  }
+  assert_true(restore(old, Folded) is Err(_))
+  let upgraded = match rebuild(old, Folded) {
+    Ok(index) => index
+    Err(_) => fail("Unchanged policy and keys should rebuild successfully")
+  }
+  assert_eq(upgraded.version().library_version, "0.2.0")
+  for i in 0..<current.records.length() {
+    assert_eq(upgraded.records()[i].key, old.records[i].key)
+    assert_eq(upgraded.records()[i].name, old.records[i].name)
+  }
+  assert_eq(old.version.library_version, "0.1.0")
+  assert_eq(original.records(), current.records)
+}
+
+///|
 test "restoring recomputes keys and preserves collision enforcement and order" {
   let original = registry(Folded)
   assert_true(original.register("paypal") is Accepted(_))

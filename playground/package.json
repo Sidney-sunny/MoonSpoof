@@ -1,13 +1,13 @@
 {
   "name": "moonspoof-playground",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "packageManager": "pnpm@11.14.0",
   "scripts": {
     "engine": "node ../tools/build-engine.mjs",
     "dev": "pnpm run engine && vite --host 127.0.0.1",
-    "build": "pnpm run engine && vite build",
+    "build": "pnpm run engine && vite build && node ../tools/stamp-site.mjs",
     "preview": "vite preview",
     "check": "pnpm run test && pnpm run build",
     "test": "pnpm run engine && node --test tests/*.test.mjs",

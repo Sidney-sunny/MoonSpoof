@@ -27,6 +27,8 @@ pub fn get_decimal_zero(Int32) -> Int32?
 
 pub fn get_identifier_status(Int32) -> @security.IdentifierStatus
 
+pub fn get_library_version() -> String
+
 pub fn get_restriction_level(String) -> @script.RestrictionLevel
 
 pub fn get_script_extensions(Int32) -> Array[String]

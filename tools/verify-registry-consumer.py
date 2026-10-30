@@ -3,6 +3,14 @@
 from pathlib import Path
 import subprocess
 import tempfile
+import argparse
+import re
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--version", default="0.1.0", help="Exact public registry version to install")
+args = parser.parse_args()
+if not re.fullmatch(r"\d+\.\d+\.\d+", args.version):
+    parser.error("Expected a numeric MAJOR.MINOR.PATCH registry version")
 
 root = Path(__file__).resolve().parent.parent
 work = root / "_build" / "acceptance"
@@ -12,15 +20,15 @@ with tempfile.TemporaryDirectory(prefix="public-consumer-", dir=work) as directo
     (consumer / "moon.mod").write_text('''name = "acceptance/consumer"
 version = "0.0.0"
 import {
-  "Sidney-sunny/moonspoof@0.1.0",
+  "Sidney-sunny/moonspoof@VERSION",
 }
-''', encoding="utf-8")
+'''.replace("@VERSION", f"@{args.version}"), encoding="utf-8")
     (consumer / "moon.pkg").write_text('''import {
   "Sidney-sunny/moonspoof" @moonspoof,
 }
 pkgtype(kind: "executable")
 ''', encoding="utf-8")
-    (consumer / "main.mbt").write_text('''///|
+    main = '''///|
 fn main raise {
   assert_true(@moonspoof.are_confusable("paypal", "p\\u0430ypal"))
   assert_eq(@moonspoof.get_decimal_systems("user1\\u0661"), [0x30, 0x660])
@@ -28,7 +36,11 @@ fn main raise {
   assert_true(@moonspoof.validate_identifier_status("alice中文") is Ok(_))
   println("Public registry consumer passed")
 }
-''', encoding="utf-8")
+'''
+    if tuple(map(int, args.version.split("."))) >= (0, 2, 0):
+        main = main.replace('fn main raise {', 'fn main raise {\n'
+                            f'  assert_eq(@moonspoof.get_library_version(), "{args.version}")')
+    (consumer / "main.mbt").write_text(main, encoding="utf-8")
     def run(command, label):
         result = subprocess.run(
             command, cwd=consumer,
@@ -44,4 +56,11 @@ fn main raise {
     run(["moon", "update"], "update")
     for target in ("wasm", "js"):
         run(["moon", "run", ".", "--target", target], target)
-        print(f"Sidney-sunny/moonspoof@0.1.0: public registry consumer passed ({target})")
+        print(f"Sidney-sunny/moonspoof@{args.version}: public registry consumer passed ({target})")
+    if tuple(map(int, args.version.split("."))) >= (0, 2, 0):
+        installed = consumer / ".mooncakes" / "Sidney-sunny" / "moonspoof"
+        for notice in ("LICENSE", "THIRD_PARTY_NOTICES.md", "licenses/UNICODE-3.0.txt",
+                       "licenses/Manrope-OFL-1.1.txt", "licenses/React-MIT.txt", "licenses/Vite-LICENSE.txt"):
+            if not (installed / notice).is_file():
+                raise SystemExit(f"Published package is missing {notice}")
+        print(f"Sidney-sunny/moonspoof@{args.version}: upstream distribution notices verified")

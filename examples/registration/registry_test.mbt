@@ -107,7 +107,7 @@ test "stored keys carry library, Unicode, syntax, profile and key policy version
   let index = registry(Folded)
   assert_true(index.register("alice") is Accepted(_))
   let record = index.records()[0]
-  assert_eq(record.version.library_version, "0.1.0")
+  assert_eq(record.version.library_version, @moonspoof.get_library_version())
   assert_eq(record.version.unicode_version, "16.0.0")
   assert_eq(record.version.application_policy_version, "account-syntax-v1")
   assert_eq(record.version.key_policy, Folded)

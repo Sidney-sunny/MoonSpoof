@@ -49,8 +49,7 @@ pub fn Registry::new(
   let unicode = @moonspoof.get_unicode_version()
   {
     version: {
-      // Keep in sync with moon.mod when copying or upgrading this example.
-      library_version: "0.1.0",
+      library_version: @moonspoof.get_library_version(),
       unicode_version: "\{unicode.major}.\{unicode.minor}.\{unicode.update}",
       key_policy,
       application_policy_version,

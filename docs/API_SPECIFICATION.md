@@ -10,6 +10,8 @@ This document defines the public API contracts, input/output types, invariants, 
 
 All public APIs are exposed at the root package level under module `Sidney-sunny/moonspoof`.
 
+`get_library_version() -> String` returns `"0.2.0"` for release metadata. The registration reference uses it in versioned indexes; see [0.2.0 migration notes](RELEASE_0.2.0.md). Unicode data version remains a separate `get_unicode_version()` result.
+
 The opt-in `get_decimal_zero`, `get_decimal_systems`, `has_mixed_numbers`, and `validate_number_systems` APIs, including typed scalar evidence and migration requirements, are specified in [decimal number system contracts](NUMBER_SYSTEMS.md).
 
 ### 1.1 `skeleton`

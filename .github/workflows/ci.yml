@@ -80,6 +80,7 @@ jobs:
         run: |
           python3 tools/verify-toolchain.py
           python3 -m unittest discover -s tools/data-generator -p 'test_*.py'
+          python3 -m unittest discover -s tools -p 'test_package_release.py'
       - name: Regenerate pinned Unicode tables
         run: python3 tools/data-generator/generate.py
       - name: Check generated interfaces and formatting
